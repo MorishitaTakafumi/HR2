@@ -1,0 +1,450 @@
+  <table class="basic narrow-xy striped">
+    <caption>
+      <div class="race_header">
+        <div class="left">
+          <div class="date_line">
+  <div class="inner">
+    <div class="cell date">2024年9月1日（日曜） 3回新潟8日</div>
+    <div class="cell time">
+        発走時刻：<strong>15時45分</strong>
+      </div>
+    <div class="cell baba">
+        <ul>
+          <li class="weather"><span class="inner"><span class="cap">天候</span><span class="txt">晴</span></span></li><li class="turf"><span class="inner"><span class="cap">芝</span><span class="txt">良</span></span></li></ul>
+      </div>
+    </div>
+</div>
+<div class="race_title">
+  <div class="inner">
+    <div class="num">
+        <div class="num_wrap">
+          <div class="race_number"><img src="/JRADB/img/race_number_main/race_num_11.png" alt="11レース"></div>
+        </div>
+        <div class="win5"><a href="#" onclick="return doAction('/JRADB/access5.html', 'pw17hde01202409011/BC');"><img src="/JRADB/img/win5/race-title_win5_5.png" alt="ウインファイヴ 5レース目" /></a></div>
+        </div>
+    <div class="txt">
+      <h2>
+        <span class="main">
+          <span class="cap"><span class="num">第60回</span></span><span class="race_name">農林水産省賞典 新潟記念<span class="grade_icon lg"><img src="/JRADB/img/grade/icon_grade_g3.png" alt="G&#8546;" /></span></span>
+        </span>
+      </h2>
+      <div class="type">
+        <div class="cell category">3歳以上</div>
+        <div class="cell class">オープン</div>
+        <div class="cell rule">（国際）（特指）</div>
+        <div class="cell weight">ハンデ</div>
+        <div class="cell course">
+          <span class="cap">コース：</span>2,000<span class="unit">メートル</span><span class="detail">（芝・左 外）</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<ul class="prize">
+    <li>
+      <div class="prize_unit">
+        <div class="cell cap">本賞金<span class="unit">（万円）</span></div>
+        <div class="cell data">
+          <ol>
+            <li><span class="cap">1着</span><span class="num">4,300</span></li>
+            <li><span class="cap">2着</span><span class="num">1,700</span></li>
+            <li><span class="cap">3着</span><span class="num">1,100</span></li>
+            <li><span class="cap">4着</span><span class="num">650</span></li>
+            <li><span class="cap">5着</span><span class="num">430</span></li>
+            </ol>
+        </div>
+      </div>
+    </li>
+    <li>
+        <div class="prize_unit">
+          <div class="cell cap">付加賞<span class="unit">（万円）</span></div>
+          <div class="cell data">
+            <ol>
+              <li><span class="cap">1着</span><span class="num">42.7</span></li>
+              <li><span class="cap">2着</span><span class="num">12.2</span></li>
+              <li><span class="cap">3着</span><span class="num">6.1</span></li>
+              </ol>
+          </div>
+        </div>
+      </li>
+    </ul>
+</div>
+      <div class="right">
+       
+
+
+
+
+<div class="race_related_link">
+  
+  
+  <ul>
+  
+  
+    <li><a href="/JRADB/accessD.html?CNAME=pw01dde1004202403081120240901/D1" class="btn-def btn-sm blue btn-block"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>出馬表</a></li>
+  
+  
+  
+    <li><a href="#" class="btn-def btn-sm blue btn-block" onclick="return doAction('/JRADB/accessO.html', 'pw151ou1004202403081120240901Z/CF');"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>オッズ</a></li>
+  
+  </ul>
+  
+  
+    <a href="#" class="btn-def btn-sm btn-narrow btn-block" onclick="return doPrint('/JRADB/accessS.html', 'pw01spr1004202403081120240901/57');"><i class="fa fa-print" aria-hidden="true"></i>印刷用ページ</a>
+  
+  <a href="/JRADB/mikata/result.html" class="btn-def btn-sm btn-block mt5"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>レース結果の見方</a>
+</div></div>
+    </div>
+    <div class="race_header_movie_area">
+        <div class="inner">
+          <div class="cell mov">
+          <div class="movie_line">
+              <div class="cap"><strong>レース映像</strong></div>
+              <div class="btn_block">
+                <script>eqPlayerButtonByAccount('202403040811', 2);</script>
+              </div>
+            </div>
+          </div>
+          <div class="cell option">
+          <ul>
+            <script>eqPlayerButtonByAccount('202403040811a', 2);</script>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <div class="race_photo_block">
+        <div class="inner">
+          <div class="cell cap"><strong>決勝写真</strong></div>
+          <div class="cell btns">
+            <ul>
+            <li><a class="btn-def btn-sm btn-block" href="#" data-img-path="/JRADB/jpg/2024/04/202403040811B.jpg"><i class="fa fa-file-image-o" aria-hidden="true"></i>決勝写真</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </caption>  <thead>
+    <tr>
+      <th scope="col" class="place">着順</th>
+      <th scope="col" class="waku">枠</th>
+      <th scope="col" class="num">馬<br>番</th>
+      <th scope="col" class="horse">馬名</th>
+      <th scope="col" class="age">性齢</th>
+      <th scope="col" class="weight">負担<br>重量</th>
+      <th scope="col" class="jockey">騎手名</th>
+      <th scope="col" class="time">タイム</th>
+      <th scope="col" class="margin">着差</th>
+      <th scope="col" class="corner">コーナー<br><span>通過順位</span></th>
+      <th scope="col" class="f_time">推定上り</th>
+      <th scope="col" class="h_weight">馬体重<br><span>（増減）</span></th>
+      <th scope="col" class="trainer">調教師名</th>
+      <th scope="col" class="pop">単勝<br>人気</th>
+      </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td class="place">1</td>
+      <td class="waku"><img src="/JRADB/img/waku/4.png" alt="枠4青" /></td>
+      <td class="num">4</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002020101608/6B">シンリョクカ</a></td>
+      <td class="age">牝4</td>
+      <td class="weight">54.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001153/33');">木幡 初也</a></td>
+      <td class="time">1:58.0</td>
+      <td class="margin">
+      </td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">2</li>
+          <li title="4コーナー通過順位">2</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">34.4</td>
+      <td class="h_weight">458<span>(0)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001152/EA');">竹内 正洋</a></td>
+      <td class="pop">8</td>
+      </tr>
+  <tr>
+      <td class="place">2</td>
+      <td class="waku"><img src="/JRADB/img/waku/6.png" alt="枠6緑" /></td>
+      <td class="num">7</td>
+      <td class="horse">
+        <div class="horse">
+	          	<a href="/JRADB/accessU.html?CNAME=pw01dud002019105168/13">セレシオン</a><div class="icon blinker"><img src="/JRADB/img/kigo/icon_blinker.png" alt="ブリンカー着用" /></div>
+    </div>
+         </td>
+      <td class="age">牡5</td>
+      <td class="weight">56.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001160/FA');">荻野 極</a></td>
+      <td class="time">1:58.0</td>
+      <td class="margin">
+      ハナ</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">9</li>
+          <li title="4コーナー通過順位">10</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">32.8</td>
+      <td class="h_weight">472<span>(-2)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001061/7F');">友道 康夫</a></td>
+      <td class="pop">3</td>
+      </tr>
+  <tr>
+      <td class="place">3</td>
+      <td class="waku"><img src="/JRADB/img/waku/7.png" alt="枠7橙" /></td>
+      <td class="num">9</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002019104828/3B">キングズパレス</a></td>
+      <td class="age">牡5</td>
+      <td class="weight">57.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001085/42');">松岡 正海</a></td>
+      <td class="time">1:58.1</td>
+      <td class="margin">
+      １／２</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">7</li>
+          <li title="4コーナー通過順位">7</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">33.4</td>
+      <td class="h_weight">494<span>(-2)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001054/B8');">戸田 博文</a></td>
+      <td class="pop">1</td>
+      </tr>
+  <tr>
+      <td class="place">4</td>
+      <td class="waku"><img src="/JRADB/img/waku/1.png" alt="枠1白" /></td>
+      <td class="num">1</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002020105834/ED">ゴールドプリンセス</a></td>
+      <td class="age">牝4</td>
+      <td class="weight">53.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001161/86');">菊沢 一樹</a></td>
+      <td class="time">1:58.2</td>
+      <td class="margin">
+      クビ</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">3</li>
+          <li title="4コーナー通過順位">3</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">34.3</td>
+      <td class="h_weight">482<span>(0)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001158/32');">寺島 良</a></td>
+      <td class="pop">7</td>
+      </tr>
+  <tr>
+      <td class="place">5</td>
+      <td class="waku"><img src="/JRADB/img/waku/8.png" alt="枠8桃" /></td>
+      <td class="num">12</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002019104984/00">レッドラディエンス</a></td>
+      <td class="age">牡5</td>
+      <td class="weight">58.5</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk005386/50');">戸崎 圭太</a></td>
+      <td class="time">1:58.3</td>
+      <td class="margin">
+      １／２</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">9</li>
+          <li title="4コーナー通過順位">8</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">33.4</td>
+      <td class="h_weight">498<span>(+10)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001061/7F');">友道 康夫</a></td>
+      <td class="pop">2</td>
+      </tr>
+  <tr>
+      <td class="place">6</td>
+      <td class="waku"><img src="/JRADB/img/waku/5.png" alt="枠5黄" /></td>
+      <td class="num">5</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002018104011/F2">ファユエン</a></td>
+      <td class="age">牝6</td>
+      <td class="weight">53.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001043/7E');">北村 宏司</a></td>
+      <td class="time">1:58.3</td>
+      <td class="margin">
+      クビ</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">7</li>
+          <li title="4コーナー通過順位">8</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">33.3</td>
+      <td class="h_weight">470<span>(0)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001047/F1');">勢司 和浩</a></td>
+      <td class="pop">9</td>
+      </tr>
+  <tr>
+      <td class="place">7</td>
+      <td class="waku"><img src="/JRADB/img/waku/8.png" alt="枠8桃" /></td>
+      <td class="num">11</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002019105062/30">エーデルブルーメ</a></td>
+      <td class="age">牝5</td>
+      <td class="weight">54.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001088/E6');">川田 将雅</a></td>
+      <td class="time">1:58.4</td>
+      <td class="margin">
+      １／２</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">11</li>
+          <li title="4コーナー通過順位">11</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">33.1</td>
+      <td class="h_weight">490<span>(+4)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001203/A9');">福永 祐一</a></td>
+      <td class="pop">4</td>
+      </tr>
+  <tr>
+      <td class="place">8</td>
+      <td class="waku"><img src="/JRADB/img/waku/7.png" alt="枠7橙" /></td>
+      <td class="num">10</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002019106698/27">バラジ</a></td>
+      <td class="age">せん5</td>
+      <td class="weight">56.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001179/51');">菅原 明良</a></td>
+      <td class="time">1:58.5</td>
+      <td class="margin">
+      １／２</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">4</li>
+          <li title="4コーナー通過順位">4</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">34.3</td>
+      <td class="h_weight">492<span>(0)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001097/08');">鹿戸 雄一</a></td>
+      <td class="pop">10</td>
+      </tr>
+  <tr>
+      <td class="place">9</td>
+      <td class="waku"><img src="/JRADB/img/waku/3.png" alt="枠3赤" /></td>
+      <td class="num">3</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002020100912/6D">ジューンアヲニヨシ</a></td>
+      <td class="age">牡4</td>
+      <td class="weight">55.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001032/87');">池添 謙一</a></td>
+      <td class="time">1:58.9</td>
+      <td class="margin">
+      ２ 1/2</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">6</li>
+          <li title="4コーナー通過順位">6</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">34.4</td>
+      <td class="h_weight">498<span>(+16)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001149/53');">松下 武士</a></td>
+      <td class="pop">6</td>
+      </tr>
+  <tr>
+      <td class="place">10</td>
+      <td class="waku"><img src="/JRADB/img/waku/6.png" alt="枠6緑" /></td>
+      <td class="num">8</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002020105655/1E">アリスヴェリテ</a></td>
+      <td class="age">牝4</td>
+      <td class="weight">53.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001212/45');">柴田 裕一郎</a></td>
+      <td class="time">1:59.4</td>
+      <td class="margin">
+      ３</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">1</li>
+          <li title="4コーナー通過順位">1</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">36.4</td>
+      <td class="h_weight">482<span>(+14)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001039/9E');">中竹 和也</a></td>
+      <td class="pop">5</td>
+      </tr>
+  <tr>
+      <td class="place">11</td>
+      <td class="waku"><img src="/JRADB/img/waku/5.png" alt="枠5黄" /></td>
+      <td class="num">6</td>
+      <td class="horse">
+        <div class="horse">
+	          	<a href="/JRADB/accessU.html?CNAME=pw01dud002019104937/09">アスクワイルドモア</a><div class="icon blinker"><img src="/JRADB/img/kigo/icon_blinker.png" alt="ブリンカー着用" /></div>
+    </div>
+         </td>
+      <td class="age">牡5</td>
+      <td class="weight">56.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001185/8C');">小沢 大仁</a></td>
+      <td class="time">2:00.0</td>
+      <td class="margin">
+      ３ 1/2</td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">4</li>
+          <li title="4コーナー通過順位">4</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time">35.7</td>
+      <td class="h_weight">488<span>(+6)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001055/44');">藤原 英昭</a></td>
+      <td class="pop">11</td>
+      </tr>
+  <tr>
+      <td class="place">除外</td>
+      <td class="waku"><img src="/JRADB/img/waku/2.png" alt="枠2黒" /></td>
+      <td class="num">2</td>
+      <td class="horse">
+        <a href="/JRADB/accessU.html?CNAME=pw01dud002021105953/57">ライトバック</a></td>
+      <td class="age">牝3</td>
+      <td class="weight">52.0</td>
+      <td class="jockey"><a href="#" onclick="return doAction('/JRADB/accessK.html', 'pw04kmk001163/9E');">坂井 瑠星</a></td>
+      <td class="time"></td>
+      <td class="margin">
+      </td>
+      <td class="corner">
+      <div class="corner_list">
+          <ul>
+          <li title="3コーナー通過順位">&nbsp;</li>
+          <li title="4コーナー通過順位">&nbsp;</li>
+          </ul>
+        </div>
+      </td>
+      <td class="f_time"></td>
+      <td class="h_weight">482<span>(+6)</span></td>
+      <td class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001181/9F');">茶木 太樹</a></td>
+      <td class="pop"></td>
+      </tr>
+  </tbody>
+</table>

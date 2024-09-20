@@ -1,0 +1,129 @@
+VB.NETでWebページのデータを取得するには、HttpClientクラスを使用するのが一般的です。
+このクラスを使って、指定したURLからHTMLコンテンツを取得できます。
+--------------------------------------------------------------------------
+Imports System.Net.Http
+Imports System.Threading.Tasks
+
+Module Module1
+    Sub Main()
+        ' 非同期メソッドを呼び出すためのTaskを開始します。
+        Dim task As Task = GetWebPageAsync("https://example.com")
+        task.Wait()
+    End Sub
+
+    Async Function GetWebPageAsync(url As String) As Task
+        ' HttpClientのインスタンスを作成します。
+        Using client As New HttpClient()
+            Try
+                ' 指定されたURLからデータを取得します。
+                Dim response As HttpResponseMessage = Await client.GetAsync(url)
+                response.EnsureSuccessStatusCode()
+
+                ' データを文字列として読み取ります。
+                Dim content As String = Await response.Content.ReadAsStringAsync()
+
+                ' 取得したデータをコンソールに出力します。
+                Console.WriteLine(content)
+            Catch ex As Exception
+                ' エラーが発生した場合に例外をキャッチしてメッセージを出力します。
+                Console.WriteLine("エラー: " & ex.Message)
+            End Try
+        End Using
+    End Function
+End Module
+--------------------------------------------------------------------------
+
+このコードのポイント
+HttpClientクラスを使って、指定したURLから非同期でデータを取得しています。
+Awaitキーワードを使って、非同期に実行される操作を待機しています。
+response.EnsureSuccessStatusCode()は、HTTPリクエストが成功したことを確認します。
+失敗した場合は例外がスローされます。
+取得したHTMLデータはコンソールに表示されますが、他の用途にも利用できます。
+このサンプルを実行するには、.NET Framework 4.5以上が必要です。
+
+*************************************************************************
+VB.NETでWebページからリンクを抽出し、それらのリンク先のページも同時に取得することは可能です。
+これを実現するには、まず指定されたWebページのHTMLを解析してリンクを取得し、
+次にそのリンク先のページの内容を取得する必要があります。
+
+以下はそのためのサンプルコードです。
+
+1. 必要なライブラリのインポート
+まず、HTMLを解析するためにHtmlAgilityPackというライブラリを使用します。
+このライブラリはNuGetからインストールできます。
+
+Install-Package HtmlAgilityPack
+--------------------------------------------------------------------------
+
+Imports System.Net.Http
+Imports System.Threading.Tasks
+Imports HtmlAgilityPack
+
+Module Module1
+    Sub Main()
+        ' 非同期メソッドを呼び出すためのTaskを開始します。
+        Dim task As Task = ProcessWebPageAsync("https://example.com")
+        task.Wait()
+    End Sub
+
+    Async Function ProcessWebPageAsync(url As String) As Task
+        ' HttpClientのインスタンスを作成します。
+        Using client As New HttpClient()
+            Try
+                ' メインページからデータを取得します。
+                Dim response As HttpResponseMessage = Await client.GetAsync(url)
+                response.EnsureSuccessStatusCode()
+
+                ' 取得したデータを文字列として読み取ります。
+                Dim content As String = Await response.Content.ReadAsStringAsync()
+
+                ' HTMLドキュメントとして解析します。
+                Dim doc As New HtmlDocument()
+                doc.LoadHtml(content)
+
+                ' 全てのリンク（<a href="...">）を取得します。
+                Dim links = doc.DocumentNode.SelectNodes("//a[@href]")
+
+                If links IsNot Nothing Then
+                    For Each link As HtmlNode In links
+                        Dim hrefValue As String = link.GetAttributeValue("href", String.Empty)
+
+                        ' 絶対URLか相対URLかを判断し、相対URLなら絶対URLに変換します。
+                        Dim fullUrl As String = New Uri(New Uri(url), hrefValue).ToString()
+
+                        Console.WriteLine("リンク先URL: " & fullUrl)
+
+                        ' リンク先ページからデータを取得します。
+                        Dim linkResponse As HttpResponseMessage = Await client.GetAsync(fullUrl)
+                        linkResponse.EnsureSuccessStatusCode()
+
+                        ' リンク先ページのデータを取得し、表示します。
+                        Dim linkContent As String = Await linkResponse.Content.ReadAsStringAsync()
+                        Console.WriteLine(linkContent)
+                    Next
+                Else
+                    Console.WriteLine("リンクが見つかりませんでした。")
+                End If
+            Catch ex As Exception
+                ' エラーが発生した場合に例外をキャッチしてメッセージを出力します。
+                Console.WriteLine("エラー: " & ex.Message)
+            End Try
+        End Using
+    End Function
+End Module
+--------------------------------------------------------------------------
+このコードのポイント
+HtmlAgilityPackを使用してHTMLを解析:
+
+取得したHTMLデータをHtmlAgilityPackで解析し、すべての<a>タグからhref属性を取得しています。
+リンク先のページのデータを取得:
+
+各リンクについて、新しいHTTPリクエストを送信してリンク先ページのデータを取得しています。
+相対URLの処理:
+
+リンクが相対URLの場合は、元のページのURLを基に絶対URLに変換しています。
+注意点
+このコードは、同時にリンク先のページも取得するので、リンクが多いページでは処理に時間がかかる可能性があります。
+リンク先が外部ドメインの場合や、リンクが動的に生成される場合は、そのままでは機能しない場合があります。
+もし、リンク数が多すぎる場合や特定のリンクだけを取りたい場合は、フィルタリングを考えると良いでしょう。
+
