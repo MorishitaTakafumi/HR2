@@ -1,4 +1,6 @@
-﻿Module GlblMod
+﻿Imports System.Runtime.InteropServices.WindowsRuntime
+
+Public Module GlblMod
     Public JoMei() As String = {"札幌", "函館", "福島", "新潟", "中山", "東京", "中京", "京都", "阪神", "小倉"}
 
     Public Function cnvTimeStr2Sec(ByVal strTime As String) As Single
@@ -15,5 +17,34 @@
         Return 0
     End Function
 
+    Public Function cyakujunEncode(ByVal strCyakujun As String) As Integer
+        If IsNumeric(strCyakujun) Then
+            Return CInt(strCyakujun)
+        ElseIf InStr(strCyakujun, "除外") > 0 Then
+            Return -998
+        ElseIf InStr(strCyakujun, "中止") > 0 Then
+            Return -999
+        ElseIf InStr(strCyakujun, "取消") > 0 Then
+            Return -997
+        Else
+            Return -9999
+        End If
+
+    End Function
+
+    Public Function cyakujunDecode(ByVal cyakujun As Integer) As String
+        Select Case cyakujun
+            Case -998
+                Return "除外"
+            Case -999
+                Return "中止"
+            Case -997
+                Return "取消"
+            Case 1 To 18
+                Return cyakujun.ToString
+            Case Else
+                Return ""
+        End Select
+    End Function
 
 End Module

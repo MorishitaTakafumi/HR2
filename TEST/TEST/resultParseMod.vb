@@ -98,18 +98,15 @@
             If lineStr.Length > 0 Then
                 While findpos < endpos AndAlso findpos > 0
                     lineStr = SearchLineByKeyword(findpos + 1, src, """place""", findpos)
+
+                    If findpos > endpos Then
+                        Exit While
+                    End If
+
                     Dim words As List(Of String) = removeTagPair(lineStr)
                     If words.Count > 0 Then
                         Dim a As New KekkaClass
-                        If IsNumeric(words(0)) Then
-                            a.cyakujun = CInt(words(0))
-                        ElseIf InStr(words(0), "除外") > 0 Then
-                            a.cyakujun = 0
-                        ElseIf InStr(words(0), "中止") > 0 Then
-                            a.cyakujun = 999
-                        Else
-                            a.cyakujun = 9999
-                        End If
+                        a.cyakujun = cyakujunEncode(words(0))
                         lineStr = SearchLineByKeyword(findpos + 1, src, """num""", findpos)
                         If lineStr.Length > 0 Then
                             words = removeTagPair(lineStr)
@@ -123,10 +120,11 @@
                         End If
                         lineStr = SearchLineByKeyword(findpos + 1, src, "a href", findpos)
                         If lineStr.Length > 0 Then
-                            words = removeTagPair(lineStr)
-                            If words.Count > 0 Then
-                                a.bamei = words(0)
-                            End If
+                            a.bamei = GetTagValue(lineStr, "a")
+                            'words = removeTagPair(lineStr)
+                            'If words.Count > 0 Then
+                            '    a.bamei = words(0)
+                            'End If
                         End If
                         lineStr = SearchLineByKeyword(findpos + 1, src, """age""", findpos)
                         If lineStr.Length > 0 Then
@@ -219,6 +217,8 @@
                         End If
 
                         klist.add1(a)
+                    Else
+                        Exit While
                     End If
                 End While
             End If

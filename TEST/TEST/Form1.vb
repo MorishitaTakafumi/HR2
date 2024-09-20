@@ -18,6 +18,8 @@ Public Class Form1
         cols = 13
     End Enum
 
+    Public kekkaList As New KekkaListClass
+
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
         With flx
@@ -43,7 +45,7 @@ Public Class Form1
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.WordWrap = True
-            .Rows.MinSize = 25
+            .Rows.MinSize = 20
 
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
             .Cols(FlxCol.kisyu).TextAlign = TextAlignEnum.LeftCenter
@@ -116,7 +118,6 @@ Public Class Form1
             ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
             ListBox1.Items.Add("クラス：" & oRaceHeader.classname)
 
-            Dim kekkaList As New KekkaListClass
             GetKekka(contents, kekkaList)
 
             kekkaList.setCyakusa()
@@ -125,4 +126,11 @@ Public Class Form1
             ShowTable(kekkaList)
         End If
     End Sub
+
+    Public Sub entry(ByVal url As String)
+        txtURL.Text = "https://www.jra.go.jp" & url
+        Show()
+        BtnTest.PerformClick()
+    End Sub
+
 End Class

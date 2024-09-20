@@ -35,9 +35,10 @@ Partial Class Form2
         'BtnTest
         '
         Me.BtnTest.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnTest.Location = New System.Drawing.Point(55, 47)
+        Me.BtnTest.Location = New System.Drawing.Point(73, 59)
+        Me.BtnTest.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.BtnTest.Name = "BtnTest"
-        Me.BtnTest.Size = New System.Drawing.Size(139, 44)
+        Me.BtnTest.Size = New System.Drawing.Size(185, 55)
         Me.BtnTest.TabIndex = 0
         Me.BtnTest.Text = "競走馬情報" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "の取り込み"
         Me.BtnTest.UseVisualStyleBackColor = True
@@ -45,9 +46,10 @@ Partial Class Form2
         'txtURL
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.txtURL.Location = New System.Drawing.Point(55, 21)
+        Me.txtURL.Location = New System.Drawing.Point(73, 26)
+        Me.txtURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(733, 20)
+        Me.txtURL.Size = New System.Drawing.Size(976, 24)
         Me.txtURL.TabIndex = 1
         Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessU.html?CNAME=pw01dud102018105165/15"
         '
@@ -55,53 +57,60 @@ Partial Class Form2
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label1.Location = New System.Drawing.Point(13, 24)
+        Me.Label1.Location = New System.Drawing.Point(17, 30)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(30, 13)
+        Me.Label1.Size = New System.Drawing.Size(39, 17)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "URL"
         '
         'txtResult
         '
-        Me.txtResult.Location = New System.Drawing.Point(200, 47)
+        Me.txtResult.Location = New System.Drawing.Point(267, 59)
+        Me.txtResult.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtResult.Multiline = True
         Me.txtResult.Name = "txtResult"
         Me.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtResult.Size = New System.Drawing.Size(706, 44)
+        Me.txtResult.Size = New System.Drawing.Size(940, 54)
         Me.txtResult.TabIndex = 3
         '
         'ListBox1
         '
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.ItemHeight = 15
-        Me.ListBox1.Location = New System.Drawing.Point(16, 114)
+        Me.ListBox1.ItemHeight = 19
+        Me.ListBox1.Location = New System.Drawing.Point(21, 142)
+        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(320, 259)
+        Me.ListBox1.Size = New System.Drawing.Size(425, 308)
         Me.ListBox1.TabIndex = 4
         '
         'flx
         '
+        Me.flx.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(358, 114)
+        Me.flx.Location = New System.Drawing.Point(477, 142)
+        Me.flx.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 19
-        Me.flx.Size = New System.Drawing.Size(917, 495)
+        Me.flx.Size = New System.Drawing.Size(1221, 618)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 5
         '
         'Form2
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1312, 631)
+        Me.ClientSize = New System.Drawing.Size(1749, 789)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.txtResult)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.BtnTest)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "Form2"
         Me.Text = "競走馬情報の取り込み"
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()

@@ -24,4 +24,11 @@
     Private Sub BtnExit_Click(sender As Object, e As EventArgs) Handles BtnExit.Click
         Me.Close()
     End Sub
+
+    Private Sub BtnAnalysis_Click(sender As Object, e As EventArgs) Handles BtnAnalysis.Click
+        Dim a As New AnaForm
+        Me.Hide()
+        a.ShowDialog()
+        Me.Show()
+    End Sub
 End Class

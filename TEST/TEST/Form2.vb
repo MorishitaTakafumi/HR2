@@ -20,6 +20,8 @@ Public Class Form2
         cols = 13
     End Enum
 
+    Public umaHistList As New umaHistListClass
+
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
         With flx
@@ -45,7 +47,7 @@ Public Class Form2
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.WordWrap = True
-            .Rows.MinSize = 25
+            .Rows.MinSize = 20
 
             .Cols(FlxCol.racename).TextAlign = TextAlignEnum.LeftCenter
             .Cols(FlxCol.kisyu).TextAlign = TextAlignEnum.LeftCenter
@@ -108,9 +110,21 @@ Public Class Form2
             ListBox1.Items.Add("性別：" & oUmaHeader.sex)
             ListBox1.Items.Add("誕生日：" & oUmaHeader.birthday.ToString("yyyy年MM月dd日"))
 
-            Dim umaHistList As New umaHistListClass
             GetUmaHist(contents, umaHistList)
             ShowTable(umaHistList)
         End If
+    End Sub
+
+    Public Sub entry(ByVal url As String)
+        txtURL.Text = "https://www.jra.go.jp" & url
+        Me.WindowState = FormWindowState.Minimized
+        Show()
+        BtnTest.PerformClick()
+    End Sub
+
+    Private Sub flx_Click(sender As Object, e As EventArgs) Handles flx.Click
+        Dim url As String = flx.Item(flx.Row, FlxCol.href)
+        Dim a As New Form1
+        a.entry(url)
     End Sub
 End Class

@@ -78,6 +78,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="cmnMod.vb" />
+    <Compile Include="AnaForm.Designer.vb">
+      <DependentUpon>AnaForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AnaForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form3.Designer.vb">
       <DependentUpon>Form3.vb</DependentUpon>
     </Compile>
@@ -117,6 +123,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="raceAnaListClass.vb" />
+    <Compile Include="raceAnanClass.vb" />
     <Compile Include="RaceHeaderClass.vb" />
     <Compile Include="resultParseMod.vb" />
     <Compile Include="SyutubaClass.vb" />
@@ -135,6 +143,9 @@
     <Compile Include="WebMod.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AnaForm.resx">
+      <DependentUpon>AnaForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.vb</DependentUpon>
     </EmbeddedResource>

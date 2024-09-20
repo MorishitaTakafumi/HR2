@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class Form3
+Partial Class AnaForm
     Inherits System.Windows.Forms.Form
 
     'フォームがコンポーネントの一覧をクリーンアップするために dispose をオーバーライドします。
@@ -22,32 +22,31 @@ Partial Class Form3
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form3))
-        Me.BtnTest = New System.Windows.Forms.Button()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AnaForm))
+        Me.BtnGo = New System.Windows.Forms.Button()
         Me.txtURL = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtResult = New System.Windows.Forms.TextBox()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'BtnTest
+        'BtnGo
         '
-        Me.BtnTest.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnTest.Location = New System.Drawing.Point(73, 59)
-        Me.BtnTest.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.BtnTest.Name = "BtnTest"
-        Me.BtnTest.Size = New System.Drawing.Size(185, 55)
-        Me.BtnTest.TabIndex = 0
-        Me.BtnTest.Text = "出馬表" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "の取り込み"
-        Me.BtnTest.UseVisualStyleBackColor = True
+        Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGo.Location = New System.Drawing.Point(1081, 13)
+        Me.BtnGo.Margin = New System.Windows.Forms.Padding(4)
+        Me.BtnGo.Name = "BtnGo"
+        Me.BtnGo.Size = New System.Drawing.Size(185, 55)
+        Me.BtnGo.TabIndex = 0
+        Me.BtnGo.Text = "解析実行"
+        Me.BtnGo.UseVisualStyleBackColor = True
         '
         'txtURL
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.txtURL.Location = New System.Drawing.Point(73, 26)
-        Me.txtURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtURL.Margin = New System.Windows.Forms.Padding(4)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(976, 24)
         Me.txtURL.TabIndex = 1
@@ -64,65 +63,54 @@ Partial Class Form3
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "URL"
         '
-        'txtResult
-        '
-        Me.txtResult.Location = New System.Drawing.Point(267, 59)
-        Me.txtResult.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.txtResult.Multiline = True
-        Me.txtResult.Name = "txtResult"
-        Me.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtResult.Size = New System.Drawing.Size(940, 54)
-        Me.txtResult.TabIndex = 3
-        '
         'ListBox1
         '
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 19
-        Me.ListBox1.Location = New System.Drawing.Point(21, 142)
-        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ListBox1.Location = New System.Drawing.Point(20, 73)
+        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(425, 308)
         Me.ListBox1.TabIndex = 4
         '
         'flx
         '
-        Me.flx.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.flx.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(477, 142)
-        Me.flx.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.flx.Location = New System.Drawing.Point(464, 73)
+        Me.flx.Margin = New System.Windows.Forms.Padding(4)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 19
-        Me.flx.Size = New System.Drawing.Size(1221, 618)
+        Me.flx.Size = New System.Drawing.Size(1405, 618)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 5
         '
-        'Form3
+        'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1749, 789)
+        Me.ClientSize = New System.Drawing.Size(1882, 789)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
-        Me.Controls.Add(Me.txtResult)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
-        Me.Controls.Add(Me.BtnTest)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.Name = "Form3"
-        Me.Text = "出馬表の取り込み"
+        Me.Controls.Add(Me.BtnGo)
+        Me.Margin = New System.Windows.Forms.Padding(4)
+        Me.Name = "AnaForm"
+        Me.Text = "レース解析"
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
-    Friend WithEvents BtnTest As Button
+    Friend WithEvents BtnGo As Button
     Friend WithEvents txtURL As TextBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtResult As TextBox
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
 End Class

@@ -42,12 +42,6 @@
     End Sub
 
     Public Function CyakujunStr() As String
-        If cyakujun = -998 Then
-            Return "除外"
-        ElseIf cyakujun = -999 Then
-            Return "中止"
-        Else
-            Return cyakujun.ToString
-        End If
+        Return cyakujunDecode(cyakujun)
     End Function
 End Class

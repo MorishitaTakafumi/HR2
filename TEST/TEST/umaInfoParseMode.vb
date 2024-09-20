@@ -136,15 +136,7 @@
                         lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "<td", findpos)
                         words = removeTagPair(lineStr)
                         If words.Count > 0 Then
-                            If IsNumeric(words(0)) Then
-                                a.cyakujun = CInt(words(0))
-                            ElseIf InStr(words(0), "除外") > 0 Then
-                                a.cyakujun = 0
-                            ElseIf InStr(words(0), "中止") > 0 Then
-                                a.cyakujun = 999
-                            Else
-                                a.cyakujun = 9999
-                            End If
+                            a.cyakujun = cyakujunEncode(words(0))
                         End If
 
                         lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, """jockey""", findpos)
