@@ -112,4 +112,34 @@
         Return ""
     End Function
 
+    'タグの値をとりだす
+    Public Function removeTagPair2(ByVal linestr As String) As List(Of String)
+        Dim p As New List(Of Integer) 'p()には'>'と'<'の位置が記録される
+        Dim ip As Integer = 1
+        Dim ip2 As Integer = 999
+        While ip > 0 AndAlso ip2 > 0
+            ip = InStr(ip, linestr, ">")
+            If ip > 0 Then
+                p.Add(ip)
+                ip2 = InStr(ip + 1, linestr, "<")
+                If ip2 > 0 Then
+                    p.Add(ip2)
+                    ip = ip2
+                End If
+            End If
+        End While
+        Dim ans As New List(Of String)
+        If p.Count > 1 Then
+            For j As Integer = 0 To p.Count - 2 Step 2
+                If p(j + 1) - p(j) = 1 Then
+                    ans.Add("")
+                Else
+                    ans.Add(Mid(linestr, p(j) + 1, p(j + 1) - p(j) - 1))
+                End If
+            Next
+        Else
+            ans.Add(linestr)
+        End If
+        Return ans
+    End Function
 End Module

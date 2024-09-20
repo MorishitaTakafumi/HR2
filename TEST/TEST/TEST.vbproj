@@ -129,6 +129,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UmaHeaderClass.vb" />
+    <Compile Include="UmaHistClass.vb" />
+    <Compile Include="umaHistListClass.vb" />
     <Compile Include="umaInfoParseMode.vb" />
     <Compile Include="WebMod.vb" />
   </ItemGroup>

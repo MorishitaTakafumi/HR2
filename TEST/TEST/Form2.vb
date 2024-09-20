@@ -57,41 +57,38 @@ Public Class Form2
         End With
     End Sub
 
-    Private Sub ShowTable(ByVal klist As KekkaListClass)
+    Private Sub ShowTable(ByVal hlist As umaHistListClass)
         SetUpFlx()
         Dim xx(FlxCol.cols - 1) As String
-        For j As Integer = 0 To klist.cnt - 1
-            'Dim oKekka As KekkaClass = klist.GetBodyRef(j)
-            'Dim e_flg As Boolean = (oKekka.cyakujun < 1)
-            'xx(FlxCol.cyakujun) = oKekka.CyakujunStr
-            'xx(FlxCol.umaban) = oKekka.umaban
-            'xx(FlxCol.bamei) = oKekka.bamei
-            'xx(FlxCol.seirei) = oKekka.sex & oKekka.age.ToString
-            'xx(FlxCol.hutan) = oKekka.hutan
-            'xx(FlxCol.kisyu) = oKekka.kisyu
-            'If e_flg Then
-            '    xx(FlxCol.tokei) = ""
-            'Else
-            '    xx(FlxCol.tokei) = oKekka.tokei.ToString("F1")
-            'End If
-            'xx(FlxCol.tukajun) = ""
-            'If Not e_flg Then
-            '    For i As Integer = 0 To 3
-            '        If oKekka.tukajun(i) > 0 Then
-            '            xx(FlxCol.tukajun) &= oKekka.tukajun(i) & " "
-            '        End If
-            '    Next
-            '    xx(FlxCol.agari) = oKekka.agari
-            '    xx(FlxCol.ninki) = oKekka.ninki
-            '    xx(FlxCol.cyakusa) = oKekka.agarisa.ToString("F1") & vbLf & "(" & oKekka.cyakusa.ToString("F1") & ")"
-            'Else
-            '    xx(FlxCol.cyakusa) = ""
-            '    xx(FlxCol.agari) = ""
-            '    xx(FlxCol.ninki) = ""
-            'End If
-            'xx(FlxCol.bataiju) = oKekka.w & vbLf & "(" & oKekka.zogen & ")"
-            'xx(FlxCol.cyokyosi) = oKekka.cyokyosi
-            'flx.AddItem(xx)
+        For j As Integer = 0 To hlist.cnt - 1
+            Dim oHist As UmaHistClass = hlist.GetBodyRef(j)
+            Dim e_flg As Boolean = (oHist.cyakujun < 1)
+            xx(FlxCol.cyakujun) = oHist.CyakujunStr
+            xx(FlxCol.dt) = oHist.dt.ToString("yyyy年MM月dd日")
+            xx(FlxCol.ba) = oHist.keibajo
+            xx(FlxCol.racename) = oHist.racename
+            xx(FlxCol.href) = oHist.href
+            xx(FlxCol.hutan) = oHist.hutan
+            xx(FlxCol.kisyu) = oHist.kisyu
+            If oHist.tokei > 0 Then
+                xx(FlxCol.tokei) = oHist.tokei.ToString("F1")
+            Else
+                xx(FlxCol.tokei) = ""
+            End If
+            xx(FlxCol.kyori) = oHist.syubetu & oHist.distance.ToString
+            xx(FlxCol.baba) = oHist.baba
+            If oHist.w > 0 Then
+                xx(FlxCol.bataiju) = oHist.w
+            Else
+                xx(FlxCol.bataiju) = ""
+            End If
+            xx(FlxCol.tosu) = oHist.tosu
+            If oHist.ninki > 0 Then
+                xx(FlxCol.ninki) = oHist.ninki
+            Else
+                xx(FlxCol.ninki) = ""
+            End If
+            flx.AddItem(xx)
         Next
         flx.AutoSizeCols()
         flx.AutoSizeRows()
@@ -111,13 +108,9 @@ Public Class Form2
             ListBox1.Items.Add("性別：" & oUmaHeader.sex)
             ListBox1.Items.Add("誕生日：" & oUmaHeader.birthday.ToString("yyyy年MM月dd日"))
 
-            'Dim kekkaList As New KekkaListClass
-            'GetKekka(contents, kekkaList)
-
-            'kekkaList.setCyakusa()
-            'kekkaList.setAgarisa(oRaceHeader)
-
-            'ShowTable(kekkaList)
+            Dim umaHistList As New umaHistListClass
+            GetUmaHist(contents, umaHistList)
+            ShowTable(umaHistList)
         End If
     End Sub
 End Class
