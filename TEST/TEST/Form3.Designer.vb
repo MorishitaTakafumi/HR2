@@ -36,7 +36,7 @@ Partial Class Form3
         '
         Me.BtnTest.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnTest.Location = New System.Drawing.Point(73, 59)
-        Me.BtnTest.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnTest.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnTest.Name = "BtnTest"
         Me.BtnTest.Size = New System.Drawing.Size(185, 55)
         Me.BtnTest.TabIndex = 0
@@ -47,11 +47,11 @@ Partial Class Form3
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.txtURL.Location = New System.Drawing.Point(73, 26)
-        Me.txtURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtURL.Margin = New System.Windows.Forms.Padding(4)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(976, 24)
         Me.txtURL.TabIndex = 1
-        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0107202403071120240922/CE"
+        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessS.html?CNAME=pw01sde1006202401051020240114/6A"
         '
         'Label1
         '
@@ -67,7 +67,7 @@ Partial Class Form3
         'txtResult
         '
         Me.txtResult.Location = New System.Drawing.Point(267, 59)
-        Me.txtResult.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtResult.Margin = New System.Windows.Forms.Padding(4)
         Me.txtResult.Multiline = True
         Me.txtResult.Name = "txtResult"
         Me.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both
@@ -80,7 +80,7 @@ Partial Class Form3
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 19
         Me.ListBox1.Location = New System.Drawing.Point(21, 142)
-        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(425, 308)
         Me.ListBox1.TabIndex = 4
@@ -92,7 +92,7 @@ Partial Class Form3
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.flx.Location = New System.Drawing.Point(477, 142)
-        Me.flx.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.flx.Margin = New System.Windows.Forms.Padding(4)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 19
         Me.flx.Size = New System.Drawing.Size(1221, 618)
@@ -110,7 +110,7 @@ Partial Class Form3
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.BtnTest)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form3"
         Me.Text = "出馬表の取り込み"
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()

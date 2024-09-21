@@ -23,7 +23,12 @@
     Public Function GetAgarisa(ByVal arg_bamei As String) As String
         For j As Integer = 0 To cnt - 1
             If StrComp(arg_bamei, m_bf(j).bamei, CompareMethod.Text) = 0 Then
-                Return m_bf(j).agarisa.ToString("F1") & "(" & m_bf(j).cyakusa.ToString("F1") & ")"
+                If m_bf(j).cyakujun > 0 Then
+                    Return m_bf(j).agarisa.ToString("F1") & "(" & m_bf(j).cyakusa.ToString("F1") & ")"
+                Else
+                    Return cyakujunDecode(m_bf(j).cyakujun)
+
+                End If
             End If
         Next
         Return ""

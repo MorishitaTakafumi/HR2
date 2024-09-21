@@ -28,6 +28,7 @@ Partial Class AnaForm
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
+        Me.lb_msg = New System.Windows.Forms.Label()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -50,7 +51,7 @@ Partial Class AnaForm
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(976, 24)
         Me.txtURL.TabIndex = 1
-        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0107202403071120240922/CE"
+        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0106202404061120240921/85"
         '
         'Label1
         '
@@ -68,10 +69,10 @@ Partial Class AnaForm
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 19
-        Me.ListBox1.Location = New System.Drawing.Point(20, 73)
+        Me.ListBox1.Location = New System.Drawing.Point(13, 73)
         Me.ListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(425, 308)
+        Me.ListBox1.Size = New System.Drawing.Size(382, 308)
         Me.ListBox1.TabIndex = 4
         '
         'flx
@@ -80,20 +81,30 @@ Partial Class AnaForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
-        Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(464, 73)
+        Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.flx.Location = New System.Drawing.Point(414, 73)
         Me.flx.Margin = New System.Windows.Forms.Padding(4)
         Me.flx.Name = "flx"
-        Me.flx.Rows.DefaultSize = 19
+        Me.flx.Rows.DefaultSize = 26
         Me.flx.Size = New System.Drawing.Size(1405, 618)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 5
+        '
+        'lb_msg
+        '
+        Me.lb_msg.AutoSize = True
+        Me.lb_msg.Location = New System.Drawing.Point(17, 418)
+        Me.lb_msg.Name = "lb_msg"
+        Me.lb_msg.Size = New System.Drawing.Size(31, 15)
+        Me.lb_msg.TabIndex = 6
+        Me.lb_msg.Text = "***"
         '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1882, 789)
+        Me.Controls.Add(Me.lb_msg)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.Label1)
@@ -113,4 +124,5 @@ Partial Class AnaForm
     Friend WithEvents Label1 As Label
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
+    Friend WithEvents lb_msg As Label
 End Class

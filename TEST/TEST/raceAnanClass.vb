@@ -1,4 +1,6 @@
-﻿Public Class raceAnanClass
+﻿Imports System.Security.Cryptography
+
+Public Class raceAnanClass
     'レース解析
 
     Public Property umaban As Short
@@ -24,5 +26,18 @@
             m_hist(idx) = value
         End Set
     End Property
+
+    Public Function isGoodHist(ByVal idx As Integer, Optional ByVal sa As Single = 0.5) As Boolean
+        If m_hist(idx).Length > 0 Then
+            Dim ip As Integer = InStr(m_hist(idx), "(")
+            If ip > 0 Then
+                Dim c_sa As Single = CSng(Left(m_hist(idx), ip - 1))
+                If c_sa <= sa Then
+                    Return True
+                End If
+            End If
+        End If
+        Return False
+    End Function
 
 End Class

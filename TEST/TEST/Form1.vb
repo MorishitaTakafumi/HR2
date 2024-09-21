@@ -129,6 +129,7 @@ Public Class Form1
 
     Public Sub entry(ByVal url As String)
         txtURL.Text = "https://www.jra.go.jp" & url
+        Me.WindowState = FormWindowState.Minimized
         Show()
         BtnTest.PerformClick()
     End Sub

@@ -27,13 +27,20 @@ Public Class AnaForm
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.WordWrap = True
-            .Rows.MinSize = 20
+            .Rows.MinSize = 25
 
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
 
             .AllowMerging = AllowMergingEnum.None
             .AllowEditing = False
             .AllowSorting = AllowSortingEnum.SingleColumn
+            .AllowFiltering = True
+
+            If Not .Styles.Contains("agari0") Then
+                Dim cs As CellStyle = .Styles.Add("agari0")
+                cs.Name = "agari0"
+                cs.BackColor = Color.Yellow
+            End If
         End With
     End Sub
 
@@ -55,6 +62,13 @@ Public Class AnaForm
                 xx(FlxCol.histStart + i) = oKekka.hist(i)
             Next
             flx.AddItem(xx)
+
+            For i As Integer = 0 To 5
+                If oKekka.isGoodHist(i) Then
+                    flx.SetCellStyle(flx.Rows.Count - 1, FlxCol.histStart + i, "agari0")
+                End If
+            Next
+
         Next
         flx.AutoSizeCols()
         flx.AutoSizeRows()
@@ -84,6 +98,7 @@ Public Class AnaForm
 
             Dim anaList As New raceAnaListClass
             For j As Integer = 0 To fm3.syutubaList.cnt - 1
+                lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString
                 Dim rA As New raceAnanClass
                 Dim o As SyutubaClass = fm3.syutubaList.GetBodyRef(j)
                 rA.umaban = o.umaban
@@ -94,6 +109,10 @@ Public Class AnaForm
                     If i > 5 Then
                         Exit For
                     End If
+
+                    lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString & " | " & (i + 1).ToString & "/6"
+                    Me.Refresh()
+
                     Dim oS As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
                     fm1.entry(oS.href)
                     rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei)
