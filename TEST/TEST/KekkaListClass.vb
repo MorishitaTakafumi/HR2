@@ -1,6 +1,7 @@
 ﻿Public Class KekkaListClass
 
     Private m_bf As New List(Of KekkaClass)
+    Public raceHeader As New RaceHeaderClass
 
     Public ReadOnly Property cnt As Integer
         Get
@@ -20,14 +21,23 @@
         Return m_bf(idx)
     End Function
 
-    Public Function GetAgarisa(ByVal arg_bamei As String) As String
+    Public Function GetAgarisa(ByVal arg_bamei As String, ByVal konkaiSyubetu As String) As String
+        Dim cmps As String
+        If InStr(konkaiSyubetu, "芝") Then
+            cmps = "芝"
+        Else
+            cmps = "ダート"
+        End If
+
         For j As Integer = 0 To cnt - 1
             If StrComp(arg_bamei, m_bf(j).bamei, CompareMethod.Text) = 0 Then
                 If m_bf(j).cyakujun > 0 Then
-                    Return m_bf(j).agarisa.ToString("F1") & "(" & m_bf(j).cyakusa.ToString("F1") & ")"
-                Else
-                    Return cyakujunDecode(m_bf(j).cyakujun)
-
+                    Dim ss As String = m_bf(j).agarisa.ToString("F1") & "(" & m_bf(j).cyakusa.ToString("F1") & ")"
+                    If InStr(raceHeader.syubetu, cmps) > 0 Then
+                        Return ss
+                    Else
+                        Return "[" & ss & "]"
+                    End If
                 End If
             End If
         Next

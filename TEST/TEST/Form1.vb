@@ -103,7 +103,7 @@ Public Class Form1
             Dim contents As String = GetWebPageText(txtURL.Text.Trim)
             txtResult.Text = contents
             ListBox1.Items.Clear()
-            Dim oRaceHeader As New RaceHeaderClass
+            Dim oRaceHeader As RaceHeaderClass = kekkaList.raceHeader
 
             oRaceHeader.keibajo = GetWhenWhere(contents, oRaceHeader.dt)
             ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)

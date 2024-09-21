@@ -31,12 +31,32 @@ Public Class raceAnanClass
         If m_hist(idx).Length > 0 Then
             Dim ip As Integer = InStr(m_hist(idx), "(")
             If ip > 0 Then
-                Dim c_sa As Single = CSng(Left(m_hist(idx), ip - 1))
+                Dim ss As String = Replace(Left(m_hist(idx), ip - 1), "[", "")
+                Dim c_sa As Single = CSng(ss)
                 If c_sa <= sa Then
                     Return True
                 End If
             End If
         End If
+        Return False
+    End Function
+
+    Public Function isGoodSpan(Optional ByVal thv As Single = 3) As Boolean
+        Dim ip As Integer = InStr(spanVal, "/")
+        If ip > 0 Then
+            Dim ss As String = Mid(spanVal, ip + 1)
+            ip = InStr(ss, "(")
+            If ip > 0 Then
+                ss = Left(ss, ip - 1)
+            End If
+            If IsNumeric(ss) Then
+                Dim av As Single = CSng(ss)
+                If av >= thv Then
+                    Return True
+                End If
+            End If
+        End If
+
         Return False
     End Function
 

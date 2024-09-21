@@ -113,6 +113,7 @@ Partial Class AnaForm
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "AnaForm"
         Me.Text = "レース解析"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

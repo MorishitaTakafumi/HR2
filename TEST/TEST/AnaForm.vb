@@ -4,9 +4,10 @@ Public Class AnaForm
     Private Enum FlxCol
         umaban = 0
         bamei = 1
-        spanVal = 2
-        histStart = 3
-        cols = 9
+        chk = 2
+        spanVal = 3
+        histStart = 4
+        cols = 10
     End Enum
 
     '一覧グリッド書式設定
@@ -18,6 +19,7 @@ Public Class AnaForm
             .Cols.Fixed = 2
             .Item(0, FlxCol.umaban) = "馬番"
             .Item(0, FlxCol.bamei) = "馬名"
+            .Item(0, FlxCol.chk) = "印"
             .Item(0, FlxCol.spanVal) = "前走間隔±７日"
             For j As Integer = 0 To 5
                 .Item(0, FlxCol.histStart + j) = (j + 1).ToString & "走前"
@@ -31,15 +33,30 @@ Public Class AnaForm
 
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
 
+            .Cols(FlxCol.chk).DataType = GetType(Boolean)
+
             .AllowMerging = AllowMergingEnum.None
-            .AllowEditing = False
+            .AllowEditing = True
+
             .AllowSorting = AllowSortingEnum.SingleColumn
             .AllowFiltering = True
 
+            For j As Integer = 0 To .Cols.Count - 1
+                If j = FlxCol.chk Then
+                    .Cols(j).AllowEditing = True
+                    .Cols(j).AllowFiltering = AllowFiltering.Default
+                Else
+                    .Cols(j).AllowEditing = False
+                    .Cols(j).AllowFiltering = AllowFiltering.None
+                End If
+            Next
+
             If Not .Styles.Contains("agari0") Then
                 Dim cs As CellStyle = .Styles.Add("agari0")
-                cs.Name = "agari0"
                 cs.BackColor = Color.Yellow
+                '
+                cs = .Styles.Add("span7")
+                cs.BackColor = Color.Pink
             End If
         End With
     End Sub
@@ -62,6 +79,11 @@ Public Class AnaForm
                 xx(FlxCol.histStart + i) = oKekka.hist(i)
             Next
             flx.AddItem(xx)
+
+            If oKekka.isGoodSpan Then
+                flx.SetCellStyle(flx.Rows.Count - 1, FlxCol.spanVal, "span7")
+            End If
+
 
             For i As Integer = 0 To 5
                 If oKekka.isGoodHist(i) Then
@@ -115,7 +137,7 @@ Public Class AnaForm
 
                     Dim oS As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
                     fm1.entry(oS.href)
-                    rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei)
+                    rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oRaceHeader.syubetu)
                 Next
 
                 anaList.add1(rA)
