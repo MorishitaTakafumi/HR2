@@ -104,7 +104,7 @@ Public Class Form1
             txtResult.Text = contents
             ListBox1.Items.Clear()
             Dim oRaceHeader As RaceHeaderClass = kekkaList.raceHeader
-
+            oRaceHeader.init()
             oRaceHeader.keibajo = GetWhenWhere(contents, oRaceHeader.dt)
             ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)
             ListBox1.Items.Add("開催日：" & oRaceHeader.dt.ToString("yyyy年MM月dd日"))
@@ -134,4 +134,9 @@ Public Class Form1
         BtnTest.PerformClick()
     End Sub
 
+    Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
+        If Clipboard.ContainsText Then
+            txtURL.Text = Clipboard.GetText()
+        End If
+    End Sub
 End Class

@@ -29,6 +29,7 @@ Partial Class AnaForm
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
         Me.lb_msg = New System.Windows.Forms.Label()
+        Me.BtnURL = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -51,7 +52,7 @@ Partial Class AnaForm
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(976, 24)
         Me.txtURL.TabIndex = 1
-        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0106202404061120240921/85"
+        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0107202403071020240922/19"
         '
         'Label1
         '
@@ -99,11 +100,23 @@ Partial Class AnaForm
         Me.lb_msg.TabIndex = 6
         Me.lb_msg.Text = "***"
         '
+        'BtnURL
+        '
+        Me.BtnURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnURL.Location = New System.Drawing.Point(1274, 13)
+        Me.BtnURL.Margin = New System.Windows.Forms.Padding(4)
+        Me.BtnURL.Name = "BtnURL"
+        Me.BtnURL.Size = New System.Drawing.Size(185, 55)
+        Me.BtnURL.TabIndex = 7
+        Me.BtnURL.Text = "URL貼り付け"
+        Me.BtnURL.UseVisualStyleBackColor = True
+        '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1882, 789)
+        Me.Controls.Add(Me.BtnURL)
         Me.Controls.Add(Me.lb_msg)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
@@ -126,4 +139,5 @@ Partial Class AnaForm
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
     Friend WithEvents lb_msg As Label
+    Friend WithEvents BtnURL As Button
 End Class

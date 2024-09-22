@@ -7,6 +7,20 @@
     Public Property syubetu As String
     Public Property classname As String
 
+    Public Sub init()
+        keibajo = ""
+        dt = #1900/1/1#
+        racename = ""
+        grade = ""
+        distance = 0
+        syubetu = ""
+        classname = ""
+    End Sub
+
+    Public Sub New()
+        init()
+    End Sub
+
     '上り差の補正値を計算するため何コーナーでの通過順位を使うか
     Public Function GetCornerToCalcAgarisa() As Integer
 

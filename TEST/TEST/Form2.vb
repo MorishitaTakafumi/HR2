@@ -127,4 +127,10 @@ Public Class Form2
         Dim a As New Form1
         a.entry(url)
     End Sub
+
+    Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
+        If Clipboard.ContainsText Then
+            txtURL.Text = Clipboard.GetText()
+        End If
+    End Sub
 End Class

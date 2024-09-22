@@ -136,6 +136,11 @@ Public Class AnaForm
                     Me.Refresh()
 
                     Dim oS As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
+
+                    'If j = 11 AndAlso i = 0 Then
+                    '    MsgBox(o.bamei & " " & oS.racename)
+                    'End If
+
                     fm1.entry(oS.href)
                     rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oRaceHeader.syubetu)
                 Next
@@ -149,4 +154,9 @@ Public Class AnaForm
         End If
     End Sub
 
+    Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
+        If Clipboard.ContainsText Then
+            txtURL.Text = Clipboard.GetText()
+        End If
+    End Sub
 End Class

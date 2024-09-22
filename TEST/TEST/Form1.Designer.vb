@@ -29,6 +29,7 @@ Partial Class Form1
         Me.txtResult = New System.Windows.Forms.TextBox()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
+        Me.BtnURL = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -49,7 +50,7 @@ Partial Class Form1
         Me.txtURL.Location = New System.Drawing.Point(73, 26)
         Me.txtURL.Margin = New System.Windows.Forms.Padding(4)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(976, 24)
+        Me.txtURL.Size = New System.Drawing.Size(1134, 24)
         Me.txtURL.TabIndex = 1
         Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessS.html?CNAME=pw01sde1009202305010720231202/99"
         '
@@ -99,11 +100,23 @@ Partial Class Form1
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 5
         '
+        'BtnURL
+        '
+        Me.BtnURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnURL.Location = New System.Drawing.Point(1235, 11)
+        Me.BtnURL.Margin = New System.Windows.Forms.Padding(4)
+        Me.BtnURL.Name = "BtnURL"
+        Me.BtnURL.Size = New System.Drawing.Size(185, 55)
+        Me.BtnURL.TabIndex = 8
+        Me.BtnURL.Text = "URL貼り付け"
+        Me.BtnURL.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1749, 789)
+        Me.Controls.Add(Me.BtnURL)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.txtResult)
@@ -125,4 +138,5 @@ Partial Class Form1
     Friend WithEvents txtResult As TextBox
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
+    Friend WithEvents BtnURL As Button
 End Class
