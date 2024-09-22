@@ -86,7 +86,7 @@ Public Class AnaForm
 
 
             For i As Integer = 0 To 5
-                If oKekka.isGoodHist(i) Then
+                If oKekka.isGoodHist(i, NumericUpDown1.Value) Then
                     flx.SetCellStyle(flx.Rows.Count - 1, FlxCol.histStart + i, "agari0")
                 End If
             Next
@@ -157,6 +157,18 @@ Public Class AnaForm
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
         If Clipboard.ContainsText Then
             txtURL.Text = Clipboard.GetText()
+        End If
+    End Sub
+
+    Private Sub flx_MouseDown(sender As Object, e As MouseEventArgs) Handles flx.MouseDown
+        Dim jcol As Integer = flx.MouseCol
+        Dim jrow As Integer = flx.MouseRow
+        If jcol < 0 OrElse jcol > flx.Cols.Count - 1 OrElse jrow < flx.Rows.Fixed OrElse jrow > flx.Rows.Count - 1 Then
+            flx.Col = -1
+            flx.Row = -1
+            flx.HighLight = HighLightEnum.Never
+        Else
+            flx.HighLight = HighLightEnum.Always
         End If
     End Sub
 End Class

@@ -30,7 +30,10 @@ Partial Class AnaForm
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
         Me.lb_msg = New System.Windows.Forms.Label()
         Me.BtnURL = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'BtnGo
@@ -70,7 +73,7 @@ Partial Class AnaForm
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 19
-        Me.ListBox1.Location = New System.Drawing.Point(13, 73)
+        Me.ListBox1.Location = New System.Drawing.Point(13, 121)
         Me.ListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(382, 308)
@@ -94,7 +97,7 @@ Partial Class AnaForm
         'lb_msg
         '
         Me.lb_msg.AutoSize = True
-        Me.lb_msg.Location = New System.Drawing.Point(17, 418)
+        Me.lb_msg.Location = New System.Drawing.Point(17, 457)
         Me.lb_msg.Name = "lb_msg"
         Me.lb_msg.Size = New System.Drawing.Size(31, 15)
         Me.lb_msg.TabIndex = 6
@@ -111,11 +114,36 @@ Partial Class AnaForm
         Me.BtnURL.Text = "URL貼り付け"
         Me.BtnURL.UseVisualStyleBackColor = True
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("MS UI Gothic", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label2.Location = New System.Drawing.Point(12, 83)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(187, 18)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "上がり強調表示基準値："
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.DecimalPlaces = 1
+        Me.NumericUpDown1.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.NumericUpDown1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        Me.NumericUpDown1.Location = New System.Drawing.Point(205, 76)
+        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(120, 30)
+        Me.NumericUpDown1.TabIndex = 9
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {5, 0, 0, 65536})
+        '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1882, 789)
+        Me.Controls.Add(Me.NumericUpDown1)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.BtnURL)
         Me.Controls.Add(Me.lb_msg)
         Me.Controls.Add(Me.flx)
@@ -128,6 +156,7 @@ Partial Class AnaForm
         Me.Text = "レース解析"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -140,4 +169,6 @@ Partial Class AnaForm
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
     Friend WithEvents lb_msg As Label
     Friend WithEvents BtnURL As Button
+    Friend WithEvents Label2 As Label
+    Friend WithEvents NumericUpDown1 As NumericUpDown
 End Class

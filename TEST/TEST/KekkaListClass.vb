@@ -100,7 +100,7 @@
         Dim corner_idx As Integer = oHead.GetCornerToCalcAgarisa() - 1
 
         For j As Integer = 0 To cnt - 1
-            If m_bf(j).agari = agariList(0) Then '最速の上り馬は2番目の上りとの差
+            If m_bf(j).agari = agariList(0) AndAlso m_bf(j).cyakujun <= 5 Then '5着内で最速の上り馬は5着内で2番目の上りとの差(その馬が5着より下の場合は5着内で最速場と比較する)
                 m_bf(j).agarisa = m_bf(j).agari - agariList(1)
             Else
                 m_bf(j).agarisa = m_bf(j).agari - agariList(0)
