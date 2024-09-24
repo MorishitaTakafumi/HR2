@@ -61,11 +61,16 @@ Public Class Form3
             Dim oKekka As SyutubaClass = sblist.GetBodyRef(j)
             If oKekka.waku > 0 Then
                 xx(FlxCol.waku) = oKekka.waku
-                xx(FlxCol.umaban) = oKekka.umaban
+                If oKekka.umaban > 0 Then
+                    xx(FlxCol.umaban) = oKekka.umaban
+                Else
+                    xx(FlxCol.umaban) = "取消"
+                End If
             Else
                 xx(FlxCol.waku) = ""
                 xx(FlxCol.umaban) = ""
             End If
+
             xx(FlxCol.bamei) = oKekka.bamei
             xx(FlxCol.seirei) = oKekka.sex & oKekka.age.ToString
             xx(FlxCol.hutan) = oKekka.hutan

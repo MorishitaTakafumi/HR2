@@ -32,15 +32,42 @@
                                 End If
                             End If
                         End If
+
+
+
                         lineStr = SearchLineByKeyword(findpos + 1, src, "a href", findpos)
                         If lineStr.Length > 0 Then
                             a.bamei = GetTagValue(lineStr, "a")
                             a.href = GetAttributeValue(lineStr, "a", "href")
+
+                            If InStr(lineStr, "pop_rank") > 0 Then
+                                Dim stmp = GetTagContents(lineStr, "pop_rank")
+                                If stmp.Length > 0 Then
+                                    stmp = Replace(stmp, "(", "")
+                                    If IsNumeric(stmp) Then
+                                        a.ninki = CShort(stmp)
+                                    End If
+                                End If
+                            End If
                         End If
 
                         lineStr = SearchLineByKeyword(findpos + 1, src, """trainer""", findpos)
                         If lineStr.Length > 0 Then
                             a.cyokyosi = GetTagValue(lineStr, "a")
+                            If InStr(lineStr, "cell weight") > 0 Then
+                                Dim stmp As String = GetTagContents(lineStr, "cell weight")
+                                If stmp.Length > 0 Then
+                                    stmp = Replace(stmp, "kg", "")
+                                    If IsNumeric(stmp) Then
+                                        a.w = CSng(stmp)
+                                        stmp = GetTagContents(lineStr, "transition")
+                                        stmp = Replace(Replace(stmp, "(", ""), ")", "")
+                                        If IsNumeric(stmp) Then
+                                            a.zogen = CSng(stmp)
+                                        End If
+                                    End If
+                                End If
+                            End If
                         End If
                         lineStr = SearchLineByKeyword(findpos + 1, src, """age""", findpos)
                         If lineStr.Length > 0 Then

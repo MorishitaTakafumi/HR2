@@ -2,5 +2,13 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
+    <PublishUrlHistory>C:\学習\HR2\TEST\TEST\publish\|publish\</PublishUrlHistory>
+    <InstallUrlHistory>\\sv1090\TMP\HR2_SETUP\</InstallUrlHistory>
+    <SupportUrlHistory />
+    <UpdateUrlHistory>\\sv1090\TMP\HR2SETUP\</UpdateUrlHistory>
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>ja-JP</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
 </Project>

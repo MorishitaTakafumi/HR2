@@ -3,14 +3,18 @@
 Public Class raceAnanClass
     'レース解析
 
+    Public Property waku As Short
     Public Property umaban As Short
     Public Property bamei As String
+    Public Property ninki As Short
     Public Property spanVal As String
 
     Private m_hist(5) As String
 
     Public Sub New()
+        waku = -1
         umaban = -1
+        ninki = -1
         bamei = ""
         spanVal = ""
         For j As Integer = 0 To 5
