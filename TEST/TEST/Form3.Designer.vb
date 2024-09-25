@@ -116,6 +116,7 @@ Partial Class Form3
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.BtnTest)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form3"
         Me.Text = "出馬表の取り込み"
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()

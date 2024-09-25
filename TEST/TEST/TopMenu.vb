@@ -1,5 +1,10 @@
 ﻿Public Class TopMenu
 
+    Public Sub New()
+        InitializeComponent()
+        Me.Text &= Application.ProductVersion
+    End Sub
+
     Private Sub BtnRaceKekka_Click(sender As Object, e As EventArgs) Handles BtnRaceKekka.Click
         Dim a As New Form1
         Me.Hide()
