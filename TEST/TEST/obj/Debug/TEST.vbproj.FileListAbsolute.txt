@@ -37,3 +37,8 @@ C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.xml
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.pdb
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.AnaForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.AnaForm.resources
+C:\STUDY\HR2\TEST\TEST\bin\Debug\TEST.exe.manifest
+C:\STUDY\HR2\TEST\TEST\bin\Debug\TEST.application
+C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.TrustInfo.xml
+C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.exe.manifest
+C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.application

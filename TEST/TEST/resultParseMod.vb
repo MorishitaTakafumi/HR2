@@ -205,9 +205,14 @@
                                 End If
                             End If
                         End If
-                        lineStr = SearchLineByKeyword(findpos + 1, src, "a href", findpos)
+
+                        lineStr = SearchLineByKeyword(findpos + 1, src, """trainer""", findpos)
                         If lineStr.Length > 0 Then
-                            a.cyokyosi = GetTagContents(lineStr, "href")
+                            If InStr(lineStr, "href") > 0 Then
+                                a.cyokyosi = GetTagContents(lineStr, "href")
+                            Else
+                                a.cyokyosi = GetTagContents(lineStr, "td")
+                            End If
                         End If
 
                         lineStr = SearchLineByKeyword(findpos + 1, src, """pop""", findpos)
