@@ -28,6 +28,7 @@ Partial Class TopMenu
         Me.BtnExit = New System.Windows.Forms.Button()
         Me.BtnSyutubahyo = New System.Windows.Forms.Button()
         Me.BtnAnalysis = New System.Windows.Forms.Button()
+        Me.BtnStoreAnaVal = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'BtnRaceKekka
@@ -35,7 +36,7 @@ Partial Class TopMenu
         Me.BtnRaceKekka.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnRaceKekka.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.BtnRaceKekka.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnRaceKekka.Location = New System.Drawing.Point(157, 267)
+        Me.BtnRaceKekka.Location = New System.Drawing.Point(162, 239)
         Me.BtnRaceKekka.Name = "BtnRaceKekka"
         Me.BtnRaceKekka.Size = New System.Drawing.Size(249, 54)
         Me.BtnRaceKekka.TabIndex = 3
@@ -47,7 +48,7 @@ Partial Class TopMenu
         Me.BtnHorce.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnHorce.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.BtnHorce.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnHorce.Location = New System.Drawing.Point(157, 199)
+        Me.BtnHorce.Location = New System.Drawing.Point(162, 171)
         Me.BtnHorce.Name = "BtnHorce"
         Me.BtnHorce.Size = New System.Drawing.Size(249, 54)
         Me.BtnHorce.TabIndex = 2
@@ -59,10 +60,10 @@ Partial Class TopMenu
         Me.BtnExit.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.BtnExit.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnExit.Location = New System.Drawing.Point(157, 335)
+        Me.BtnExit.Location = New System.Drawing.Point(162, 375)
         Me.BtnExit.Name = "BtnExit"
         Me.BtnExit.Size = New System.Drawing.Size(249, 54)
-        Me.BtnExit.TabIndex = 4
+        Me.BtnExit.TabIndex = 5
         Me.BtnExit.Text = "終了"
         Me.BtnExit.UseVisualStyleBackColor = False
         '
@@ -71,7 +72,7 @@ Partial Class TopMenu
         Me.BtnSyutubahyo.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnSyutubahyo.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.BtnSyutubahyo.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnSyutubahyo.Location = New System.Drawing.Point(157, 131)
+        Me.BtnSyutubahyo.Location = New System.Drawing.Point(162, 103)
         Me.BtnSyutubahyo.Name = "BtnSyutubahyo"
         Me.BtnSyutubahyo.Size = New System.Drawing.Size(249, 54)
         Me.BtnSyutubahyo.TabIndex = 1
@@ -83,18 +84,31 @@ Partial Class TopMenu
         Me.BtnAnalysis.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnAnalysis.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.BtnAnalysis.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnAnalysis.Location = New System.Drawing.Point(157, 63)
+        Me.BtnAnalysis.Location = New System.Drawing.Point(162, 35)
         Me.BtnAnalysis.Name = "BtnAnalysis"
         Me.BtnAnalysis.Size = New System.Drawing.Size(249, 54)
         Me.BtnAnalysis.TabIndex = 0
         Me.BtnAnalysis.Text = "レース解析"
         Me.BtnAnalysis.UseVisualStyleBackColor = False
         '
+        'BtnStoreAnaVal
+        '
+        Me.BtnStoreAnaVal.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BtnStoreAnaVal.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.BtnStoreAnaVal.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnStoreAnaVal.Location = New System.Drawing.Point(162, 307)
+        Me.BtnStoreAnaVal.Name = "BtnStoreAnaVal"
+        Me.BtnStoreAnaVal.Size = New System.Drawing.Size(249, 54)
+        Me.BtnStoreAnaVal.TabIndex = 4
+        Me.BtnStoreAnaVal.Text = "レース勝ち馬解析値の登録"
+        Me.BtnStoreAnaVal.UseVisualStyleBackColor = False
+        '
         'TopMenu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(569, 482)
+        Me.Controls.Add(Me.BtnStoreAnaVal)
         Me.Controls.Add(Me.BtnAnalysis)
         Me.Controls.Add(Me.BtnSyutubahyo)
         Me.Controls.Add(Me.BtnExit)
@@ -113,4 +127,5 @@ Partial Class TopMenu
     Friend WithEvents BtnExit As Button
     Friend WithEvents BtnSyutubahyo As Button
     Friend WithEvents BtnAnalysis As Button
+    Friend WithEvents BtnStoreAnaVal As Button
 End Class

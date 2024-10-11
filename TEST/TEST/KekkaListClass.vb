@@ -1,4 +1,5 @@
 ﻿Public Class KekkaListClass
+    'レース結果リスト・・・ある１つの出走各場のレース結果のリスト
 
     Private m_bf As New List(Of KekkaClass)
     Public raceHeader As New RaceHeaderClass
@@ -17,23 +18,38 @@
         m_bf.Add(o)
     End Sub
 
+    '着順を指定してBody参照を取得する
+    Public Function GetBodyRefByCyakujun(ByVal cyakujun As Integer) As KekkaClass
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).cyakujun = cyakujun Then
+                Return m_bf(j)
+            End If
+        Next
+        Return Nothing
+    End Function
+
+    '馬名を指定してBody参照を取得する
+    '
+    Public Function GetBodyRefByBamei(ByVal arg_bamei As String) As KekkaClass
+        For j As Integer = 0 To cnt - 1
+            If StrComp(arg_bamei, m_bf(j).bamei, CompareMethod.Text) = 0 Then
+                Return m_bf(j)
+            End If
+        Next
+        Return Nothing
+    End Function
+
     Public Function GetBodyRef(ByVal idx As Integer) As KekkaClass
         Return m_bf(idx)
     End Function
 
+    '馬名を指定して上り差と着差を文字列で返す
     Public Function GetAgarisa(ByVal arg_bamei As String, ByVal konkaiSyubetu As String) As String
-        Dim cmps As String
-        If InStr(konkaiSyubetu, "芝") Then
-            cmps = "芝"
-        Else
-            cmps = "ダート"
-        End If
-
         For j As Integer = 0 To cnt - 1
             If StrComp(arg_bamei, m_bf(j).bamei, CompareMethod.Text) = 0 Then
                 If m_bf(j).cyakujun > 0 Then
                     Dim ss As String = m_bf(j).agarisa.ToString("F1") & "(" & m_bf(j).cyakusa.ToString("F1") & ")"
-                    If InStr(raceHeader.syubetu, cmps) > 0 Then
+                    If IsSameTypeRace(konkaiSyubetu) Then
                         Return ss
                     Else
                         Return "[" & ss & "]"
@@ -42,6 +58,22 @@
             End If
         Next
         Return ""
+    End Function
+
+    'レース種別の同異
+    '戻り値：True=同種, False=異種
+    Public Function IsSameTypeRace(ByVal konkaiSyubetu As String) As Boolean
+        Dim cmps As String
+        If InStr(konkaiSyubetu, "芝") Then
+            cmps = "芝"
+        Else
+            cmps = "ダート"
+        End If
+        If InStr(raceHeader.syubetu, cmps) > 0 Then
+            Return True
+        Else
+            Return False
+        End If
     End Function
 
     '着差セット
@@ -85,13 +117,13 @@
             Case "G1"
                 hoseiti = -0.6
             Case Else
-                If InStr(oHead.classname, "未勝利") > 0 OrElse InStr(oHead.classname, "新馬") > 0 Then
+                If InStr(oHead.class_name, "未勝利") > 0 OrElse InStr(oHead.class_name, "新馬") > 0 Then
                     hoseiti = 0.8
-                ElseIf InStr(oHead.classname, "1勝") > 0 OrElse InStr(oHead.classname, "500万") > 0 Then
+                ElseIf InStr(oHead.class_name, "1勝") > 0 OrElse InStr(oHead.class_name, "500万") > 0 Then
                     hoseiti = 0.6
-                ElseIf InStr(oHead.classname, "2勝") > 0 OrElse InStr(oHead.classname, "1000万") > 0 Then
+                ElseIf InStr(oHead.class_name, "2勝") > 0 OrElse InStr(oHead.class_name, "1000万") > 0 Then
                     hoseiti = 0.4
-                ElseIf InStr(oHead.classname, "3勝") > 0 OrElse InStr(oHead.classname, "1600万") > 0 Then
+                ElseIf InStr(oHead.class_name, "3勝") > 0 OrElse InStr(oHead.class_name, "1600万") > 0 Then
                     hoseiti = 0.2
                 End If
         End Select

@@ -1,6 +1,8 @@
 ﻿Imports C1.Win.C1FlexGrid
 
 Public Class Form1
+    'レース結果の取り込み
+
     Private Enum FlxCol
         cyakujun = 0
         umaban = 1
@@ -15,7 +17,8 @@ Public Class Form1
         bataiju = 10
         cyokyosi = 11
         ninki = 12
-        cols = 13
+        href = 13
+        cols = 14
     End Enum
 
     Public kekkaList As New KekkaListClass
@@ -40,6 +43,7 @@ Public Class Form1
             .Item(0, FlxCol.bataiju) = "馬体重" & vbLf & "(増減)"
             .Item(0, FlxCol.cyokyosi) = "調教師名"
             .Item(0, FlxCol.ninki) = "人気"
+            .Item(0, FlxCol.href) = "馬href"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
@@ -50,6 +54,7 @@ Public Class Form1
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
             .Cols(FlxCol.kisyu).TextAlign = TextAlignEnum.LeftCenter
             .Cols(FlxCol.cyokyosi).TextAlign = TextAlignEnum.LeftCenter
+            .Cols(FlxCol.href).TextAlign = TextAlignEnum.LeftCenter
 
             .AllowMerging = AllowMergingEnum.None
             .AllowEditing = False
@@ -91,6 +96,7 @@ Public Class Form1
             End If
             xx(FlxCol.bataiju) = oKekka.w & vbLf & "(" & oKekka.zogen & ")"
             xx(FlxCol.cyokyosi) = oKekka.cyokyosi
+            xx(FlxCol.href) = oKekka.uma_href
             flx.AddItem(xx)
         Next
         flx.AutoSizeCols()
@@ -109,16 +115,21 @@ Public Class Form1
             ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)
             ListBox1.Items.Add("開催日：" & oRaceHeader.dt.ToString("yyyy年MM月dd日"))
 
-            oRaceHeader.racename = GetRaceName(contents, oRaceHeader.grade)
-            ListBox1.Items.Add("レース名：" & oRaceHeader.racename)
+            oRaceHeader.race_no = GetRaceNo(contents)
+            ListBox1.Items.Add("レースNo.：" & oRaceHeader.race_no)
+            oRaceHeader.race_name = GetRaceName(contents, oRaceHeader.grade)
+            ListBox1.Items.Add("レース名：" & oRaceHeader.race_name)
             ListBox1.Items.Add("グレード：" & oRaceHeader.grade)
 
-            oRaceHeader.classname = GetClassCource(contents, oRaceHeader.distance, oRaceHeader.syubetu)
-            ListBox1.Items.Add("距離：" & oRaceHeader.distance.ToString)
+            oRaceHeader.class_name = GetClassCource(contents, oRaceHeader.kyori, oRaceHeader.syubetu)
+            ListBox1.Items.Add("距離：" & oRaceHeader.kyori.ToString)
             ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
-            ListBox1.Items.Add("クラス：" & oRaceHeader.classname)
+            ListBox1.Items.Add("クラス：" & oRaceHeader.class_name)
+            oRaceHeader.class_code = oRaceHeader.GetClassCode()
 
             GetKekka(contents, kekkaList)
+            oRaceHeader.tosu = kekkaList.cnt
+            ListBox1.Items.Add("頭数：" & oRaceHeader.tosu)
 
             kekkaList.setCyakusa()
             kekkaList.setAgarisa(oRaceHeader)
@@ -128,7 +139,10 @@ Public Class Form1
     End Sub
 
     Public Sub entry(ByVal url As String)
-        txtURL.Text = "https://www.jra.go.jp" & url
+        If InStr(url, "https://www.jra.go.jp") = 0 Then
+            url = "https://www.jra.go.jp" & url
+        End If
+        txtURL.Text = url
         Me.WindowState = FormWindowState.Minimized
         Show()
         BtnTest.PerformClick()
@@ -138,5 +152,11 @@ Public Class Form1
         If Clipboard.ContainsText Then
             txtURL.Text = Clipboard.GetText()
         End If
+    End Sub
+
+    Private Sub flx_Click(sender As Object, e As EventArgs) Handles flx.Click
+        Dim url As String = flx.Item(flx.Row, FlxCol.href)
+        Dim a As New Form2
+        a.entry(url)
     End Sub
 End Class

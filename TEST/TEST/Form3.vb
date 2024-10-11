@@ -1,6 +1,8 @@
 ﻿Imports C1.Win.C1FlexGrid
 
 Public Class Form3
+    '出馬表の取り込み
+
     Private Enum FlxCol
         waku = 0
         umaban = 1
@@ -105,14 +107,14 @@ Public Class Form3
             ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)
             ListBox1.Items.Add("開催日：" & oRaceHeader.dt.ToString("yyyy年MM月dd日"))
 
-            oRaceHeader.racename = GetRaceName(contents, oRaceHeader.grade)
-            ListBox1.Items.Add("レース名：" & oRaceHeader.racename)
+            oRaceHeader.race_name = GetRaceName(contents, oRaceHeader.grade)
+            ListBox1.Items.Add("レース名：" & oRaceHeader.race_name)
             ListBox1.Items.Add("グレード：" & oRaceHeader.grade)
 
-            oRaceHeader.classname = GetClassCource(contents, oRaceHeader.distance, oRaceHeader.syubetu)
-            ListBox1.Items.Add("距離：" & oRaceHeader.distance.ToString)
+            oRaceHeader.class_name = GetClassCource(contents, oRaceHeader.kyori, oRaceHeader.syubetu)
+            ListBox1.Items.Add("距離：" & oRaceHeader.kyori.ToString)
             ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
-            ListBox1.Items.Add("クラス：" & oRaceHeader.classname)
+            ListBox1.Items.Add("クラス：" & oRaceHeader.class_name)
 
             GetSyutuba(contents, syutubaList)
 

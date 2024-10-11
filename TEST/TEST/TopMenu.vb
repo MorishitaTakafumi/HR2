@@ -36,4 +36,11 @@
         a.ShowDialog()
         Me.Show()
     End Sub
+
+    Private Sub BtnStoreAnaVal_Click(sender As Object, e As EventArgs) Handles BtnStoreAnaVal.Click
+        Dim a As New StoreAnaValForm
+        Me.Hide()
+        a.ShowDialog()
+        Me.Show()
+    End Sub
 End Class

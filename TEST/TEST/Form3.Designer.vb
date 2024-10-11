@@ -50,7 +50,7 @@ Partial Class Form3
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(852, 20)
         Me.txtURL.TabIndex = 1
-        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde1007202403071120240922/AD"
+        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0108202405041120241013/49"
         '
         'Label1
         '

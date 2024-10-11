@@ -34,6 +34,24 @@
         End If
     End Function
 
+    'レースNOの取得
+    Public Function GetRaceNo(ByVal src As String) As Short
+        Dim findpos As Integer = 1
+        Dim lineStr As String = SearchLineByKeyword(findpos, src, """race_number""", findpos)
+        If lineStr.Length > 0 Then
+            Dim imgname As String = GetAttributeValue(lineStr, "img", "src")
+            Dim ip As Integer = InStr(imgname, "race_num_")
+            If ip > 0 Then
+                imgname = Mid(imgname, ip)
+                Dim ss As String = Replace(Replace(imgname, "race_num_", ""), ".png", "")
+                If IsNumeric(ss) Then
+                    Return CShort(ss)
+                End If
+            End If
+        End If
+        Return 0
+    End Function
+
     'レース名とグレードの取得
     Public Function GetRaceName(ByVal src As String, ByRef grade As String) As String
         Dim findpos As Integer = 1
@@ -121,6 +139,7 @@
                         lineStr = SearchLineByKeyword(findpos + 1, src, "a href", findpos)
                         If lineStr.Length > 0 Then
                             a.bamei = GetTagValue(lineStr, "a")
+                            a.uma_href = GetAttributeValue(lineStr, "a", "href")
                             'words = removeTagPair(lineStr)
                             'If words.Count > 0 Then
                             '    a.bamei = words(0)

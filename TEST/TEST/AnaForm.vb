@@ -1,6 +1,9 @@
 ﻿Imports C1.Win.C1FlexGrid
+Imports System.Data.SQLite
 
 Public Class AnaForm
+
+    Private Const HIS_CNT As Integer = 6
     Private Enum FlxCol
         waku = 0
         umaban = 1
@@ -9,10 +12,13 @@ Public Class AnaForm
         ninki = 4
         spanVal = 5
         histStart = 6
-        cols = 12
+        kyoriScore = histStart + HIS_CNT
+        dateScore
+        cols = dateScore + 1
     End Enum
 
     Private anaList As New raceAnaListClass
+    Private oHead As RaceHeaderClass
 
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
@@ -26,10 +32,12 @@ Public Class AnaForm
             .Item(0, FlxCol.bamei) = "馬名"
             .Item(0, FlxCol.chk) = " マーク "
             .Item(0, FlxCol.ninki) = "人気"
-            .Item(0, FlxCol.spanVal) = "前走間隔±７日"
+            .Item(0, FlxCol.spanVal) = "前走間隔" & vbLf & "±７日"
             For j As Integer = 0 To 5
                 .Item(0, FlxCol.histStart + j) = (j + 1).ToString & "走前"
             Next
+            .Item(0, FlxCol.kyoriScore) = "今回距離" & vbLf & "成績"
+            .Item(0, FlxCol.dateScore) = "今回日付" & vbLf & "±７日成績"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
@@ -152,14 +160,16 @@ Public Class AnaForm
             xx(FlxCol.bamei) = oUma.bamei
             If xx(FlxCol.umaban) = "取消" Then
                 xx(FlxCol.spanVal) = ""
-                For i As Integer = 0 To 5
-                    xx(FlxCol.histStart + i) = ""
+                For i As Integer = FlxCol.histStart To FlxCol.cols - 1
+                    xx(i) = ""
                 Next
             Else
                 xx(FlxCol.spanVal) = oUma.spanVal
                 For i As Integer = 0 To 5
                     xx(FlxCol.histStart + i) = oUma.hist(i)
                 Next
+                xx(FlxCol.kyoriScore) = AnaValClass.Score2String(oUma.kyoriScore)
+                xx(FlxCol.dateScore) = AnaValClass.Score2String(oUma.dateScore)
             End If
             flx.AddItem(xx)
         Next
@@ -170,8 +180,14 @@ Public Class AnaForm
     Private Sub PaintTable(ByVal sblist As raceAnaListClass)
 
         For j As Integer = 0 To sblist.cnt - 1
-            Dim jrow As Integer = flx.Rows.Fixed + j
             Dim oUma As raceAnanClass = sblist.GetBodyRef(j)
+            '並べ替えに対応するため馬名で行を検索する
+            Dim jrow As Integer
+            For jrow = flx.Rows.Fixed To flx.Rows.Count - 1
+                If oUma.bamei = flx.Item(jrow, FlxCol.bamei) Then
+                    Exit For
+                End If
+            Next
 
             Dim torikesi As Boolean = False
             If oUma.waku > 0 AndAlso oUma.umaban < 0 Then
@@ -218,7 +234,7 @@ Public Class AnaForm
         Next
     End Sub
 
-    Private Sub BtnTGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
+    Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
         Dim url As String = txtURL.Text.Trim
         If url.Length > 0 Then
             Dim fm1 As New Form1
@@ -228,17 +244,17 @@ Public Class AnaForm
 
 
             ListBox1.Items.Clear()
-            Dim oRaceHeader As RaceHeaderClass = fm3.oRaceHeader
+            oHead = fm3.oRaceHeader
 
-            ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)
-            ListBox1.Items.Add("開催日：" & oRaceHeader.dt.ToString("yyyy年MM月dd日"))
+            ListBox1.Items.Add("競馬場：" & oHead.keibajo)
+            ListBox1.Items.Add("開催日：" & oHead.dt.ToString("yyyy年MM月dd日"))
 
-            ListBox1.Items.Add("レース名：" & oRaceHeader.racename)
-            ListBox1.Items.Add("グレード：" & oRaceHeader.grade)
+            ListBox1.Items.Add("レース名：" & oHead.race_name)
+            ListBox1.Items.Add("グレード：" & oHead.grade)
 
-            ListBox1.Items.Add("距離：" & oRaceHeader.distance.ToString)
-            ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
-            ListBox1.Items.Add("クラス：" & oRaceHeader.classname)
+            ListBox1.Items.Add("距離：" & oHead.kyori.ToString)
+            ListBox1.Items.Add("種別：" & oHead.syubetu)
+            ListBox1.Items.Add("クラス：" & oHead.class_name)
 
             anaList.init()
             For j As Integer = 0 To fm3.syutubaList.cnt - 1
@@ -250,7 +266,8 @@ Public Class AnaForm
                 rA.bamei = o.bamei
                 rA.ninki = o.ninki
                 fm2.entry(o.href)
-                rA.spanVal = fm2.umaHistList.GetSpanVal(oRaceHeader.dt)
+                Dim spanScore As Integer = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
+                rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
                 For i As Integer = 0 To fm2.umaHistList.cnt - 1
                     If i > 5 Then
                         Exit For
@@ -266,7 +283,7 @@ Public Class AnaForm
                     'End If
 
                     fm1.entry(oS.href)
-                    rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oRaceHeader.syubetu)
+                    rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
                 Next
 
                 anaList.add1(rA)
@@ -299,5 +316,10 @@ Public Class AnaForm
 
     Private Sub BtnRedisp_Click(sender As Object, e As EventArgs) Handles BtnRedisp.Click
         PaintTable(anaList)
+    End Sub
+
+    Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
+        ListBox2.Items.Clear()
+
     End Sub
 End Class

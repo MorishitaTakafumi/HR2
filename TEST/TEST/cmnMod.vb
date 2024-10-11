@@ -1,4 +1,10 @@
 ﻿Module cmnMod
+
+    'データベース接続文字列
+    Public Function GetDbConnectionString() As String
+        Return "Data Source=HR2.sqlite3"
+    End Function
+
     '指定したキーワードを含む行をさがす
     Public Function SearchLineByKeyword(ByVal startpos As Integer, ByVal src As String, ByVal keyword As String, ByRef findpos As Integer) As String
         Dim ip As Integer

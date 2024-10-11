@@ -1,7 +1,5 @@
-﻿Imports System.Security.Cryptography
-
-Public Class raceAnanClass
-    'レース解析
+﻿Public Class raceAnanClass
+    'レース解析値
 
     Public Property waku As Short
     Public Property umaban As Short
@@ -10,6 +8,10 @@ Public Class raceAnanClass
     Public Property spanVal As String
 
     Private m_hist(5) As String
+
+    Public Property kyoriScore As Integer
+    Public Property dateScore As Integer
+
 
     Public Sub New()
         waku = -1
@@ -20,6 +22,8 @@ Public Class raceAnanClass
         For j As Integer = 0 To 5
             m_hist(j) = ""
         Next
+        kyoriScore = 0
+        dateScore = 0
     End Sub
 
     Public Property hist(ByVal idx As Integer) As String
@@ -63,5 +67,4 @@ Public Class raceAnanClass
 
         Return False
     End Function
-
 End Class

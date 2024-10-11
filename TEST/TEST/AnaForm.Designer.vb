@@ -33,6 +33,14 @@ Partial Class AnaForm
         Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.BtnRedisp = New System.Windows.Forms.Button()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.chkJo = New System.Windows.Forms.CheckBox()
+        Me.chkKyori = New System.Windows.Forms.CheckBox()
+        Me.chkRacename = New System.Windows.Forms.CheckBox()
+        Me.chkGrade = New System.Windows.Forms.CheckBox()
+        Me.chkMonth = New System.Windows.Forms.CheckBox()
+        Me.BtnHistGet = New System.Windows.Forms.Button()
+        Me.ListBox2 = New System.Windows.Forms.ListBox()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -54,7 +62,7 @@ Partial Class AnaForm
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(733, 20)
         Me.txtURL.TabIndex = 1
-        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde1007202403071120240922/AD"
+        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0108202405041120241013/49"
         '
         'Label1
         '
@@ -113,11 +121,11 @@ Partial Class AnaForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("MS UI Gothic", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label2.Location = New System.Drawing.Point(-6, 66)
+        Me.Label2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label2.Location = New System.Drawing.Point(11, 67)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(156, 15)
+        Me.Label2.Size = New System.Drawing.Size(137, 13)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "上がり強調表示基準値："
         '
@@ -145,11 +153,100 @@ Partial Class AnaForm
         Me.BtnRedisp.Text = "再表示"
         Me.BtnRedisp.UseVisualStyleBackColor = True
         '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(14, 402)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(151, 12)
+        Me.Label3.TabIndex = 11
+        Me.Label3.Text = "過去レース解析値の検索条件"
+        '
+        'chkJo
+        '
+        Me.chkJo.AutoSize = True
+        Me.chkJo.Location = New System.Drawing.Point(14, 427)
+        Me.chkJo.Name = "chkJo"
+        Me.chkJo.Size = New System.Drawing.Size(84, 16)
+        Me.chkJo.TabIndex = 12
+        Me.chkJo.Text = "同一競馬場"
+        Me.chkJo.UseVisualStyleBackColor = True
+        '
+        'chkKyori
+        '
+        Me.chkKyori.AutoSize = True
+        Me.chkKyori.Location = New System.Drawing.Point(14, 449)
+        Me.chkKyori.Name = "chkKyori"
+        Me.chkKyori.Size = New System.Drawing.Size(72, 16)
+        Me.chkKyori.TabIndex = 13
+        Me.chkKyori.Text = "同一距離"
+        Me.chkKyori.UseVisualStyleBackColor = True
+        '
+        'chkRacename
+        '
+        Me.chkRacename.AutoSize = True
+        Me.chkRacename.Location = New System.Drawing.Point(14, 471)
+        Me.chkRacename.Name = "chkRacename"
+        Me.chkRacename.Size = New System.Drawing.Size(88, 16)
+        Me.chkRacename.TabIndex = 14
+        Me.chkRacename.Text = "同一レース名"
+        Me.chkRacename.UseVisualStyleBackColor = True
+        '
+        'chkGrade
+        '
+        Me.chkGrade.AutoSize = True
+        Me.chkGrade.Location = New System.Drawing.Point(14, 493)
+        Me.chkGrade.Name = "chkGrade"
+        Me.chkGrade.Size = New System.Drawing.Size(116, 16)
+        Me.chkGrade.TabIndex = 15
+        Me.chkGrade.Text = "同一クラス・グレード"
+        Me.chkGrade.UseVisualStyleBackColor = True
+        '
+        'chkMonth
+        '
+        Me.chkMonth.AutoSize = True
+        Me.chkMonth.Location = New System.Drawing.Point(14, 515)
+        Me.chkMonth.Name = "chkMonth"
+        Me.chkMonth.Size = New System.Drawing.Size(60, 16)
+        Me.chkMonth.TabIndex = 16
+        Me.chkMonth.Text = "同一月"
+        Me.chkMonth.UseVisualStyleBackColor = True
+        '
+        'BtnHistGet
+        '
+        Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnHistGet.Location = New System.Drawing.Point(193, 506)
+        Me.BtnHistGet.Name = "BtnHistGet"
+        Me.BtnHistGet.Size = New System.Drawing.Size(74, 30)
+        Me.BtnHistGet.TabIndex = 17
+        Me.BtnHistGet.Text = "検索実行"
+        Me.BtnHistGet.UseVisualStyleBackColor = True
+        '
+        'ListBox2
+        '
+        Me.ListBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ListBox2.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.ListBox2.FormattingEnabled = True
+        Me.ListBox2.ItemHeight = 15
+        Me.ListBox2.Location = New System.Drawing.Point(10, 551)
+        Me.ListBox2.Name = "ListBox2"
+        Me.ListBox2.Size = New System.Drawing.Size(288, 64)
+        Me.ListBox2.TabIndex = 18
+        '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.ListBox2)
+        Me.Controls.Add(Me.BtnHistGet)
+        Me.Controls.Add(Me.chkMonth)
+        Me.Controls.Add(Me.chkGrade)
+        Me.Controls.Add(Me.chkRacename)
+        Me.Controls.Add(Me.chkKyori)
+        Me.Controls.Add(Me.chkJo)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.BtnRedisp)
         Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.Label2)
@@ -181,4 +278,12 @@ Partial Class AnaForm
     Friend WithEvents Label2 As Label
     Friend WithEvents NumericUpDown1 As NumericUpDown
     Friend WithEvents BtnRedisp As Button
+    Friend WithEvents Label3 As Label
+    Friend WithEvents chkJo As CheckBox
+    Friend WithEvents chkKyori As CheckBox
+    Friend WithEvents chkRacename As CheckBox
+    Friend WithEvents chkGrade As CheckBox
+    Friend WithEvents chkMonth As CheckBox
+    Friend WithEvents BtnHistGet As Button
+    Friend WithEvents ListBox2 As ListBox
 End Class

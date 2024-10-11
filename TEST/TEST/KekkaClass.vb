@@ -1,5 +1,5 @@
 ﻿Public Class KekkaClass
-    'レース結果
+    'レース結果・・・ある1頭の馬のある１つのレース結果
 
     Public Property rec_id As Integer
     Public Property race_id As Integer
@@ -20,6 +20,7 @@
     Public Property agarisa As Single '上りの差の補正値
 
     Private m_tukajun(3) As Short '1-4角通過順
+    Public Property uma_href As String
 
     Public Sub New()
         rec_id = -1
@@ -42,6 +43,7 @@
         ninki = -1
         cyakusa = 999
         agarisa = 999
+        uma_href = ""
     End Sub
 
     Public Property tukajun(ByVal corner As Integer) As Short

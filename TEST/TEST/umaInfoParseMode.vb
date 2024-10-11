@@ -12,9 +12,12 @@
                 lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "競走馬情報", findpos)
                 If lineStr.Length > 0 Then
                     Dim words As List(Of String) = removeTagPair2(lineStr)
+                    Dim flg As Boolean = False
                     For i As Integer = 0 To words.Count - 1
                         If InStr(words(i), "競走馬情報") > 0 Then
-                            oHeader.bamei = words(i + 1)
+                            flg = True
+                        ElseIf words(i).Trim.Length > 0 AndAlso flg Then
+                            oHeader.bamei = words(i)
                             Exit For
                         End If
                     Next

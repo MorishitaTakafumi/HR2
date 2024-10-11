@@ -1,7 +1,19 @@
 ﻿Imports System.Runtime.InteropServices.WindowsRuntime
 
 Public Module GlblMod
+    Public Const DMY_DATE As Date = #1900/1/1#
+    Public Const DMY_VAL As Integer = -9999
+
     Public JoMei() As String = {"札幌", "函館", "福島", "新潟", "中山", "東京", "中京", "京都", "阪神", "小倉"}
+
+    Public Function GetKeibajoCode(ByVal keibajo As String) As Short
+        For j As Integer = 0 To JoMei.Length - 1
+            If InStr(keibajo, JoMei(j)) > 0 Then
+                Return j
+            End If
+        Next
+        Return -1
+    End Function
 
     Public Function cnvTimeStr2Sec(ByVal strTime As String) As Single
         Dim ip As Integer = InStr(strTime, ":")

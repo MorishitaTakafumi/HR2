@@ -21,6 +21,7 @@ Public Class Form2
     End Enum
 
     Public umaHistList As New umaHistListClass
+    Public oUmaHeader As UmaHeaderClass
 
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
@@ -102,7 +103,7 @@ Public Class Form2
             Dim contents As String = GetWebPageText(txtURL.Text.Trim)
             txtResult.Text = contents
             ListBox1.Items.Clear()
-            Dim oUmaHeader As UmaHeaderClass = GetUmaHeader(contents)
+            oUmaHeader = GetUmaHeader(contents)
 
             ListBox1.Items.Add("馬名：" & oUmaHeader.bamei)
             ListBox1.Items.Add("父：" & oUmaHeader.titi)
@@ -116,7 +117,10 @@ Public Class Form2
     End Sub
 
     Public Sub entry(ByVal url As String)
-        txtURL.Text = "https://www.jra.go.jp" & url
+        If InStr(url, "https://www.jra.go.jp") = 0 Then
+            url = "https://www.jra.go.jp" & url
+        End If
+        txtURL.Text = url
         Me.WindowState = FormWindowState.Minimized
         Show()
         BtnTest.PerformClick()
