@@ -2,7 +2,7 @@
 
     'データベース接続文字列
     Public Function GetDbConnectionString() As String
-        Return "Data Source=HR2.sqlite3"
+        Return "Data Source=C:\STUDY\HR2\HR2.sqlite3"
     End Function
 
     '指定したキーワードを含む行をさがす

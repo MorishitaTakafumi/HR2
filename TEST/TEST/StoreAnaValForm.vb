@@ -14,8 +14,13 @@ Public Class StoreAnaValForm
         cols = dateScore + 1
     End Enum
 
-    Private raceURLstack As New Stack(Of String)
+    Private raceURLque As New Queue(Of String)
     Private saveCount As Integer
+    Private fm1 As New Form1 'レース結果
+    Private fm1sub As New Form1
+    Private fm2 As New Form2 '馬情報
+    Private CancelFlag As Boolean
+
 
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
@@ -79,37 +84,46 @@ Public Class StoreAnaValForm
         ListBox1.Items.Add("距離：" & oRaceHeader.kyori.ToString)
         ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
         ListBox1.Items.Add("クラス：" & oRaceHeader.class_name)
+        ListBox1.Refresh()
     End Sub
 
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
         Dim url As String = txtURL.Text.Trim
         If url.Length > 0 Then
-            raceURLstack.Clear()
-            raceURLstack.Push(url)
+            raceURLque.Clear()
+            raceURLque.Enqueue(url)
             analysis()
         End If
     End Sub
 
     '連続して解析
     Private Sub analysis()
+        BtnStop.Visible = True
+        CancelFlag = False
         saveCount = 0
-        While raceURLstack.Count > 0 AndAlso saveCount < 5
-            Dim url As String = raceURLstack.Pop()
+        While raceURLque.Count > 0 AndAlso saveCount < NumericUpDown1.Value AndAlso (Not CancelFlag)
+            Dim url As String = raceURLque.Dequeue()
             If analysis1(url) Then
-                lb_cnt.Text = "今回登録数：" & saveCount.ToString & " Stack残数：" & raceURLstack.Count.ToString
-                Me.Refresh()
+                lb_cnt.Text = "今回登録数：" & saveCount.ToString & " Stack残数：" & raceURLque.Count.ToString
+                Application.DoEvents()
             Else
                 Exit While
             End If
         End While
+        fm1.Close()
+        fm1sub.Close()
+        fm2.Close()
+        If CancelFlag Then
+            lb_msg.Text = "中止"
+        Else
+            lb_msg.Text = "完了"
+        End If
+        BtnStop.Visible = False
     End Sub
 
     'URLを指定して１レース分を解析・登録する
     '戻り値：True=成功、False=失敗
     Private Function analysis1(ByVal url As String) As Boolean
-        Dim fm1 As New Form1 'レース結果
-        Dim fm1sub As New Form1
-        Dim fm2 As New Form2 '馬情報
 
         Me.Cursor = Cursors.WaitCursor
         Me.Refresh()
@@ -125,47 +139,48 @@ Public Class StoreAnaValForm
             Dim anaValAry(2) As AnaValClass
             '1,2,3着馬の情報
             For cyakujun As Short = 1 To 3
+                Application.DoEvents()
                 lb_msg.Text = cyakujun.ToString & "着馬の情報処理中"
                 anaValAry(cyakujun - 1) = New AnaValClass
                 Dim oKekka As KekkaClass = fm1.kekkaList.GetBodyRefByCyakujun(cyakujun)
-                Dim uma_href As String = oKekka.uma_href
-                fm2.entry(uma_href)
-                Dim stmp As String = ""
-                With anaValAry(cyakujun - 1)
-                    .cyakujun = cyakujun
-                    .bamei = oKekka.bamei
-                    .ninki = oKekka.ninki
-                    .spanScore = fm2.umaHistList.GetSpanScore(oRaceHeader.dt, stmp)
-                    .dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oRaceHeader.dt, oRaceHeader.kyori, oRaceHeader.syubetu, .kyoriScore)
-                End With
+                If oKekka IsNot Nothing Then '同着のときNothingとなる
+                    Dim uma_href As String = oKekka.uma_href
+                    fm2.entry(uma_href)
+                    Dim stmp As String = ""
+                    With anaValAry(cyakujun - 1)
+                        .cyakujun = cyakujun
+                        .bamei = oKekka.bamei
+                        .ninki = oKekka.ninki
+                        .spanScore = fm2.umaHistList.GetSpanScore(oRaceHeader.dt, stmp)
+                        .dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oRaceHeader.dt, oRaceHeader.kyori, oRaceHeader.syubetu, .kyoriScore)
+                    End With
 
-                Dim hist_idx As Integer = 0
-                For i As Integer = 0 To fm2.umaHistList.cnt - 1
-                    lb_msg.Text = cyakujun.ToString & "着馬の情報処理中 " & hist_idx.ToString & "/4"
-                    If hist_idx >= HIS_CNT Then
-                        Exit For
-                    End If
-                    If oRaceHeader.dt > fm2.umaHistList.GetBodyRef(i).dt Then
-
-                        raceURLstack.Push(fm2.umaHistList.GetBodyRef(i).href)
-                        fm1sub.entry(fm2.umaHistList.GetBodyRef(i).href)
-
-                        Dim oKekkaSub As KekkaClass = fm1sub.kekkaList.GetBodyRefByBamei(fm2.oUmaHeader.bamei)
-                        If oKekkaSub IsNot Nothing Then
-                            anaValAry(cyakujun - 1).agarisa(hist_idx) = oKekkaSub.agarisa
-                            anaValAry(cyakujun - 1).cyakusa(hist_idx) = oKekkaSub.cyakusa
-                            anaValAry(cyakujun - 1).OtherTypeRaceFlag(hist_idx) = Not fm1sub.kekkaList.IsSameTypeRace(oRaceHeader.syubetu)
-                            hist_idx += 1
-                        Else
-
+                    Dim hist_idx As Integer = 0
+                    For i As Integer = 0 To fm2.umaHistList.cnt - 1
+                        lb_msg.Text = cyakujun.ToString & "着馬の情報処理中 " & hist_idx.ToString & "/4"
+                        Application.DoEvents()
+                        If hist_idx >= HIS_CNT Then
+                            Exit For
                         End If
-                    End If
-                Next
+                        If oRaceHeader.dt > fm2.umaHistList.GetBodyRef(i).dt Then
+
+                            raceURLque.Enqueue(fm2.umaHistList.GetBodyRef(i).href)
+                            fm1sub.entry(fm2.umaHistList.GetBodyRef(i).href)
+
+                            Dim oKekkaSub As KekkaClass = fm1sub.kekkaList.GetBodyRefByBamei(fm2.oUmaHeader.bamei)
+                            If oKekkaSub IsNot Nothing Then
+                                anaValAry(cyakujun - 1).agarisa(hist_idx) = oKekkaSub.agarisa
+                                anaValAry(cyakujun - 1).cyakusa(hist_idx) = oKekkaSub.cyakusa
+                                anaValAry(cyakujun - 1).OtherTypeRaceFlag(hist_idx) = Not fm1sub.kekkaList.IsSameTypeRace(oRaceHeader.syubetu)
+                                hist_idx += 1
+                            Else
+
+                            End If
+                        End If
+                    Next
+                End If
             Next
             ShowTable(anaValAry)
-            fm1.Close()
-            fm1sub.Close()
-            fm2.Close()
             lb_msg.Text = "結果登録"
             errmsg = oRaceHeader.save(anaValAry)
         End If
@@ -179,6 +194,7 @@ Public Class StoreAnaValForm
             ElseIf oRaceHeader.class_code < 2 Then
                 lb_msg.Text = "1勝クラス以下のレース！"
             Else
+                'MsgBox("OK", MsgBoxStyle.Information, Me.Text)
                 saveCount += 1
             End If
             Return True
@@ -203,4 +219,7 @@ Public Class StoreAnaValForm
         End If
     End Sub
 
+    Private Sub BtnStop_Click(sender As Object, e As EventArgs) Handles BtnStop.Click
+        CancelFlag = True
+    End Sub
 End Class

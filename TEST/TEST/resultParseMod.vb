@@ -5,6 +5,7 @@
     Public Function GetWhenWhere(ByVal src As String, ByRef dt As Date) As String
         Dim JoIdx As Integer = -1
         Dim findpos As Integer = 1
+        dt = DMY_DATE
         Do
             Dim lineStr As String = SearchLineByKeyword(findpos, src, "cell date", findpos)
             If lineStr.Length > 0 Then
@@ -22,12 +23,15 @@
                             End If
                         End If
                     Next
+                    If JoIdx >= 0 AndAlso dt <> DMY_DATE Then
+                        Exit For
+                    End If
                 Next
             Else
                 Exit Do
             End If
         Loop While JoIdx = -1
-        If JoIdx > 0 Then
+        If JoIdx >= 0 Then
             Return JoMei(JoIdx)
         Else
             Return ""
