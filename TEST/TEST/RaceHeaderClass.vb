@@ -235,10 +235,12 @@ Public Class RaceHeaderClass
             Dim errmsg As String = addNew(cmd)
             If errmsg.Length = 0 Then
                 For j As Integer = 0 To anavalary.Length - 1
-                    anavalary(j).rhead_id = id
-                    errmsg = anavalary(j).addNew(cmd)
-                    If errmsg.Length > 0 Then
-                        Exit For
+                    If anavalary(j) IsNot Nothing Then
+                        anavalary(j).rhead_id = id
+                        errmsg = anavalary(j).addNew(cmd)
+                        If errmsg.Length > 0 Then
+                            Exit For
+                        End If
                     End If
                 Next
             End If

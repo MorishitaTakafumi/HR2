@@ -21,6 +21,16 @@ Public Class StoreAnaValForm
     Private fm2 As New Form2 '馬情報
     Private CancelFlag As Boolean
 
+    Public Sub New()
+        InitializeComponent()
+        If Clipboard.ContainsText Then
+            Dim tmp As String = Clipboard.GetText
+            If InStr(tmp, "https") Then
+                txtURL.Text = tmp
+            End If
+        End If
+    End Sub
+
 
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
@@ -59,16 +69,18 @@ Public Class StoreAnaValForm
         SetUpFlx()
         Dim xx(FlxCol.cols - 1) As String
         For j As Integer = 0 To anaValary.Length - 1
-            xx(FlxCol.cyakujun) = anaValary(j).cyakujun
-            xx(FlxCol.ninki) = anaValary(j).ninki
-            xx(FlxCol.bamei) = anaValary(j).bamei
-            xx(FlxCol.spanVal) = anaValary(j).spanVal
-            For i As Integer = 0 To HIS_CNT - 1
-                xx(FlxCol.histStart + i) = anaValary(j).GetHist(i)
-            Next
-            xx(FlxCol.kyoriScore) = anaValary(j).kyoriVal
-            xx(FlxCol.dateScore) = anaValary(j).dateVal
-            flx.AddItem(xx)
+            If anaValary(j) IsNot Nothing Then
+                xx(FlxCol.cyakujun) = anaValary(j).cyakujun
+                xx(FlxCol.ninki) = anaValary(j).ninki
+                xx(FlxCol.bamei) = anaValary(j).bamei
+                xx(FlxCol.spanVal) = anaValary(j).spanVal
+                For i As Integer = 0 To HIS_CNT - 1
+                    xx(FlxCol.histStart + i) = anaValary(j).GetHist(i)
+                Next
+                xx(FlxCol.kyoriScore) = anaValary(j).kyoriVal
+                xx(FlxCol.dateScore) = anaValary(j).dateVal
+                flx.AddItem(xx)
+            End If
         Next
         flx.AutoSizeCols()
         flx.AutoSizeRows()
@@ -136,19 +148,19 @@ Public Class StoreAnaValForm
         lb_msg.Text = "既登録済みか調査"
         Dim errmsg As String = oRaceHeader.IsExist(exist_flg)
         If errmsg.Length = 0 AndAlso (Not exist_flg) AndAlso oRaceHeader.class_code > 1 Then
-            Dim anaValAry(2) As AnaValClass
-            '1,2,3着馬の情報
-            For cyakujun As Short = 1 To 3
+            Dim anaValAry(oRaceHeader.tosu - 1) As AnaValClass
+            '全馬の情報
+            For j As Short = 0 To oRaceHeader.tosu - 1
                 Application.DoEvents()
-                lb_msg.Text = cyakujun.ToString & "着馬の情報処理中"
-                anaValAry(cyakujun - 1) = New AnaValClass
-                Dim oKekka As KekkaClass = fm1.kekkaList.GetBodyRefByCyakujun(cyakujun)
+                lb_msg.Text = "情報処理中" & (j + 1).ToString
+                anaValAry(j) = New AnaValClass
+                Dim oKekka As KekkaClass = fm1.kekkaList.GetBodyRef(j)
                 If oKekka IsNot Nothing Then '同着のときNothingとなる
                     Dim uma_href As String = oKekka.uma_href
                     fm2.entry(uma_href)
                     Dim stmp As String = ""
-                    With anaValAry(cyakujun - 1)
-                        .cyakujun = cyakujun
+                    With anaValAry(j)
+                        .cyakujun = oKekka.cyakujun
                         .bamei = oKekka.bamei
                         .ninki = oKekka.ninki
                         .spanScore = fm2.umaHistList.GetSpanScore(oRaceHeader.dt, stmp)
@@ -157,7 +169,7 @@ Public Class StoreAnaValForm
 
                     Dim hist_idx As Integer = 0
                     For i As Integer = 0 To fm2.umaHistList.cnt - 1
-                        lb_msg.Text = cyakujun.ToString & "着馬の情報処理中 " & hist_idx.ToString & "/4"
+                        lb_msg.Text = "情報処理中 " & (j + 1).ToString & " " & hist_idx.ToString & "/4"
                         Application.DoEvents()
                         If hist_idx >= HIS_CNT Then
                             Exit For
@@ -169,9 +181,9 @@ Public Class StoreAnaValForm
 
                             Dim oKekkaSub As KekkaClass = fm1sub.kekkaList.GetBodyRefByBamei(fm2.oUmaHeader.bamei)
                             If oKekkaSub IsNot Nothing Then
-                                anaValAry(cyakujun - 1).agarisa(hist_idx) = oKekkaSub.agarisa
-                                anaValAry(cyakujun - 1).cyakusa(hist_idx) = oKekkaSub.cyakusa
-                                anaValAry(cyakujun - 1).OtherTypeRaceFlag(hist_idx) = Not fm1sub.kekkaList.IsSameTypeRace(oRaceHeader.syubetu)
+                                anaValAry(j).agarisa(hist_idx) = oKekkaSub.agarisa
+                                anaValAry(j).cyakusa(hist_idx) = oKekkaSub.cyakusa
+                                anaValAry(j).OtherTypeRaceFlag(hist_idx) = Not fm1sub.kekkaList.IsSameTypeRace(oRaceHeader.syubetu)
                                 hist_idx += 1
                             Else
 

@@ -42,7 +42,7 @@ Partial Class StoreAnaValForm
         '
         Me.BtnURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnURL.Location = New System.Drawing.Point(1273, 2)
-        Me.BtnURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnURL.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnURL.Name = "BtnURL"
         Me.BtnURL.Size = New System.Drawing.Size(185, 55)
         Me.BtnURL.TabIndex = 17
@@ -66,7 +66,7 @@ Partial Class StoreAnaValForm
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.flx.Location = New System.Drawing.Point(412, 62)
-        Me.flx.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.flx.Margin = New System.Windows.Forms.Padding(4)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 26
         Me.flx.Size = New System.Drawing.Size(1405, 669)
@@ -79,7 +79,7 @@ Partial Class StoreAnaValForm
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 19
         Me.ListBox1.Location = New System.Drawing.Point(16, 62)
-        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(383, 289)
         Me.ListBox1.TabIndex = 14
@@ -99,7 +99,7 @@ Partial Class StoreAnaValForm
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.txtURL.Location = New System.Drawing.Point(72, 16)
-        Me.txtURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtURL.Margin = New System.Windows.Forms.Padding(4)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(976, 24)
         Me.txtURL.TabIndex = 12
@@ -109,7 +109,7 @@ Partial Class StoreAnaValForm
         '
         Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnGo.Location = New System.Drawing.Point(1080, 2)
-        Me.BtnGo.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnGo.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnGo.Name = "BtnGo"
         Me.BtnGo.Size = New System.Drawing.Size(185, 55)
         Me.BtnGo.TabIndex = 11
@@ -147,7 +147,7 @@ Partial Class StoreAnaValForm
         Me.NumericUpDown1.Name = "NumericUpDown1"
         Me.NumericUpDown1.Size = New System.Drawing.Size(87, 30)
         Me.NumericUpDown1.TabIndex = 21
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label2
         '
@@ -176,7 +176,7 @@ Partial Class StoreAnaValForm
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.BtnGo)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "StoreAnaValForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "勝ち馬の解析値登録"
