@@ -214,41 +214,41 @@ Public Class raceReviewForm
 
     Private Sub PaintTable(ByVal sblist As raceAnaListClass)
 
-        For j As Integer = 0 To sblist.cnt - 1
-            Dim oUma As raceAnanClass = sblist.GetBodyRef(j)
-            '並べ替えに対応するため馬名で行を検索する
-            Dim jrow As Integer
-            For jrow = flx.Rows.Fixed To flx.Rows.Count - 1
-                If oUma.bamei = flx.Item(jrow, FlxCol.bamei) Then
-                    Exit For
-                End If
-            Next
+        'For j As Integer = 0 To sblist.cnt - 1
+        '    Dim oUma As raceAnanClass = sblist.GetBodyRef(j)
+        '    '並べ替えに対応するため馬名で行を検索する
+        '    Dim jrow As Integer
+        '    For jrow = flx.Rows.Fixed To flx.Rows.Count - 1
+        '        If oUma.bamei = flx.Item(jrow, FlxCol.bamei) Then
+        '            Exit For
+        '        End If
+        '    Next
 
-            Dim torikesi As Boolean = False
-            If oUma.waku > 0 AndAlso oUma.umaban < 0 Then
-                torikesi = True
-            End If
+        '    Dim torikesi As Boolean = False
+        '    If oUma.waku > 0 AndAlso oUma.umaban < 0 Then
+        '        torikesi = True
+        '    End If
 
-            If torikesi Then
-                For jcol As Integer = FlxCol.chk To flx.Cols.Count - 1
-                    flx.SetCellStyle(jrow, jcol, "torikesi")
-                Next
-            Else
-                If oUma.isGoodSpan Then
-                    flx.SetCellStyle(jrow, FlxCol.spanVal, "span7")
-                Else
-                    flx.SetCellStyle(jrow, FlxCol.spanVal, "normal")
-                End If
-                For i As Integer = 0 To 5
-                    If oUma.isGoodHist(i, NumericUpDown1.Value) Then
-                        flx.SetCellStyle(jrow, FlxCol.histStart + i, "agari0")
-                    Else
-                        flx.SetCellStyle(jrow, FlxCol.histStart + i, "normal")
-                    End If
-                Next
-            End If
+        '    If torikesi Then
+        '        For jcol As Integer = FlxCol.chk To flx.Cols.Count - 1
+        '            flx.SetCellStyle(jrow, jcol, "torikesi")
+        '        Next
+        '    Else
+        '        If oUma.isGoodSpan Then
+        '            flx.SetCellStyle(jrow, FlxCol.spanVal, "span7")
+        '        Else
+        '            flx.SetCellStyle(jrow, FlxCol.spanVal, "normal")
+        '        End If
+        '        For i As Integer = 0 To 5
+        '            If oUma.isGoodHist(i, NumericUpDown1.Value) Then
+        '                flx.SetCellStyle(jrow, FlxCol.histStart + i, "agari0")
+        '            Else
+        '                flx.SetCellStyle(jrow, FlxCol.histStart + i, "normal")
+        '            End If
+        '        Next
+        '    End If
 
-        Next
+        'Next
     End Sub
 
     Private Sub BtnRedisp_Click(sender As Object, e As EventArgs) Handles BtnRedisp.Click
@@ -509,7 +509,11 @@ Public Class raceReviewForm
         If tm <= DMY_VAL Then
             Return ""
         Else
-            Return tm.ToString("F1")
+            If tm < 0 Then
+                Return tm.ToString("F1")
+            Else
+                Return "+" & tm.ToString("F1")
+            End If
         End If
     End Function
 
