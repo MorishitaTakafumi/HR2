@@ -136,6 +136,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="raceReviewForm.Designer.vb">
+      <DependentUpon>raceReviewForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="raceReviewForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AnaValClass.vb" />
     <Compile Include="cmnMod.vb" />
     <Compile Include="AnaForm.Designer.vb">
@@ -209,6 +215,9 @@
     <Compile Include="WebMod.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="raceReviewForm.resx">
+      <DependentUpon>raceReviewForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AnaForm.resx">
       <DependentUpon>AnaForm.vb</DependentUpon>
     </EmbeddedResource>

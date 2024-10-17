@@ -43,4 +43,11 @@
         a.ShowDialog()
         Me.Show()
     End Sub
+
+    Private Sub BtnReview_Click(sender As Object, e As EventArgs) Handles BtnReview.Click
+        Dim a As New raceReviewForm
+        Me.Hide()
+        a.ShowDialog()
+        Me.Show()
+    End Sub
 End Class

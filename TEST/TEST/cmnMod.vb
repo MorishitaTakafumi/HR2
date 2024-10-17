@@ -1,8 +1,26 @@
-﻿Module cmnMod
+﻿Imports System.IO
+
+Module cmnMod
 
     'データベース接続文字列
     Public Function GetDbConnectionString() As String
-        Return "Data Source=C:\STUDY\HR2\HR2.sqlite3"
+        '2024/10/17 環境を考慮した
+        If File.Exists("C:\STUDY\HR2\HR2.sqlite3") Then
+            Return "Data Source=C:\STUDY\HR2\HR2.sqlite3"
+        ElseIf File.Exists("C:\学習\HR2\HR2.sqlite3") Then
+            Return "Data Source=C:\学習\HR2\HR2.sqlite3"
+        Else
+            Dim openFileDialog1 As New OpenFileDialog()
+            openFileDialog1.InitialDirectory = "c:\"
+            openFileDialog1.Filter = "sqlite files (*.sqlite3)|*.sqlite3|All files (*.*)|*.*"
+            openFileDialog1.FilterIndex = 2
+            openFileDialog1.RestoreDirectory = True
+
+            If openFileDialog1.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+                Return openFileDialog1.FileName
+            End If
+        End If
+        Return ""
     End Function
 
     '指定したキーワードを含む行をさがす
