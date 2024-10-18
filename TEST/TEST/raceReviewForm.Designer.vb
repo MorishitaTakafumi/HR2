@@ -24,7 +24,6 @@ Partial Class raceReviewForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(raceReviewForm))
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
-        Me.lb_msg = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.BtnRedisp = New System.Windows.Forms.Button()
@@ -47,8 +46,14 @@ Partial Class raceReviewForm
         Me.Label9 = New System.Windows.Forms.Label()
         Me.CbRacename = New System.Windows.Forms.ComboBox()
         Me.BtnJokenCls = New System.Windows.Forms.Button()
+        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.RbInai = New System.Windows.Forms.RadioButton()
+        Me.RbIka = New System.Windows.Forms.RadioButton()
+        Me.BtnWinRate = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'flx
@@ -57,23 +62,13 @@ Partial Class raceReviewForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
-        Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(331, 58)
+        Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.flx.Location = New System.Drawing.Point(569, 52)
         Me.flx.Name = "flx"
-        Me.flx.Rows.DefaultSize = 24
-        Me.flx.Size = New System.Drawing.Size(1055, 564)
+        Me.flx.Rows.DefaultSize = 19
+        Me.flx.Size = New System.Drawing.Size(831, 564)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 12
-        '
-        'lb_msg
-        '
-        Me.lb_msg.AutoSize = True
-        Me.lb_msg.Location = New System.Drawing.Point(13, 297)
-        Me.lb_msg.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.lb_msg.Name = "lb_msg"
-        Me.lb_msg.Size = New System.Drawing.Size(23, 12)
-        Me.lb_msg.TabIndex = 6
-        Me.lb_msg.Text = "***"
         '
         'Label2
         '
@@ -82,16 +77,16 @@ Partial Class raceReviewForm
         Me.Label2.Location = New System.Drawing.Point(330, 21)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(137, 13)
+        Me.Label2.Size = New System.Drawing.Size(131, 13)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "上がり強調表示基準値："
+        Me.Label2.Text = "上差強調表示基準値："
         '
         'NumericUpDown1
         '
         Me.NumericUpDown1.DecimalPlaces = 1
         Me.NumericUpDown1.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.NumericUpDown1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.NumericUpDown1.Location = New System.Drawing.Point(471, 15)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(465, 15)
         Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(2)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
@@ -103,9 +98,9 @@ Partial Class raceReviewForm
         'BtnRedisp
         '
         Me.BtnRedisp.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnRedisp.Location = New System.Drawing.Point(551, 12)
+        Me.BtnRedisp.Location = New System.Drawing.Point(770, 5)
         Me.BtnRedisp.Name = "BtnRedisp"
-        Me.BtnRedisp.Size = New System.Drawing.Size(74, 30)
+        Me.BtnRedisp.Size = New System.Drawing.Size(82, 41)
         Me.BtnRedisp.TabIndex = 11
         Me.BtnRedisp.Text = "再表示"
         Me.BtnRedisp.UseVisualStyleBackColor = True
@@ -124,12 +119,12 @@ Partial Class raceReviewForm
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnHistGet.Image = CType(resources.GetObject("BtnHistGet.Image"), System.Drawing.Image)
         Me.BtnHistGet.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.BtnHistGet.Location = New System.Drawing.Point(195, 297)
+        Me.BtnHistGet.Location = New System.Drawing.Point(292, 78)
         Me.BtnHistGet.Name = "BtnHistGet"
-        Me.BtnHistGet.Size = New System.Drawing.Size(103, 52)
+        Me.BtnHistGet.Size = New System.Drawing.Size(93, 69)
         Me.BtnHistGet.TabIndex = 7
         Me.BtnHistGet.Text = "検索" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "実行"
-        Me.BtnHistGet.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.BtnHistGet.TextAlign = System.Drawing.ContentAlignment.BottomRight
         Me.BtnHistGet.UseVisualStyleBackColor = True
         '
         'ListBox2
@@ -139,9 +134,9 @@ Partial Class raceReviewForm
         Me.ListBox2.Font = New System.Drawing.Font("ＭＳ ゴシック", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox2.FormattingEnabled = True
         Me.ListBox2.ItemHeight = 14
-        Me.ListBox2.Location = New System.Drawing.Point(15, 408)
+        Me.ListBox2.Location = New System.Drawing.Point(15, 324)
         Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(288, 214)
+        Me.ListBox2.Size = New System.Drawing.Size(533, 298)
         Me.ListBox2.TabIndex = 9
         '
         'CbCyakujun
@@ -159,7 +154,7 @@ Partial Class raceReviewForm
         Me.chkDosu.AutoSize = True
         Me.chkDosu.Checked = True
         Me.chkDosu.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkDosu.Location = New System.Drawing.Point(15, 372)
+        Me.chkDosu.Location = New System.Drawing.Point(15, 290)
         Me.chkDosu.Name = "chkDosu"
         Me.chkDosu.Size = New System.Drawing.Size(187, 16)
         Me.chkDosu.TabIndex = 8
@@ -306,18 +301,79 @@ Partial Class raceReviewForm
         'BtnJokenCls
         '
         Me.BtnJokenCls.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnJokenCls.Location = New System.Drawing.Point(224, 5)
+        Me.BtnJokenCls.Location = New System.Drawing.Point(226, 81)
         Me.BtnJokenCls.Name = "BtnJokenCls"
         Me.BtnJokenCls.Size = New System.Drawing.Size(47, 53)
         Me.BtnJokenCls.TabIndex = 34
         Me.BtnJokenCls.Text = "条件クリア"
         Me.BtnJokenCls.UseVisualStyleBackColor = True
         '
+        'NumericUpDown2
+        '
+        Me.NumericUpDown2.DecimalPlaces = 1
+        Me.NumericUpDown2.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.NumericUpDown2.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        Me.NumericUpDown2.Location = New System.Drawing.Point(691, 15)
+        Me.NumericUpDown2.Margin = New System.Windows.Forms.Padding(2)
+        Me.NumericUpDown2.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown2.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
+        Me.NumericUpDown2.Name = "NumericUpDown2"
+        Me.NumericUpDown2.Size = New System.Drawing.Size(65, 26)
+        Me.NumericUpDown2.TabIndex = 36
+        Me.NumericUpDown2.Value = New Decimal(New Integer() {5, 0, 0, 65536})
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label10.Location = New System.Drawing.Point(550, 21)
+        Me.Label10.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(131, 13)
+        Me.Label10.TabIndex = 35
+        Me.Label10.Text = "着差強調表示基準値："
+        '
+        'RbInai
+        '
+        Me.RbInai.AutoSize = True
+        Me.RbInai.Checked = True
+        Me.RbInai.Location = New System.Drawing.Point(203, 184)
+        Me.RbInai.Name = "RbInai"
+        Me.RbInai.Size = New System.Drawing.Size(47, 16)
+        Me.RbInai.TabIndex = 37
+        Me.RbInai.Text = "以内"
+        Me.RbInai.UseVisualStyleBackColor = True
+        '
+        'RbIka
+        '
+        Me.RbIka.AutoSize = True
+        Me.RbIka.Location = New System.Drawing.Point(256, 184)
+        Me.RbIka.Name = "RbIka"
+        Me.RbIka.Size = New System.Drawing.Size(47, 16)
+        Me.RbIka.TabIndex = 38
+        Me.RbIka.Text = "以下"
+        Me.RbIka.UseVisualStyleBackColor = True
+        '
+        'BtnWinRate
+        '
+        Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnWinRate.Location = New System.Drawing.Point(405, 81)
+        Me.BtnWinRate.Name = "BtnWinRate"
+        Me.BtnWinRate.Size = New System.Drawing.Size(47, 53)
+        Me.BtnWinRate.TabIndex = 39
+        Me.BtnWinRate.Text = "勝率検索"
+        Me.BtnWinRate.UseVisualStyleBackColor = True
+        '
         'raceReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.BtnWinRate)
+        Me.Controls.Add(Me.RbIka)
+        Me.Controls.Add(Me.RbInai)
+        Me.Controls.Add(Me.NumericUpDown2)
+        Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.BtnJokenCls)
         Me.Controls.Add(Me.CbRacename)
         Me.Controls.Add(Me.Label9)
@@ -340,21 +396,19 @@ Partial Class raceReviewForm
         Me.Controls.Add(Me.BtnRedisp)
         Me.Controls.Add(Me.NumericUpDown1)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.lb_msg)
         Me.Controls.Add(Me.flx)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "raceReviewForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "レース結果の検討"
-        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         CType(Me.flx, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
-    Friend WithEvents lb_msg As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents NumericUpDown1 As NumericUpDown
     Friend WithEvents BtnRedisp As Button
@@ -377,4 +431,9 @@ Partial Class raceReviewForm
     Friend WithEvents Label9 As Label
     Friend WithEvents CbRacename As ComboBox
     Friend WithEvents BtnJokenCls As Button
+    Friend WithEvents NumericUpDown2 As NumericUpDown
+    Friend WithEvents Label10 As Label
+    Friend WithEvents RbInai As RadioButton
+    Friend WithEvents RbIka As RadioButton
+    Friend WithEvents BtnWinRate As Button
 End Class

@@ -213,6 +213,12 @@
     <Compile Include="umaHistListClass.vb" />
     <Compile Include="umaInfoParseMode.vb" />
     <Compile Include="WebMod.vb" />
+    <Compile Include="WinRateForm.Designer.vb">
+      <DependentUpon>WinRateForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WinRateForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="raceReviewForm.resx">
@@ -242,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TopMenu.resx">
       <DependentUpon>TopMenu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinRateForm.resx">
+      <DependentUpon>WinRateForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

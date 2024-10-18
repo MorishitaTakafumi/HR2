@@ -130,7 +130,7 @@ Partial Class TopMenu
         Me.Controls.Add(Me.BtnRaceKekka)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "TopMenu"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "HR2トップメニュー"
         Me.ResumeLayout(False)
 
