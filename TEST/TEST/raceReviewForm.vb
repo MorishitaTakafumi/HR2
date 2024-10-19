@@ -17,7 +17,12 @@ Public Class raceReviewForm
         cols = dateScore + 1
     End Enum
 
-    Private anaList As New raceAnaListClass
+    Private spanScore As New List(Of Integer)
+    Private cyakujun As New List(Of Integer)
+    Private agarisa1 As New List(Of Single)
+    Private agarisa2 As New List(Of Single)
+    Private agarisa3 As New List(Of Single)
+    Private agarisa4 As New List(Of Single)
 
     Public Sub New()
         InitializeComponent()
@@ -136,6 +141,7 @@ Public Class raceReviewForm
             .Styles.Normal.WordWrap = True
             .Rows.MinSize = 25
 
+            .Cols(FlxCol.racename).TextAlign = TextAlignEnum.LeftCenter
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
 
             .AllowMerging = AllowMergingEnum.Custom
@@ -248,12 +254,13 @@ Public Class raceReviewForm
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
         SetUpFlx()
         ListBox2.Items.Clear()
-        Dim spanScore As New List(Of Integer)
-        Dim cyakujun As New List(Of Integer)
-        Dim agarisa1 As New List(Of Single)
-        Dim agarisa2 As New List(Of Single)
-        Dim agarisa3 As New List(Of Single)
-        Dim agarisa4 As New List(Of Single)
+        spanScore.Clear()
+        cyakujun.Clear()
+        agarisa1.Clear()
+        agarisa2.Clear()
+        agarisa3.Clear()
+        agarisa4.Clear()
+
         Dim errmsg As String = ""
 
         Using conn As New SQLiteConnection(GetDbConnectionString)
@@ -387,8 +394,6 @@ Public Class raceReviewForm
             Next
             ' 度数分布を度数の多い順にソート
             Dim sortedDistribution = frequencyDistribution.OrderByDescending(Function(kvp) kvp.Value)
-            Dim wcnt(3, 4, 2) As Integer
-
 
             For j As Integer = 0 To spanScore.Count - 1
                 tmpcnt = 0
@@ -410,64 +415,24 @@ Public Class raceReviewForm
                     cnt8 += 1
                 End If
 
-                Dim ag_idx As Integer = Int(agarisa1(j) / 0.3)
-                If ag_idx <= 0 Then
-                    ag_idx = 0
-                ElseIf ag_idx > 3 Then
-                    ag_idx = 3
-                Else
-                    ag_idx += 1
+                Dim ag_idx As Integer = GetAgarisaIdx(agarisa1(j))
+                If ag_idx >= 0 Then
+                    cnt9(ag_idx) += 1
                 End If
 
-                If agarisa1(j) <= 0 Then
-                    cnt9(0) += 1
-                    If cyakujun(j) <= 3 Then
-                        wcnt(0, 0, cyakujun(j) - 1) += 1
-                    End If
-                ElseIf agarisa1(j) <= 0.3 Then
-                    cnt9(1) += 1
-                ElseIf agarisa1(j) <= 0.6 Then
-                    cnt9(2) += 1
-                ElseIf agarisa1(j) <= 0.9 Then
-                    cnt9(3) += 1
-                Else
-                    cnt9(4) += 1
+                ag_idx = GetAgarisaIdx(agarisa2(j))
+                If ag_idx >= 0 Then
+                    cnt10(ag_idx) += 1
                 End If
 
-                If agarisa2(j) <= 0 Then
-                    cnt10(0) += 1
-                ElseIf agarisa2(j) <= 0.3 Then
-                    cnt10(1) += 1
-                ElseIf agarisa2(j) <= 0.6 Then
-                    cnt10(2) += 1
-                ElseIf agarisa2(j) <= 0.9 Then
-                    cnt10(3) += 1
-                Else
-                    cnt10(4) += 1
+                ag_idx = GetAgarisaIdx(agarisa3(j))
+                If ag_idx >= 0 Then
+                    cnt11(ag_idx) += 1
                 End If
 
-                If agarisa3(j) <= 0 Then
-                    cnt11(0) += 1
-                ElseIf agarisa3(j) <= 0.3 Then
-                    cnt11(1) += 1
-                ElseIf agarisa3(j) <= 0.6 Then
-                    cnt11(2) += 1
-                ElseIf agarisa3(j) <= 0.9 Then
-                    cnt11(3) += 1
-                Else
-                    cnt11(4) += 1
-                End If
-
-                If agarisa4(j) <= 0 Then
-                    cnt12(0) += 1
-                ElseIf agarisa4(j) <= 0.3 Then
-                    cnt12(1) += 1
-                ElseIf agarisa4(j) <= 0.6 Then
-                    cnt12(2) += 1
-                ElseIf agarisa4(j) <= 0.9 Then
-                    cnt12(3) += 1
-                Else
-                    cnt12(4) += 1
+                ag_idx = GetAgarisaIdx(agarisa4(j))
+                If ag_idx >= 0 Then
+                    cnt12(ag_idx) += 1
                 End If
 
                 If agarisa1(j) <= sikii Then
@@ -511,6 +476,25 @@ Public Class raceReviewForm
             PaintTable()
         End If
     End Sub
+
+    Private Function GetAgarisaIdx(ByVal agarisa As Single) As Integer
+        If agarisa = DMY_VAL Then
+            Return -1
+        End If
+
+        If agarisa <= 0 Then
+            Return 0
+        ElseIf agarisa <= 0.3 Then
+            Return 1
+        ElseIf agarisa <= 0.6 Then
+            Return 2
+        ElseIf agarisa <= 0.9 Then
+            Return 3
+        Else
+            Return 4
+        End If
+    End Function
+
     Private Function time2str(ByVal tm As Single) As String
         If tm <= DMY_VAL Then
             Return ""
@@ -552,6 +536,6 @@ Public Class raceReviewForm
 
     Private Sub BtnWinRate_Click(sender As Object, e As EventArgs) Handles BtnWinRate.Click
         Dim a As New WinRateForm
-        a.Show()
+        a.entry(spanScore, cyakujun, agarisa1, agarisa2, agarisa3, agarisa4)
     End Sub
 End Class

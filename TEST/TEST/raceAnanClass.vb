@@ -9,6 +9,7 @@
 
     Private m_hist(5) As String
 
+    Public Property spanScore As Integer
     Public Property kyoriScore As Integer
     Public Property dateScore As Integer
 
@@ -22,6 +23,7 @@
         For j As Integer = 0 To 5
             m_hist(j) = ""
         Next
+        spanScore = 0
         kyoriScore = 0
         dateScore = 0
     End Sub

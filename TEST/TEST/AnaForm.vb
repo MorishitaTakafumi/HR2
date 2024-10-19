@@ -19,6 +19,12 @@ Public Class AnaForm
 
     Private anaList As New raceAnaListClass
     Private oHead As RaceHeaderClass
+    Private spanScore As New List(Of Integer)
+    Private cyakujun As New List(Of Integer)
+    Private agarisa1 As New List(Of Single)
+    Private agarisa2 As New List(Of Single)
+    Private agarisa3 As New List(Of Single)
+    Private agarisa4 As New List(Of Single)
 
     Public Sub New()
         InitializeComponent()
@@ -174,7 +180,7 @@ Public Class AnaForm
                     xx(i) = ""
                 Next
             Else
-                xx(FlxCol.spanVal) = oUma.spanVal
+                xx(FlxCol.spanVal) = AnaValClass.Score2String(oUma.spanScore) 'oUma.spanVal
                 For i As Integer = 0 To 5
                     xx(FlxCol.histStart + i) = oUma.hist(i)
                 Next
@@ -276,7 +282,7 @@ Public Class AnaForm
                 rA.bamei = o.bamei
                 rA.ninki = o.ninki
                 fm2.entry(o.href)
-                Dim spanScore As Integer = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
+                rA.spanScore = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
                 rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
                 For i As Integer = 0 To fm2.umaHistList.cnt - 1
                     If i > 5 Then
@@ -330,14 +336,15 @@ Public Class AnaForm
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
         ListBox2.Items.Clear()
+        spanScore.Clear()
+        cyakujun.Clear()
+        agarisa1.Clear()
+        agarisa2.Clear()
+        agarisa3.Clear()
+        agarisa4.Clear()
+
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim errmsg As String = ""
-            Dim spanScore As New List(Of Integer)
-            Dim cyakujun As New List(Of Integer)
-            Dim agarisa1 As New List(Of Single)
-            Dim agarisa2 As New List(Of Single)
-            Dim agarisa3 As New List(Of Single)
-            Dim agarisa4 As New List(Of Single)
 
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
@@ -572,4 +579,21 @@ Public Class AnaForm
             Return n.ToString
         End If
     End Function
+
+    Private Sub BtnWinRate_Click(sender As Object, e As EventArgs) Handles BtnWinRate.Click
+        Dim a As New WinRateForm
+
+        If flx.Row >= flx.Rows.Fixed Then
+            a.entry(spanScore, cyakujun, agarisa1, agarisa2, agarisa3, agarisa4,
+                    flx.Item(flx.Row, FlxCol.spanVal),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 0)),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 1)),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 2)),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 3))
+                    )
+        Else
+            a.entry(spanScore, cyakujun, agarisa1, agarisa2, agarisa3, agarisa4)
+        End If
+
+    End Sub
 End Class
