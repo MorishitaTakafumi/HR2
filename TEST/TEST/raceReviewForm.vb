@@ -29,6 +29,11 @@ Public Class raceReviewForm
         SetupCombobox()
     End Sub
 
+    Public Sub entry(ByVal racename As String)
+        CbRacename.Text = racename
+        Show()
+    End Sub
+
     Private Sub SetupCombobox()
         With CbJo
             .Items.Clear()

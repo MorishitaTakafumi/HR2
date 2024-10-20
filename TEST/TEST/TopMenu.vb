@@ -32,7 +32,9 @@
 
     Private Sub BtnAnalysis_Click(sender As Object, e As EventArgs) Handles BtnAnalysis.Click
         Dim a As New AnaForm
-        a.Show()
+        Me.Hide()
+        a.ShowDialog()
+        Me.Show()
     End Sub
 
     Private Sub BtnStoreAnaVal_Click(sender As Object, e As EventArgs) Handles BtnStoreAnaVal.Click
