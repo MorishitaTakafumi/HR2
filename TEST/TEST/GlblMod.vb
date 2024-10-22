@@ -84,8 +84,10 @@ Public Module GlblMod
         Return 0
     End Function
 
-    Public Function cnvAgarisaStr2Val(ByVal strScore As String) As Single
-        If strScore.Length = 0 Then
+    '上差と着差を取得する
+    'Return 上がり差
+    Public Function cnvAgarisaStr2Val(ByVal strScore As String, ByRef cyakusa As Single) As Single
+        If strScore Is Nothing OrElse strScore.Length = 0 Then
             Return DMY_VAL
         End If
         strScore = Replace(Replace(strScore, "[", ""), "]", "")
@@ -93,6 +95,7 @@ Public Module GlblMod
         Dim ip As Integer = InStr(strScore, "(")
         If ip > 1 Then
             strScore = strScore.Substring(0, ip - 1)
+            cyakusa = CSng(Replace(strScore.Substring(2), ")", ""))
             Return CSng(strScore)
         End If
         Return DMY_VAL

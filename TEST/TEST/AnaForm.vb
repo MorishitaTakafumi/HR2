@@ -592,12 +592,13 @@ Public Class AnaForm
         Dim a As New WinRateForm
 
         If flx.Row >= flx.Rows.Fixed Then
+            Dim tmpcyakusa As Single
             a.entry(spanScore, cyakujun, agarisa1, agarisa2, agarisa3, agarisa4,
                     flx.Item(flx.Row, FlxCol.spanVal),
-                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 0)),
-                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 1)),
-                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 2)),
-                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 3))
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 0), tmpcyakusa),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 1), tmpcyakusa),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 2), tmpcyakusa),
+                    cnvAgarisaStr2Val(flx.Item(flx.Row, FlxCol.histStart + 3), tmpcyakusa)
                     )
         Else
             a.entry(spanScore, cyakujun, agarisa1, agarisa2, agarisa3, agarisa4)
@@ -620,6 +621,9 @@ Public Class AnaForm
                 If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
                     Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
                     flx.Item(jrow, FlxCol.dof_span) = GetDofSpan(myScore, cmp_cyakujun)
+                    Dim cyakusaPoint As Integer
+                    flx.Item(jrow, FlxCol.dof_agarisa) = GetDofTime(jrow, cyakusaPoint)
+                    flx.Item(jrow, FlxCol.dof_cyakusa) = cyakusaPoint
                 End If
             Next
         Else
@@ -635,6 +639,25 @@ Public Class AnaForm
             End If
         Next
         Return pnt
+    End Function
+
+    Private Function GetDofTime(ByVal jrow As Integer, ByRef cyakusaPoint As Integer) As Integer
+        Dim agarisaPoint As Integer = 0
+        cyakusaPoint = 0
+        For j As Integer = 0 To 3
+            Dim tmpcyakusa As Single
+            Dim tmpagarisa As Single = cnvAgarisaStr2Val(flx.Item(jrow, FlxCol.histStart + j), tmpcyakusa)
+            If tmpagarisa <> DMY_VAL Then
+                For i As Integer = 0 To agarisa1.Count - 1
+                    If spanScore(j) >= 0 AndAlso cyakujun(j) >= 1 AndAlso cyakujun(j) <= cmp_cyakujun Then
+                        pnt += GetDegreeOfFit_spanScore(myScore, spanScore(j))
+                    End If
+                Next
+                GetDegreeOfFit_time(agarisaPoint, 0, j)
+            End If
+        Next
+
+        Return agarisaPoint
     End Function
 
 End Class
