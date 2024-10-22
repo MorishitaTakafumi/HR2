@@ -29,6 +29,10 @@ Public Class AnaForm
     Private agarisa2 As New List(Of Single)
     Private agarisa3 As New List(Of Single)
     Private agarisa4 As New List(Of Single)
+    Private cyakusa1 As New List(Of Single)
+    Private cyakusa2 As New List(Of Single)
+    Private cyakusa3 As New List(Of Single)
+    Private cyakusa4 As New List(Of Single)
 
     Public Sub New()
         InitializeComponent()
@@ -350,6 +354,10 @@ Public Class AnaForm
         agarisa2.Clear()
         agarisa3.Clear()
         agarisa4.Clear()
+        cyakusa1.Clear()
+        cyakusa2.Clear()
+        cyakusa3.Clear()
+        cyakusa4.Clear()
 
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim errmsg As String = ""
@@ -412,6 +420,10 @@ Public Class AnaForm
                     agarisa2.Add(r("agarisa2"))
                     agarisa3.Add(r("agarisa3"))
                     agarisa4.Add(r("agarisa4"))
+                    cyakusa1.Add(r("cyakusa1"))
+                    cyakusa2.Add(r("cyakusa2"))
+                    cyakusa3.Add(r("cyakusa3"))
+                    cyakusa4.Add(r("cyakusa4"))
                 End While
                 r.Close()
                 ListBox2.Items.Add("COUNT=" & (cyakujun.Count).ToString)
@@ -620,10 +632,13 @@ Public Class AnaForm
             For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
                 If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
                     Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
-                    flx.Item(jrow, FlxCol.dof_span) = GetDofSpan(myScore, cmp_cyakujun)
-                    Dim cyakusaPoint As Integer
-                    flx.Item(jrow, FlxCol.dof_agarisa) = GetDofTime(jrow, cyakusaPoint)
+                    Dim spanPoint As Integer = GetDofSpan(myScore, cmp_cyakujun)
+                    flx.Item(jrow, FlxCol.dof_span) = spanPoint
+                    Dim agarisaPoint, cyakusaPoint As Integer
+                    agarisaPoint = GetDofTime(jrow, cmp_cyakujun, cyakusaPoint)
+                    flx.Item(jrow, FlxCol.dof_agarisa) = agarisaPoint
                     flx.Item(jrow, FlxCol.dof_cyakusa) = cyakusaPoint
+                    flx.Item(jrow, FlxCol.dof_total) = spanPoint + agarisaPoint + cyakusaPoint
                 End If
             Next
         Else
@@ -641,7 +656,7 @@ Public Class AnaForm
         Return pnt
     End Function
 
-    Private Function GetDofTime(ByVal jrow As Integer, ByRef cyakusaPoint As Integer) As Integer
+    Private Function GetDofTime(ByVal jrow As Integer, ByVal cmp_cyakujun As Integer, ByRef cyakusaPoint As Integer) As Integer
         Dim agarisaPoint As Integer = 0
         cyakusaPoint = 0
         For j As Integer = 0 To 3
@@ -649,15 +664,27 @@ Public Class AnaForm
             Dim tmpagarisa As Single = cnvAgarisaStr2Val(flx.Item(jrow, FlxCol.histStart + j), tmpcyakusa)
             If tmpagarisa <> DMY_VAL Then
                 For i As Integer = 0 To agarisa1.Count - 1
-                    If spanScore(j) >= 0 AndAlso cyakujun(j) >= 1 AndAlso cyakujun(j) <= cmp_cyakujun Then
-                        pnt += GetDegreeOfFit_spanScore(myScore, spanScore(j))
+                    If spanScore(i) >= 0 AndAlso cyakujun(i) >= 1 AndAlso cyakujun(i) <= cmp_cyakujun Then
+                        Select Case j
+                            Case 0
+                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa1(i), j)
+                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa1(i), j)
+                            Case 1
+                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa2(i), j)
+                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa2(i), j)
+                            Case 2
+                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa3(i), j)
+                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa3(i), j)
+                            Case 3
+                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa4(i), j)
+                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa4(i), j)
+                        End Select
                     End If
                 Next
-                GetDegreeOfFit_time(agarisaPoint, 0, j)
             End If
         Next
-
         Return agarisaPoint
     End Function
+
 
 End Class
