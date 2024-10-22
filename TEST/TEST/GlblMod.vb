@@ -98,4 +98,99 @@ Public Module GlblMod
         Return DMY_VAL
     End Function
 
+    'spanScoreの適合度を得点化する
+    Public Function GetDegreeOfFit_spanScore(ByVal myScore As Integer, ByVal cmpScore As Integer) As Integer
+        'spanScoreの適合度
+        '1着,2着,3着,4着以下の４区分で出走馬myScoreと比較対象馬cmpScoreの得点を比較して得点化する
+        '各区分で｛ ①0回もない　②1回ある　③2回以上ある }に分けて比較する
+        '  ①　  ②　 ③ ←cmpScoreとする
+        '①R00　  0    0 
+        '②  0  R11   R1
+        '③  0   R2  R22
+        '
+        '各着での完全適合時の得点を P1, P2, P3, P4 とする
+        '
+        '（例）myScore：1-0-0-3, cmpScore:2-1-0-1 ならば myScore：②①①③, cmpScore:③②①① である
+        '1着：②vs③だからP1*R1、2着：①vs②だからP2*0、3着：①vs①だからP3*1、4着以下：③vs①だからP4*R2
+        'よって得点は P1*R1+P2*0+P3*1+P4*R2 となる
+
+        'R00, R11, R22, R1, R2, P1, P2, P3, P4 はパラメータ化したい
+        Dim R00 As Single = 0.6
+        Dim R11 As Single = 1
+        Dim R22 As Single = 0.9
+        Dim R1 As Single = 0.8
+        Dim R2 As Single = 0.8
+        Dim P() As Integer = {10, 40, 70, 100}
+        Dim psum As Integer = 0
+        For j As Integer = 0 To 3
+            Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
+            Dim cmpp As Integer = (cmpScore \ (100 ^ j)) Mod 100
+            Select Case cmpp
+                Case 0 '①
+                    If myp = 0 Then
+                        psum += P(j) * R00
+                    End If
+                Case 1 '②
+                    If myp = 1 Then
+                        psum += P(j) * R11
+                    ElseIf myp > 1 Then
+                        psum += P(j) * R2
+                    End If
+                Case Else '③
+                    If myp = 1 Then
+                        psum += P(j) * R1
+                    ElseIf myp > 1 Then
+                        psum += P(j) * R22
+                    End If
+            End Select
+        Next
+        Return Int(psum)
+    End Function
+
+    '上り差／着差の適合度を得点化する
+    Public Function GetDegreeOfFit_time(ByVal myTime As Single, ByVal cmpTime As Single, ByVal soumaeV As Integer) As Integer
+        '上り差／着差の適合度
+        '
+        '0.3秒間隔で６個ゾーンを作る
+        '①～-0.3/ ②-0.3～0/ ③0～0.3/ ④0.3～0.6/ ⑤0.6～0.9/ ⑥0.9～
+        '
+        '出走馬myTimeと比較対象馬cmpTimeのゾーンの一致度を得点化する
+        '
+        'myTimeのゾーン=a, cmpTimeのゾーン=b として
+        '(a-b)=0　のとき 1
+        '(a-b)<0　のとき (a-b)*R1
+        '(a-b)>0　のとき (a-b)*R2
+        '
+        'さらにそれが何走前かでも重みづけの係数 P1, P2, P3, P4 を掛ける
+        '
+        Dim R1 As Single = 0.1
+        Dim R2 As Single = 0.3
+        Dim P() As Single = {1, 0.9, 0.8, 0.7}
+        Dim psum As Integer = 0
+        Dim myZone As Integer = GetTimeZone(myTime)
+        Dim cmpZone As Integer = GetTimeZone(cmpTime)
+        If myZone = cmpZone Then
+            Return 1000 * P(soumaeV)
+        ElseIf myZone < cmpZone Then
+            Return 1000 * P(soumaeV) * (myZone - cmpZone) * R1
+        Else
+            Return 1000 * P(soumaeV) * (myZone - cmpZone) * R2
+        End If
+    End Function
+
+    Private Function GetTimeZone(ByVal tmpTime As Single) As Integer
+        If tmpTime < -0.299 Then
+            Return 0
+        ElseIf tmpTime < 0 Then
+            Return 1
+        ElseIf tmpTime < 0.301 Then
+            Return 2
+        ElseIf tmpTime < 0.601 Then
+            Return 3
+        ElseIf tmpTime < 0.901 Then
+            Return 4
+        Else
+            Return 5
+        End If
+    End Function
 End Module

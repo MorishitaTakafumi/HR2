@@ -14,7 +14,11 @@ Public Class AnaForm
         histStart = 6
         kyoriScore = histStart + HIS_CNT
         dateScore
-        cols = dateScore + 1
+        dof_span
+        dof_agarisa
+        dof_cyakusa
+        dof_total
+        cols = dof_total + 1
     End Enum
 
     Private anaList As New raceAnaListClass
@@ -54,6 +58,10 @@ Public Class AnaForm
             Next
             .Item(0, FlxCol.kyoriScore) = "今回距離" & vbLf & "成績"
             .Item(0, FlxCol.dateScore) = "今回日付" & vbLf & "±７日成績"
+            .Item(0, FlxCol.dof_span) = "span" & vbLf & "適合度"
+            .Item(0, FlxCol.dof_agarisa) = "上差" & vbLf & "適合度"
+            .Item(0, FlxCol.dof_cyakusa) = "着差" & vbLf & "適合度"
+            .Item(0, FlxCol.dof_total) = "適合度合計"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
@@ -601,4 +609,32 @@ Public Class AnaForm
         Dim a As New raceReviewForm
         a.entry(oHead.race_name)
     End Sub
+
+    Private Sub BtnDof_Click(sender As Object, e As EventArgs) Handles BtnDof.Click
+        If spanScore.Count > 0 Then
+            Dim cmp_cyakujun As Integer = 1
+            If CbCyakujun.SelectedIndex > 0 Then
+                cmp_cyakujun = CbCyakujun.SelectedIndex + 1
+            End If
+            For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
+                If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
+                    Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
+                    flx.Item(jrow, FlxCol.dof_span) = GetDofSpan(myScore, cmp_cyakujun)
+                End If
+            Next
+        Else
+            MsgBox("条件を指定して「検索実行」して比較するためのデータをロードしてください", MsgBoxStyle.Critical, Me.Text)
+        End If
+    End Sub
+
+    Private Function GetDofSpan(ByVal myScore As Integer, ByVal cmp_cyakujun As Integer) As Integer
+        Dim pnt As Integer = 0
+        For j As Integer = 0 To spanScore.Count - 1
+            If spanScore(j) >= 0 AndAlso cyakujun(j) >= 1 AndAlso cyakujun(j) <= cmp_cyakujun Then
+                pnt += GetDegreeOfFit_spanScore(myScore, spanScore(j))
+            End If
+        Next
+        Return pnt
+    End Function
+
 End Class
