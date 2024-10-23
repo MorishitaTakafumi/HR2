@@ -94,9 +94,9 @@ Public Module GlblMod
 
         Dim ip As Integer = InStr(strScore, "(")
         If ip > 1 Then
-            strScore = strScore.Substring(0, ip - 1)
-            cyakusa = CSng(Replace(strScore.Substring(2), ")", ""))
-            Return CSng(strScore)
+            Dim agarisa As Single = CSng(strScore.Substring(0, ip - 1))
+            cyakusa = CSng(Replace(strScore.Substring(ip), ")", ""))
+            Return agarisa
         End If
         Return DMY_VAL
     End Function
@@ -123,9 +123,9 @@ Public Module GlblMod
         Dim R22 As Single = 0.9
         Dim R1 As Single = 0.8
         Dim R2 As Single = 0.8
-        Dim P() As Integer = {10, 40, 70, 100}
+        Dim P() As Integer = {60, 75, 80, 100} 'まだ{70, 80, 90, 100} '全然X{10, 40, 70, 100}
         Dim psum As Integer = 0
-        For j As Integer = 0 To 3
+        For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
             Dim cmpp As Integer = (cmpScore \ (100 ^ j)) Mod 100
             Select Case cmpp
@@ -166,19 +166,26 @@ Public Module GlblMod
         '
         'さらにそれが何走前かでも重みづけの係数 P1, P2, P3, P4 を掛ける
         '
-        Dim R1 As Single = 0.1
-        Dim R2 As Single = 0.3
-        Dim P() As Single = {1, 0.9, 0.8, 0.7}
-        Dim psum As Integer = 0
+        If myTime = DMY_VAL OrElse cmpTime = DMY_VAL Then
+            Return 0
+        End If
+
+        Dim fullPoint As Integer = 100 '満点
+        Dim R1 As Single = -0.1 'myTimeがcmpTimeより良いとき満点からの減量を決める係数
+        Dim R2 As Single = 0.3  'myTimeがcmpTimeより悪いとき満点からの減量を決める係数
+        Dim P() As Single = {1, 0.9, 0.8, 0.7} '何走前かでの重みづけ用
         Dim myZone As Integer = GetTimeZone(myTime)
         Dim cmpZone As Integer = GetTimeZone(cmpTime)
+        Dim coef As Single
+
         If myZone = cmpZone Then
-            Return 1000 * P(soumaeV)
+            coef = 1
         ElseIf myZone < cmpZone Then
-            Return 1000 * P(soumaeV) * (myZone - cmpZone) * R1
+            coef = 1 - (myZone - cmpZone) * R1
         Else
-            Return 1000 * P(soumaeV) * (myZone - cmpZone) * R2
+            coef = 1 - (myZone - cmpZone) * R2
         End If
+        Return fullPoint * P(soumaeV) * coef
     End Function
 
     Private Function GetTimeZone(ByVal tmpTime As Single) As Integer

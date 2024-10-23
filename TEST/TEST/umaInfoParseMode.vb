@@ -64,7 +64,7 @@
     End Function
 
     '履歴表の取得
-    Public Function GetUmaHist(ByVal src As String, ByVal hlist As umaHistListClass) As Integer
+    Public Function GetUmaHist(ByVal src As String, ByVal hlist As umaHistListClass, ByVal dt_max As Date) As Integer
         hlist.init()
         Dim findpos As Integer = 1
         Dim lineStr As String = SearchLineByKeyword(findpos, src, "<tbody>", findpos)
@@ -181,8 +181,9 @@
                                 a.tokei = cnvTimeStr2Sec(words(0))
                             End If
                         End If
-
-                        hlist.add1(a)
+                        If a.dt < dt_max OrElse dt_max = DMY_DATE Then
+                            hlist.add1(a)
+                        End If
                     Else
                         Exit While
                     End If

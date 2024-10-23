@@ -98,6 +98,10 @@ Public Class Form2
     End Sub
 
     Private Sub BtnTest_Click(sender As Object, e As EventArgs) Handles BtnTest.Click
+        GetData(DMY_DATE)
+    End Sub
+
+    Private Sub GetData(ByVal dt_max As Date)
         Dim url As String = txtURL.Text.Trim
         If url.Length > 0 Then
             Dim contents As String = GetWebPageText(txtURL.Text.Trim)
@@ -111,19 +115,19 @@ Public Class Form2
             ListBox1.Items.Add("性別：" & oUmaHeader.sex)
             ListBox1.Items.Add("誕生日：" & oUmaHeader.birthday.ToString("yyyy年MM月dd日"))
 
-            GetUmaHist(contents, umaHistList)
+            GetUmaHist(contents, umaHistList, dt_max)
             ShowTable(umaHistList)
         End If
     End Sub
 
-    Public Sub entry(ByVal url As String)
+    Public Sub entry(ByVal url As String, Optional ByVal dt_max As Date = DMY_DATE)
         If InStr(url, "https://www.jra.go.jp") = 0 Then
             url = "https://www.jra.go.jp" & url
         End If
         txtURL.Text = url
         Me.WindowState = FormWindowState.Minimized
         Show()
-        BtnTest.PerformClick()
+        GetData(dt_max)
     End Sub
 
     Private Sub flx_Click(sender As Object, e As EventArgs) Handles flx.Click

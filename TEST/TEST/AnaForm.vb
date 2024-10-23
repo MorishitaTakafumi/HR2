@@ -293,7 +293,7 @@ Public Class AnaForm
                 rA.umaban = o.umaban
                 rA.bamei = o.bamei
                 rA.ninki = o.ninki
-                fm2.entry(o.href)
+                fm2.entry(o.href, oHead.dt)
                 rA.spanScore = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
                 rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
                 For i As Integer = 0 To fm2.umaHistList.cnt - 1
@@ -365,52 +365,38 @@ Public Class AnaForm
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
             Try
-                cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id"
+                cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE R.dt<@dt"
+                cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
                 If chkJo.Checked Then
-                    sql &= "R.jo_code=@jo_code"
+                    sql &= " AND R.jo_code=@jo_code"
                     cmd.Parameters.AddWithValue("@jo_code", oHead.jo_code)
                 End If
                 If chkKyori.Checked Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.kyori=@kyori AND R.type_code=@type_code"
+                    sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
                     cmd.Parameters.AddWithValue("@kyori", oHead.kyori)
                     cmd.Parameters.AddWithValue("@type_code", oHead.type_code)
                 End If
                 If chkRacename.Checked Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.race_name=@race_name"
+                    sql &= " AND R.race_name=@race_name"
                     cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
                 End If
                 If chkGrade.Checked Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.class_code=@class_code"
+                    sql &= " AND R.class_code=@class_code"
                     cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
                 End If
                 If CbCyakujun.SelectedIndex >= 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "A.cyakujun<=@cyakujun"
+                    sql &= " AND A.cyakujun<=@cyakujun"
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex + 1)
                 End If
 
                 If chkMonth.Checked Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "strftime('%m', R.dt) = @tuki"
+                    sql &= " AND strftime('%m', R.dt) = @tuki"
                     cmd.Parameters.AddWithValue("@tuki", oHead.dt.Month.ToString("D2"))
                 End If
 
                 If sql.Length > 0 Then
-                    cmd.CommandText &= " WHERE " & sql
+                    cmd.CommandText &= sql
                 End If
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
@@ -664,7 +650,7 @@ Public Class AnaForm
             Dim tmpagarisa As Single = cnvAgarisaStr2Val(flx.Item(jrow, FlxCol.histStart + j), tmpcyakusa)
             If tmpagarisa <> DMY_VAL Then
                 For i As Integer = 0 To agarisa1.Count - 1
-                    If spanScore(i) >= 0 AndAlso cyakujun(i) >= 1 AndAlso cyakujun(i) <= cmp_cyakujun Then
+                    If cyakujun(i) >= 1 AndAlso cyakujun(i) <= cmp_cyakujun Then
                         Select Case j
                             Case 0
                                 agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa1(i), j)
