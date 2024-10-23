@@ -128,24 +128,67 @@ Public Module GlblMod
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
             Dim cmpp As Integer = (cmpScore \ (100 ^ j)) Mod 100
-            Select Case cmpp
-                Case 0 '①
-                    If myp = 0 Then
-                        psum += P(j) * R00
+            If j = 0 Then
+                '4着以下はマイナス要素なので別ロジックとする
+                If myp = 0 Then
+                    If myScore > 0 Then '3着以上しかない場合はプラス要素
+                        If cmpp = 0 Then
+                            If cmpScore > 0 Then
+                                psum += P(j) * R00 '相手も3着以上のみ
+                            Else
+                                psum += P(j) * R00 * 0.5 '相手は0-0-0-0
+                            End If
+                        Else
+                            psum += 0 '相手は4着以下あり、このときはマイナス要素としない
+                        End If
+                    Else '0-0-0-0
+                        If cmpp = 0 Then
+                            If cmpScore > 0 Then
+                                psum += 0 '相手は3着以上しかない、このときはマイナス要素としない
+                            Else
+                                psum += 0 '相手も0-0-0-0、このときはマイナス要素としない
+                            End If
+                        Else
+                            psum += 0 '相手は4着以下あり、このときはマイナス要素としない
+                        End If
                     End If
-                Case 1 '②
-                    If myp = 1 Then
-                        psum += P(j) * R11
-                    ElseIf myp > 1 Then
-                        psum += P(j) * R2
+                Else '4着以下あり
+                    If cmpp = 0 Then
+                        If cmpScore > 0 Then
+                            psum -= P(j) * R00 '相手は3着以上のみ、このときマイナス要素とする
+                        Else
+                            psum -= P(j) * R00 * 0.5 '相手は0-0-0-0
+                        End If
+                    Else '相手も4着以下あり
+                        If myp = cmpp Then
+                            psum += 0 '同じ回数4着以下あり、このときはマイナス要素としない
+                        ElseIf myp > cmpp Then
+                            psum -= P(j) * R00 '相手はより4着以下が多い、このときマイナス要素とする
+                        Else
+                            psum -= 0 '相手はより4着以下が少ない、このときマイナス要素としない
+                        End If
                     End If
-                Case Else '③
-                    If myp = 1 Then
-                        psum += P(j) * R1
-                    ElseIf myp > 1 Then
-                        psum += P(j) * R22
-                    End If
-            End Select
+                End If
+            Else
+                Select Case cmpp
+                    Case 0 '①
+                        If myp = 0 Then
+                            psum += P(j) * R00
+                        End If
+                    Case 1 '②
+                        If myp = 1 Then
+                            psum += P(j) * R11
+                        ElseIf myp > 1 Then
+                            psum += P(j) * R2
+                        End If
+                    Case Else '③
+                        If myp = 1 Then
+                            psum += P(j) * R1
+                        ElseIf myp > 1 Then
+                            psum += P(j) * R22
+                        End If
+                End Select
+            End If
         Next
         Return Int(psum)
     End Function
