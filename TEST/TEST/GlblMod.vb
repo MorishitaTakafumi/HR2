@@ -102,6 +102,7 @@ Public Module GlblMod
     End Function
 
     'spanScoreの適合度を得点化する
+    'Return 得点(0～400)
     Public Function GetDegreeOfFit_spanScore(ByVal myScore As Integer, ByVal cmpScore As Integer) As Integer
         'spanScoreの適合度
         '1着,2着,3着,4着以下の４区分で出走馬myScoreと比較対象馬cmpScoreの得点を比較して得点化する
@@ -123,7 +124,7 @@ Public Module GlblMod
         Dim R22 As Single = 0.9
         Dim R1 As Single = 0.8
         Dim R2 As Single = 0.8
-        Dim P() As Integer = {60, 75, 80, 100} 'まだ{70, 80, 90, 100} '全然X{10, 40, 70, 100}
+        Dim P() As Integer = {100, 100, 100, 100} 'まだ{70, 80, 90, 100} '全然X{10, 40, 70, 100}
         Dim psum As Integer = 0
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
@@ -194,6 +195,7 @@ Public Module GlblMod
     End Function
 
     '上り差／着差の適合度を得点化する
+    'Return 得点(0～100)
     Public Function GetDegreeOfFit_time(ByVal myTime As Single, ByVal cmpTime As Single, ByVal soumaeV As Integer) As Integer
         '上り差／着差の適合度
         '

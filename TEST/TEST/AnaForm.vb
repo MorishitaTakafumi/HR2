@@ -265,9 +265,9 @@ Public Class AnaForm
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
         Dim url As String = txtURL.Text.Trim
         If url.Length > 0 Then
-            Dim fm1 As New Form1
-            Dim fm2 As New Form2
-            Dim fm3 As New Form3
+            Dim fm1 As New Form1 '結果
+            Dim fm2 As New Form2 '馬情報
+            Dim fm3 As New Form3 '出走馬
             fm3.entry(url)
 
 
@@ -632,6 +632,8 @@ Public Class AnaForm
         End If
     End Sub
 
+    'spanの適合度の得点を取得
+    'Return span得点　0 ～ 400の範囲の値
     Private Function GetDofSpan(ByVal myScore As Integer, ByVal cmp_cyakujun As Integer) As Integer
         Dim pnt As Integer = 0
         For j As Integer = 0 To spanScore.Count - 1
@@ -642,13 +644,17 @@ Public Class AnaForm
         Return pnt
     End Function
 
+    '上り差および着差の適合度の得点を取得
+    'Return 上り差得点　※cyakusaPointに着差得点をセットして返す　共に0 ～ 400の範囲の値
     Private Function GetDofTime(ByVal jrow As Integer, ByVal cmp_cyakujun As Integer, ByRef cyakusaPoint As Integer) As Integer
+        Dim dataCnt As Integer = 0
         Dim agarisaPoint As Integer = 0
         cyakusaPoint = 0
         For j As Integer = 0 To 3
             Dim tmpcyakusa As Single
             Dim tmpagarisa As Single = cnvAgarisaStr2Val(flx.Item(jrow, FlxCol.histStart + j), tmpcyakusa)
             If tmpagarisa <> DMY_VAL Then
+                dataCnt += 1
                 For i As Integer = 0 To agarisa1.Count - 1
                     If cyakujun(i) >= 1 AndAlso cyakujun(i) <= cmp_cyakujun Then
                         Select Case j
@@ -669,6 +675,14 @@ Public Class AnaForm
                 Next
             End If
         Next
+        If dataCnt > 0 Then
+            '取消しや海外レース等でデータの無い回の影響を除くため平均をとる
+            agarisaPoint /= dataCnt
+            cyakusaPoint /= dataCnt
+            '比較対象数の多い少ないの影響を除くため平均をとる
+            agarisaPoint /= agarisa1.Count
+            cyakusaPoint /= agarisa1.Count
+        End If
         Return agarisaPoint
     End Function
 
