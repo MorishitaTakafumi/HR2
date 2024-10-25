@@ -633,14 +633,19 @@ Public Class AnaForm
     End Sub
 
     'spanの適合度の得点を取得
-    'Return span得点　0 ～ 400の範囲の値
+    'Return span得点　0 ～ 200の範囲の値
     Private Function GetDofSpan(ByVal myScore As Integer, ByVal cmp_cyakujun As Integer) As Integer
         Dim pnt As Integer = 0
+        Dim cnt As Integer = 0
         For j As Integer = 0 To spanScore.Count - 1
             If spanScore(j) >= 0 AndAlso cyakujun(j) >= 1 AndAlso cyakujun(j) <= cmp_cyakujun Then
                 pnt += GetDegreeOfFit_spanScore(myScore, spanScore(j))
+                cnt += 1
             End If
         Next
+        If cnt > 0 Then
+            pnt /= cnt
+        End If
         Return pnt
     End Function
 
@@ -686,5 +691,7 @@ Public Class AnaForm
         Return agarisaPoint
     End Function
 
+    Private Sub BtnHistGet_DragDrop(sender As Object, e As DragEventArgs) Handles BtnHistGet.DragDrop
 
+    End Sub
 End Class

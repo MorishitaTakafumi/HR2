@@ -102,7 +102,7 @@ Public Module GlblMod
     End Function
 
     'spanScoreの適合度を得点化する
-    'Return 得点(0～400)
+    'Return 得点(0～200)
     Public Function GetDegreeOfFit_spanScore(ByVal myScore As Integer, ByVal cmpScore As Integer) As Integer
         'spanScoreの適合度
         '1着,2着,3着,4着以下の４区分で出走馬myScoreと比較対象馬cmpScoreの得点を比較して得点化する
@@ -124,7 +124,7 @@ Public Module GlblMod
         Dim R22 As Single = 0.9
         Dim R1 As Single = 0.8
         Dim R2 As Single = 0.8
-        Dim P() As Integer = {100, 100, 100, 100} 'まだ{70, 80, 90, 100} '全然X{10, 40, 70, 100}
+        Dim P() As Integer = {40, 45, 55, 60} '合計200にする
         Dim psum As Integer = 0
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
@@ -162,11 +162,11 @@ Public Module GlblMod
                         End If
                     Else '相手も4着以下あり
                         If myp = cmpp Then
-                            psum += 0 '同じ回数4着以下あり、このときはマイナス要素としない
+                            psum += 0 '同じ回数、このときはマイナス要素としない
                         ElseIf myp > cmpp Then
-                            psum -= P(j) * R00 '相手はより4着以下が多い、このときマイナス要素とする
+                            psum -= P(j) * R00 '相手より多い、このときマイナス要素とする
                         Else
-                            psum -= 0 '相手はより4着以下が少ない、このときマイナス要素としない
+                            psum -= 0 '相手より少ない、このときマイナス要素としない
                         End If
                     End If
                 End If

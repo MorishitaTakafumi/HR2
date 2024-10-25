@@ -67,7 +67,7 @@ Partial Class AnaForm
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(733, 20)
         Me.txtURL.TabIndex = 1
-        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0108202405061120241020/52"
+        Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0105202404081120241027/54"
         '
         'Label1
         '
@@ -140,7 +140,7 @@ Partial Class AnaForm
         Me.NumericUpDown1.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.NumericUpDown1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
         Me.NumericUpDown1.Location = New System.Drawing.Point(154, 61)
-        Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(2)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
         Me.NumericUpDown1.Name = "NumericUpDown1"
@@ -245,7 +245,7 @@ Partial Class AnaForm
         Me.CbCyakujun.FormattingEnabled = True
         Me.CbCyakujun.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbCyakujun.Location = New System.Drawing.Point(164, 426)
-        Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(2)
         Me.CbCyakujun.Name = "CbCyakujun"
         Me.CbCyakujun.Size = New System.Drawing.Size(92, 20)
         Me.CbCyakujun.TabIndex = 19
