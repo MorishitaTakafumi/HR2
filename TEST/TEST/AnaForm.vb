@@ -380,13 +380,16 @@ Public Class AnaForm
                 If chkRacename.Checked Then
                     sql &= " AND R.race_name=@race_name"
                     cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                ElseIf chkRacename2.Checked Then
+                    sql &= " AND R.race_name like @race_name"
+                    cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
                 End If
                 If chkGrade.Checked Then
                     sql &= " AND R.class_code=@class_code"
                     cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
                 End If
                 If CbCyakujun.SelectedIndex >= 0 Then
-                    sql &= " AND A.cyakujun<=@cyakujun"
+                    sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex + 1)
                 End If
 
@@ -691,7 +694,18 @@ Public Class AnaForm
         Return agarisaPoint
     End Function
 
-    Private Sub BtnHistGet_DragDrop(sender As Object, e As DragEventArgs) Handles BtnHistGet.DragDrop
+    Private Sub chkRacename2_CheckedChanged(sender As Object, e As EventArgs) Handles chkRacename2.CheckedChanged
+        If chkRacename2.Checked Then
+            chkRacename.Checked = False
+            If txtRacename.Text.Length = 0 Then
+                txtRacename.Text = oHead.race_name
+            End If
+        End If
+    End Sub
 
+    Private Sub chkRacename_CheckedChanged(sender As Object, e As EventArgs) Handles chkRacename.CheckedChanged
+        If chkRacename.Checked Then
+            chkRacename2.Checked = False
+        End If
     End Sub
 End Class

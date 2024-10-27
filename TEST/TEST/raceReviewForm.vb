@@ -272,60 +272,42 @@ Public Class raceReviewForm
             Dim cmd As SQLiteCommand = conn.CreateCommand
             conn.Open()
             Try
-                cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id"
+                cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
                 Dim sql As String = ""
                 If CbJo.SelectedIndex > 0 Then
-                    sql &= "R.jo_code=@jo_code"
+                    sql &= " AND R.jo_code=@jo_code"
                     cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
                 End If
                 If CbKyori.SelectedIndex > 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.kyori=@kyori"
+                    sql &= " AND R.kyori=@kyori"
                     cmd.Parameters.AddWithValue("@kyori", CInt(CbKyori.Text))
                 End If
                 If CbSyubetu.SelectedIndex > 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.type_code=@type_code"
+                    sql &= " AND R.type_code=@type_code"
                     cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
                 End If
                 If CbRacename.SelectedIndex > 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.race_name=@race_name"
+                    sql &= " AND R.race_name=@race_name"
                     cmd.Parameters.AddWithValue("@race_name", CbRacename.Text)
                 End If
                 If CbGrade.SelectedIndex > 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "R.class_code=@class_code"
+                    sql &= " AND R.class_code=@class_code"
                     cmd.Parameters.AddWithValue("@class_code", CbGrade.SelectedIndex - 1)
                 End If
                 If CbCyakujun.SelectedIndex > 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
                     If RbInai.Checked Then
-                        sql &= "A.cyakujun<=@cyakujun"
+                        sql &= " AND A.cyakujun<=@cyakujun"
                     Else
-                        sql &= "A.cyakujun>=@cyakujun"
+                        sql &= " AND A.cyakujun>=@cyakujun"
                     End If
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
                 End If
                 If CbMonth.SelectedIndex > 0 Then
-                    If sql.Length > 0 Then
-                        sql &= " AND "
-                    End If
-                    sql &= "strftime('%m', R.dt) = @tuki"
+                    sql &= " AND strftime('%m', R.dt) = @tuki"
                     cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
                 End If
                 If sql.Length > 0 Then
-                    cmd.CommandText &= " WHERE " & sql
+                    cmd.CommandText &= sql
                 End If
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 Dim xx(FlxCol.cols - 1) As String
