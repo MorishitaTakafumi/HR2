@@ -91,7 +91,7 @@
         For j As Integer = 0 To cnt - 1
             If m_bf(j).cyakujun = 1 Then
                 m_bf(j).cyakusa = time1 - time2
-            ElseIf m_bf(j).cyakujun > 0 Then
+            ElseIf m_bf(j).cyakujun > 0 Then '除外・中止・取消は除く
                 m_bf(j).cyakusa = m_bf(j).tokei - time1
             End If
         Next
@@ -132,14 +132,16 @@
         Dim corner_idx As Integer = oHead.GetCornerToCalcAgarisa() - 1
 
         For j As Integer = 0 To cnt - 1
-            If m_bf(j).agari = agariList(0) AndAlso m_bf(j).cyakujun <= 5 Then '5着内で最速の上り馬は5着内で2番目の上りとの差(その馬が5着より下の場合は5着内で最速場と比較する)
-                m_bf(j).agarisa = m_bf(j).agari - agariList(1)
-            Else
-                m_bf(j).agarisa = m_bf(j).agari - agariList(0)
-            End If
-            'コーナーでの順位を考慮
-            If m_bf(j).tukajun(corner_idx) > 0 Then
-                m_bf(j).agarisa += (m_bf(j).tukajun(corner_idx) - 1) * 0.1 - 0.4 + hoseiti
+            If m_bf(j).cyakujun > 0 Then
+                If m_bf(j).agari = agariList(0) AndAlso m_bf(j).cyakujun <= 5 Then '5着内で最速の上り馬は5着内で2番目の上りとの差(その馬が5着より下の場合は5着内で最速場と比較する)
+                    m_bf(j).agarisa = m_bf(j).agari - agariList(1)
+                Else
+                    m_bf(j).agarisa = m_bf(j).agari - agariList(0)
+                End If
+                'コーナーでの順位を考慮
+                If m_bf(j).tukajun(corner_idx) > 0 Then
+                    m_bf(j).agarisa += (m_bf(j).tukajun(corner_idx) - 1) * 0.1 - 0.4 + hoseiti
+                End If
             End If
         Next
 

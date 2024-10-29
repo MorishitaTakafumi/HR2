@@ -667,17 +667,25 @@ Public Class AnaForm
                     If cyakujun(i) >= 1 AndAlso cyakujun(i) <= cmp_cyakujun Then
                         Select Case j
                             Case 0
-                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa1(i), j)
-                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa1(i), j)
+                                If Math.Abs(cyakusa1(i)) < 999 Then '取消,中止,除外などで変なのが混じってる
+                                    agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa1(i), j)
+                                    cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa1(i), j)
+                                End If
                             Case 1
-                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa2(i), j)
-                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa2(i), j)
+                                If Math.Abs(cyakusa2(i)) < 999 Then
+                                    agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa2(i), j)
+                                    cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa2(i), j)
+                                End If
                             Case 2
-                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa3(i), j)
-                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa3(i), j)
+                                If Math.Abs(cyakusa3(i)) < 999 Then
+                                    agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa3(i), j)
+                                    cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa3(i), j)
+                                End If
                             Case 3
-                                agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa4(i), j)
-                                cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa4(i), j)
+                                If Math.Abs(cyakusa4(i)) < 999 Then
+                                    agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa4(i), j)
+                                    cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa4(i), j)
+                                End If
                         End Select
                     End If
                 Next

@@ -41,8 +41,8 @@
         zogen = 0
         cyokyosi = ""
         ninki = -1
-        cyakusa = 999
-        agarisa = 999
+        cyakusa = DMY_VAL
+        agarisa = DMY_VAL
         uma_href = ""
     End Sub
 
