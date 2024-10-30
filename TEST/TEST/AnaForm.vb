@@ -1,5 +1,7 @@
 ﻿Imports C1.Win.C1FlexGrid
 Imports System.Data.SQLite
+Imports System.IO
+Imports System.Security.Policy
 
 Public Class AnaForm
 
@@ -40,6 +42,7 @@ Public Class AnaForm
             Dim tmp As String = Clipboard.GetText
             If InStr(tmp, "https") Then
                 txtURL.Text = tmp
+                RbURL.Checked = True
             End If
         End If
     End Sub
@@ -263,70 +266,82 @@ Public Class AnaForm
     End Sub
 
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
-        Dim url As String = txtURL.Text.Trim
-        If url.Length > 0 Then
-            Dim fm1 As New Form1 '結果
-            Dim fm2 As New Form2 '馬情報
-            Dim fm3 As New Form3 '出走馬
-            fm3.entry(url)
-
-
-            ListBox1.Items.Clear()
-            oHead = fm3.oRaceHeader
-
-            ListBox1.Items.Add("競馬場：" & oHead.keibajo)
-            ListBox1.Items.Add("開催日：" & oHead.dt.ToString("yyyy年MM月dd日"))
-
-            ListBox1.Items.Add("レース名：" & oHead.race_name)
-            ListBox1.Items.Add("グレード：" & oHead.grade)
-
-            ListBox1.Items.Add("距離：" & oHead.kyori.ToString)
-            ListBox1.Items.Add("種別：" & oHead.syubetu)
-            ListBox1.Items.Add("クラス：" & oHead.class_name)
-            oHead.class_code = oHead.GetClassCode()
-            anaList.init()
-            For j As Integer = 0 To fm3.syutubaList.cnt - 1
-                lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString
-                Dim rA As New raceAnanClass
-                Dim o As SyutubaClass = fm3.syutubaList.GetBodyRef(j)
-                rA.waku = o.waku
-                rA.umaban = o.umaban
-                rA.bamei = o.bamei
-                rA.ninki = o.ninki
-                fm2.entry(o.href, oHead.dt)
-                rA.spanScore = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
-                rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
-                For i As Integer = 0 To fm2.umaHistList.cnt - 1
-                    If i > 5 Then
-                        Exit For
-                    End If
-
-                    lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString & " | " & (i + 1).ToString & "/6"
-                    Me.Refresh()
-
-                    Dim oS As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
-
-                    'If j = 11 AndAlso i = 0 Then
-                    '    MsgBox(o.bamei & " " & oS.racename)
-                    'End If
-
-                    fm1.entry(oS.href)
-                    rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
-                Next
-
-                anaList.add1(rA)
-            Next
-            ShowTable(anaList)
-            PaintTable(anaList)
-            fm1.Close()
-            fm2.Close()
-            fm3.Close()
+        Dim form3argStr As String = ""
+        If RbURL.Checked Then
+            form3argStr = txtURL.Text.Trim
+        ElseIf RbFile.Checked Then
+            form3argStr = txtFile.Text.Trim
         End If
+
+        If form3argStr.Length = 0 Then
+            Return
+        End If
+
+        Dim fm3 As New Form3 '出走馬
+        If RbURL.Checked Then
+            fm3.entry(form3argStr)
+        ElseIf RbFile.Checked Then
+            fm3.entry2(form3argStr)
+        End If
+        Dim fm1 As New Form1 '結果
+        Dim fm2 As New Form2 '馬情報
+
+        ListBox1.Items.Clear()
+        oHead = fm3.oRaceHeader
+
+        ListBox1.Items.Add("競馬場：" & oHead.keibajo)
+        ListBox1.Items.Add("開催日：" & oHead.dt.ToString("yyyy年MM月dd日"))
+
+        ListBox1.Items.Add("レース名：" & oHead.race_name)
+        ListBox1.Items.Add("グレード：" & oHead.grade)
+
+        ListBox1.Items.Add("距離：" & oHead.kyori.ToString)
+        ListBox1.Items.Add("種別：" & oHead.syubetu)
+        ListBox1.Items.Add("クラス：" & oHead.class_name)
+        oHead.class_code = oHead.GetClassCode()
+        anaList.init()
+        For j As Integer = 0 To fm3.syutubaList.cnt - 1
+            lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString
+            Dim rA As New raceAnanClass
+            Dim o As SyutubaClass = fm3.syutubaList.GetBodyRef(j)
+            rA.waku = o.waku
+            rA.umaban = o.umaban
+            rA.bamei = o.bamei
+            rA.ninki = o.ninki
+            fm2.entry(o.href, oHead.dt)
+            rA.spanScore = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
+            rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
+            For i As Integer = 0 To fm2.umaHistList.cnt - 1
+                If i > 5 Then
+                    Exit For
+                End If
+
+                lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString & " | " & (i + 1).ToString & "/6"
+                Me.Refresh()
+
+                Dim oS As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
+
+                'If j = 11 AndAlso i = 0 Then
+                '    MsgBox(o.bamei & " " & oS.racename)
+                'End If
+
+                fm1.entry(oS.href)
+                rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
+            Next
+
+            anaList.add1(rA)
+        Next
+        ShowTable(anaList)
+        PaintTable(anaList)
+        fm1.Close()
+        fm2.Close()
+        fm3.Close()
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
         If Clipboard.ContainsText Then
             txtURL.Text = Clipboard.GetText()
+            RbURL.Checked = True
         End If
     End Sub
 
@@ -714,6 +729,16 @@ Public Class AnaForm
     Private Sub chkRacename_CheckedChanged(sender As Object, e As EventArgs) Handles chkRacename.CheckedChanged
         If chkRacename.Checked Then
             chkRacename2.Checked = False
+        End If
+    End Sub
+
+    Private Sub BtnFile_Click(sender As Object, e As EventArgs) Handles BtnFile.Click
+        Dim dlg As New OpenFileDialog
+        dlg.InitialDirectory = Path.Combine(GetTextDataFolder(), "出馬表")
+        dlg.Filter = "txt files (*.txt)|*.txt"
+        If dlg.ShowDialog() = DialogResult.OK Then
+            txtFile.Text = dlg.FileName
+            RbFile.Checked = True
         End If
     End Sub
 End Class

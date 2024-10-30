@@ -2,13 +2,14 @@
 
 Module cmnMod
 
-    'データベース接続文字列
-    Public Function GetDbConnectionString() As String
-        '2024/10/17 環境を考慮した
+    Private HR2Path As String = ""
+
+    'データベースファイルや出馬表を置くフォルダーの取得
+    Private Function GetHR2Path() As String
         If File.Exists("C:\STUDY\HR2\HR2.sqlite3") Then
-            Return "Data Source=C:\STUDY\HR2\HR2.sqlite3"
+            Return "C:\STUDY\HR2"
         ElseIf File.Exists("C:\学習\HR2\HR2.sqlite3") Then
-            Return "Data Source=C:\学習\HR2\HR2.sqlite3"
+            Return "C:\学習\HR2"
         Else
             Dim openFileDialog1 As New OpenFileDialog()
             openFileDialog1.InitialDirectory = "c:\"
@@ -17,10 +18,31 @@ Module cmnMod
             openFileDialog1.RestoreDirectory = True
 
             If openFileDialog1.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
-                Return openFileDialog1.FileName
+                Return Path.GetDirectoryName(openFileDialog1.FileName)
             End If
         End If
         Return ""
+    End Function
+
+    '出馬表のテキストファイルを置くフォルダー名の取得
+    Public Function GetTextDataFolder() As String
+        If HR2Path.Length = 0 Then
+            HR2Path = GetHR2Path()
+        End If
+        Return HR2Path
+    End Function
+
+    Public Function GetSyutubahyoTextFileName(ByVal oHead As RaceHeaderClass) As String
+        Dim fnm As String = oHead.dt.ToString("yyyy年M月d日") & "_" & oHead.race_name & ".Txt"
+        Return Path.Combine(GetTextDataFolder(), "出馬表", fnm)
+    End Function
+
+    'データベース接続文字列
+    Public Function GetDbConnectionString() As String
+        If HR2Path.Length = 0 Then
+            HR2Path = GetHR2Path()
+        End If
+        Return "Data Source=" & Path.Combine(HR2Path, "HR2.sqlite3")
     End Function
 
     '指定したキーワードを含む行をさがす

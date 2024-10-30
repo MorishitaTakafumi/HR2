@@ -25,7 +25,6 @@ Partial Class AnaForm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AnaForm))
         Me.BtnGo = New System.Windows.Forms.Button()
         Me.txtURL = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
         Me.lb_msg = New System.Windows.Forms.Label()
@@ -48,6 +47,10 @@ Partial Class AnaForm
         Me.BtnDof = New System.Windows.Forms.Button()
         Me.chkRacename2 = New System.Windows.Forms.CheckBox()
         Me.txtRacename = New System.Windows.Forms.TextBox()
+        Me.RbURL = New System.Windows.Forms.RadioButton()
+        Me.RbFile = New System.Windows.Forms.RadioButton()
+        Me.txtFile = New System.Windows.Forms.TextBox()
+        Me.BtnFile = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -55,10 +58,10 @@ Partial Class AnaForm
         'BtnGo
         '
         Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnGo.Location = New System.Drawing.Point(1081, 12)
+        Me.BtnGo.Location = New System.Drawing.Point(1049, 12)
         Me.BtnGo.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnGo.Name = "BtnGo"
-        Me.BtnGo.Size = New System.Drawing.Size(185, 55)
+        Me.BtnGo.Size = New System.Drawing.Size(175, 84)
         Me.BtnGo.TabIndex = 0
         Me.BtnGo.Text = "解析実行"
         Me.BtnGo.UseVisualStyleBackColor = True
@@ -66,30 +69,19 @@ Partial Class AnaForm
         'txtURL
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.txtURL.Location = New System.Drawing.Point(73, 26)
+        Me.txtURL.Location = New System.Drawing.Point(102, 20)
         Me.txtURL.Margin = New System.Windows.Forms.Padding(4)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(976, 24)
+        Me.txtURL.Size = New System.Drawing.Size(750, 24)
         Me.txtURL.TabIndex = 1
         Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0105202404081120241027/54"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label1.Location = New System.Drawing.Point(17, 30)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(39, 17)
-        Me.Label1.TabIndex = 2
-        Me.Label1.Text = "URL"
         '
         'ListBox1
         '
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 19
-        Me.ListBox1.Location = New System.Drawing.Point(13, 121)
+        Me.ListBox1.Location = New System.Drawing.Point(13, 159)
         Me.ListBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(383, 251)
@@ -102,7 +94,7 @@ Partial Class AnaForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(413, 72)
+        Me.flx.Location = New System.Drawing.Point(404, 118)
         Me.flx.Margin = New System.Windows.Forms.Padding(4)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 18
@@ -113,7 +105,7 @@ Partial Class AnaForm
         'lb_msg
         '
         Me.lb_msg.AutoSize = True
-        Me.lb_msg.Location = New System.Drawing.Point(15, 392)
+        Me.lb_msg.Location = New System.Drawing.Point(15, 430)
         Me.lb_msg.Name = "lb_msg"
         Me.lb_msg.Size = New System.Drawing.Size(31, 15)
         Me.lb_msg.TabIndex = 6
@@ -122,10 +114,10 @@ Partial Class AnaForm
         'BtnURL
         '
         Me.BtnURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnURL.Location = New System.Drawing.Point(1275, 12)
+        Me.BtnURL.Location = New System.Drawing.Point(870, 12)
         Me.BtnURL.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnURL.Name = "BtnURL"
-        Me.BtnURL.Size = New System.Drawing.Size(185, 55)
+        Me.BtnURL.Size = New System.Drawing.Size(153, 39)
         Me.BtnURL.TabIndex = 7
         Me.BtnURL.Text = "URL貼り付け"
         Me.BtnURL.UseVisualStyleBackColor = True
@@ -134,7 +126,7 @@ Partial Class AnaForm
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label2.Location = New System.Drawing.Point(15, 84)
+        Me.Label2.Location = New System.Drawing.Point(13, 121)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(178, 17)
         Me.Label2.TabIndex = 8
@@ -145,7 +137,7 @@ Partial Class AnaForm
         Me.NumericUpDown1.DecimalPlaces = 1
         Me.NumericUpDown1.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.NumericUpDown1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.NumericUpDown1.Location = New System.Drawing.Point(205, 76)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(203, 113)
         Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
@@ -157,7 +149,7 @@ Partial Class AnaForm
         'BtnRedisp
         '
         Me.BtnRedisp.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnRedisp.Location = New System.Drawing.Point(299, 76)
+        Me.BtnRedisp.Location = New System.Drawing.Point(297, 113)
         Me.BtnRedisp.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnRedisp.Name = "BtnRedisp"
         Me.BtnRedisp.Size = New System.Drawing.Size(99, 38)
@@ -168,7 +160,7 @@ Partial Class AnaForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(17, 436)
+        Me.Label3.Location = New System.Drawing.Point(17, 474)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(188, 15)
@@ -178,7 +170,7 @@ Partial Class AnaForm
         'chkJo
         '
         Me.chkJo.AutoSize = True
-        Me.chkJo.Location = New System.Drawing.Point(19, 477)
+        Me.chkJo.Location = New System.Drawing.Point(19, 515)
         Me.chkJo.Margin = New System.Windows.Forms.Padding(4)
         Me.chkJo.Name = "chkJo"
         Me.chkJo.Size = New System.Drawing.Size(104, 19)
@@ -189,7 +181,7 @@ Partial Class AnaForm
         'chkKyori
         '
         Me.chkKyori.AutoSize = True
-        Me.chkKyori.Location = New System.Drawing.Point(20, 504)
+        Me.chkKyori.Location = New System.Drawing.Point(20, 542)
         Me.chkKyori.Margin = New System.Windows.Forms.Padding(4)
         Me.chkKyori.Name = "chkKyori"
         Me.chkKyori.Size = New System.Drawing.Size(89, 19)
@@ -200,7 +192,7 @@ Partial Class AnaForm
         'chkRacename
         '
         Me.chkRacename.AutoSize = True
-        Me.chkRacename.Location = New System.Drawing.Point(18, 536)
+        Me.chkRacename.Location = New System.Drawing.Point(18, 574)
         Me.chkRacename.Margin = New System.Windows.Forms.Padding(4)
         Me.chkRacename.Name = "chkRacename"
         Me.chkRacename.Size = New System.Drawing.Size(108, 19)
@@ -211,7 +203,7 @@ Partial Class AnaForm
         'chkGrade
         '
         Me.chkGrade.AutoSize = True
-        Me.chkGrade.Location = New System.Drawing.Point(18, 572)
+        Me.chkGrade.Location = New System.Drawing.Point(18, 610)
         Me.chkGrade.Margin = New System.Windows.Forms.Padding(4)
         Me.chkGrade.Name = "chkGrade"
         Me.chkGrade.Size = New System.Drawing.Size(144, 19)
@@ -222,7 +214,7 @@ Partial Class AnaForm
         'chkMonth
         '
         Me.chkMonth.AutoSize = True
-        Me.chkMonth.Location = New System.Drawing.Point(18, 604)
+        Me.chkMonth.Location = New System.Drawing.Point(18, 642)
         Me.chkMonth.Margin = New System.Windows.Forms.Padding(4)
         Me.chkMonth.Name = "chkMonth"
         Me.chkMonth.Size = New System.Drawing.Size(74, 19)
@@ -233,7 +225,7 @@ Partial Class AnaForm
         'BtnHistGet
         '
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnHistGet.Location = New System.Drawing.Point(205, 529)
+        Me.BtnHistGet.Location = New System.Drawing.Point(205, 567)
         Me.BtnHistGet.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnHistGet.Name = "BtnHistGet"
         Me.BtnHistGet.Size = New System.Drawing.Size(99, 81)
@@ -248,7 +240,7 @@ Partial Class AnaForm
         Me.ListBox2.Font = New System.Drawing.Font("ＭＳ ゴシック", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox2.FormattingEnabled = True
         Me.ListBox2.ItemHeight = 17
-        Me.ListBox2.Location = New System.Drawing.Point(13, 698)
+        Me.ListBox2.Location = New System.Drawing.Point(13, 736)
         Me.ListBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.Size = New System.Drawing.Size(383, 38)
@@ -259,7 +251,7 @@ Partial Class AnaForm
         Me.CbCyakujun.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbCyakujun.FormattingEnabled = True
         Me.CbCyakujun.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
-        Me.CbCyakujun.Location = New System.Drawing.Point(205, 500)
+        Me.CbCyakujun.Location = New System.Drawing.Point(205, 538)
         Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.CbCyakujun.Name = "CbCyakujun"
         Me.CbCyakujun.Size = New System.Drawing.Size(121, 23)
@@ -268,7 +260,7 @@ Partial Class AnaForm
         'chkDosu
         '
         Me.chkDosu.AutoSize = True
-        Me.chkDosu.Location = New System.Drawing.Point(20, 671)
+        Me.chkDosu.Location = New System.Drawing.Point(20, 709)
         Me.chkDosu.Margin = New System.Windows.Forms.Padding(4)
         Me.chkDosu.Name = "chkDosu"
         Me.chkDosu.Size = New System.Drawing.Size(233, 19)
@@ -279,7 +271,7 @@ Partial Class AnaForm
         'BtnWinRate
         '
         Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnWinRate.Location = New System.Drawing.Point(312, 529)
+        Me.BtnWinRate.Location = New System.Drawing.Point(312, 567)
         Me.BtnWinRate.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnWinRate.Name = "BtnWinRate"
         Me.BtnWinRate.Size = New System.Drawing.Size(63, 81)
@@ -290,7 +282,7 @@ Partial Class AnaForm
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button1.Location = New System.Drawing.Point(307, 403)
+        Me.Button1.Location = New System.Drawing.Point(307, 441)
         Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(81, 81)
@@ -301,7 +293,7 @@ Partial Class AnaForm
         'BtnDof
         '
         Me.BtnDof.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnDof.Location = New System.Drawing.Point(219, 425)
+        Me.BtnDof.Location = New System.Drawing.Point(219, 463)
         Me.BtnDof.Margin = New System.Windows.Forms.Padding(4)
         Me.BtnDof.Name = "BtnDof"
         Me.BtnDof.Size = New System.Drawing.Size(81, 36)
@@ -312,7 +304,7 @@ Partial Class AnaForm
         'chkRacename2
         '
         Me.chkRacename2.AutoSize = True
-        Me.chkRacename2.Location = New System.Drawing.Point(20, 634)
+        Me.chkRacename2.Location = New System.Drawing.Point(20, 672)
         Me.chkRacename2.Margin = New System.Windows.Forms.Padding(4)
         Me.chkRacename2.Name = "chkRacename2"
         Me.chkRacename2.Size = New System.Drawing.Size(138, 19)
@@ -322,16 +314,61 @@ Partial Class AnaForm
         '
         'txtRacename
         '
-        Me.txtRacename.Location = New System.Drawing.Point(174, 631)
+        Me.txtRacename.Location = New System.Drawing.Point(174, 669)
         Me.txtRacename.Name = "txtRacename"
         Me.txtRacename.Size = New System.Drawing.Size(201, 22)
         Me.txtRacename.TabIndex = 44
+        '
+        'RbURL
+        '
+        Me.RbURL.AutoSize = True
+        Me.RbURL.Checked = True
+        Me.RbURL.Location = New System.Drawing.Point(19, 22)
+        Me.RbURL.Name = "RbURL"
+        Me.RbURL.Size = New System.Drawing.Size(55, 19)
+        Me.RbURL.TabIndex = 45
+        Me.RbURL.Text = "URL"
+        Me.RbURL.UseVisualStyleBackColor = True
+        '
+        'RbFile
+        '
+        Me.RbFile.AutoSize = True
+        Me.RbFile.Location = New System.Drawing.Point(19, 65)
+        Me.RbFile.Name = "RbFile"
+        Me.RbFile.Size = New System.Drawing.Size(50, 19)
+        Me.RbFile.TabIndex = 46
+        Me.RbFile.Text = "File"
+        Me.RbFile.UseVisualStyleBackColor = True
+        '
+        'txtFile
+        '
+        Me.txtFile.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.txtFile.Location = New System.Drawing.Point(102, 63)
+        Me.txtFile.Margin = New System.Windows.Forms.Padding(4)
+        Me.txtFile.Name = "txtFile"
+        Me.txtFile.Size = New System.Drawing.Size(750, 24)
+        Me.txtFile.TabIndex = 47
+        '
+        'BtnFile
+        '
+        Me.BtnFile.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnFile.Location = New System.Drawing.Point(870, 57)
+        Me.BtnFile.Margin = New System.Windows.Forms.Padding(4)
+        Me.BtnFile.Name = "BtnFile"
+        Me.BtnFile.Size = New System.Drawing.Size(153, 39)
+        Me.BtnFile.TabIndex = 48
+        Me.BtnFile.Text = "参照"
+        Me.BtnFile.UseVisualStyleBackColor = True
         '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1883, 789)
+        Me.Controls.Add(Me.BtnFile)
+        Me.Controls.Add(Me.txtFile)
+        Me.Controls.Add(Me.RbFile)
+        Me.Controls.Add(Me.RbURL)
         Me.Controls.Add(Me.txtRacename)
         Me.Controls.Add(Me.chkRacename2)
         Me.Controls.Add(Me.BtnDof)
@@ -354,7 +391,6 @@ Partial Class AnaForm
         Me.Controls.Add(Me.lb_msg)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
-        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.BtnGo)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -371,7 +407,6 @@ Partial Class AnaForm
 
     Friend WithEvents BtnGo As Button
     Friend WithEvents txtURL As TextBox
-    Friend WithEvents Label1 As Label
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
     Friend WithEvents lb_msg As Label
@@ -394,4 +429,8 @@ Partial Class AnaForm
     Friend WithEvents BtnDof As Button
     Friend WithEvents chkRacename2 As CheckBox
     Friend WithEvents txtRacename As TextBox
+    Friend WithEvents RbURL As RadioButton
+    Friend WithEvents RbFile As RadioButton
+    Friend WithEvents txtFile As TextBox
+    Friend WithEvents BtnFile As Button
 End Class

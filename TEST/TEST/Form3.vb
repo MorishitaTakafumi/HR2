@@ -1,4 +1,6 @@
-﻿Imports C1.Win.C1FlexGrid
+﻿Imports System.IO
+Imports System.Security.Policy
+Imports C1.Win.C1FlexGrid
 
 Public Class Form3
     '出馬表の取り込み
@@ -97,9 +99,26 @@ Public Class Form3
     End Sub
 
     Private Sub BtnTest_Click(sender As Object, e As EventArgs) Handles BtnTest.Click
-        Dim url As String = txtURL.Text.Trim
-        If url.Length > 0 Then
-            Dim contents As String = GetWebPageText(txtURL.Text.Trim)
+        Dim contents As String = ""
+        If RbURL.Checked Then
+            Dim url As String = txtURL.Text.Trim
+            If url.Length > 0 Then
+                contents = GetWebPageText(url)
+            End If
+        ElseIf RbFile.Checked Then
+            Dim fnm As String = txtFile.Text
+            If fnm.Length > 0 Then
+                Try
+                    Using sr As New StreamReader(fnm)
+                        contents = sr.ReadToEnd()
+                    End Using
+                Catch ex As Exception
+                    MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+                    Return
+                End Try
+            End If
+        End If
+        If contents.Length > 0 Then
             txtResult.Text = contents
             ListBox1.Items.Clear()
 
@@ -119,11 +138,31 @@ Public Class Form3
             GetSyutuba(contents, syutubaList)
 
             ShowTable(syutubaList)
+            If RbURL.Checked Then
+                Dim fnm As String = GetSyutubahyoTextFileName(oRaceHeader)
+                Try
+                    Using sw As New StreamWriter(fnm)
+                        sw.Write(contents)
+                    End Using
+                Catch ex As Exception
+                    MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+                    Return
+                End Try
+            End If
         End If
     End Sub
 
     Public Sub entry(ByVal url As String)
         txtURL.Text = url
+        RbURL.Checked = True
+        Me.WindowState = FormWindowState.Minimized
+        Show()
+        BtnTest.PerformClick()
+    End Sub
+
+    Public Sub entry2(ByVal txtFnm As String)
+        txtFile.Text = txtFnm
+        RbFile.Checked = True
         Me.WindowState = FormWindowState.Minimized
         Show()
         BtnTest.PerformClick()
@@ -133,12 +172,22 @@ Public Class Form3
         Dim url As String = flx.Item(flx.Row, FlxCol.href)
         Dim a As New Form2
         a.entry(url)
-
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
         If Clipboard.ContainsText Then
             txtURL.Text = Clipboard.GetText()
+            RbURL.Checked = True
+        End If
+    End Sub
+
+    Private Sub BtnFile_Click(sender As Object, e As EventArgs) Handles BtnFile.Click
+        Dim dlg As New OpenFileDialog
+        dlg.InitialDirectory = Path.Combine(GetTextDataFolder(), "出馬表")
+        dlg.Filter = "txt files (*.txt)|*.txt"
+        If dlg.ShowDialog() = DialogResult.OK Then
+            txtFile.Text = dlg.FileName
+            RbFile.Checked = True
         End If
     End Sub
 End Class
