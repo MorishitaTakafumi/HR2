@@ -143,7 +143,7 @@ Public Class AnaForm
                 '
                 cs = .Styles.Add("mark")
                 cs.DataType = Type.GetType("System.String")
-                cs.ComboList = "　|×|△|▲|○|◎"
+                cs.ComboList = "|　|×|△|▲|○|◎"
                 .Cols(FlxCol.chk).Style = cs
             End If
 
@@ -265,6 +265,7 @@ Public Class AnaForm
         Next
     End Sub
 
+    '解析実行
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
         Dim form3argStr As String = ""
         If RbURL.Checked Then
@@ -336,6 +337,9 @@ Public Class AnaForm
         fm1.Close()
         fm2.Close()
         fm3.Close()
+        If RbFile.Checked Then
+            ShowCyakujun()
+        End If
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
@@ -359,6 +363,38 @@ Public Class AnaForm
 
     Private Sub BtnRedisp_Click(sender As Object, e As EventArgs) Handles BtnRedisp.Click
         PaintTable(anaList)
+    End Sub
+
+    'Fileから入った時は結果が分かるので取得して表示する
+    Private Sub ShowCyakujun()
+        Dim errmsg As String = ""
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Try
+                cmd.CommandText = "SELECT A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id 
+                                    WHERE R.dt=@dt AND R.race_name=@race_name"
+                cmd.Parameters.AddWithValue("@dt", oHead.dt)
+                cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    Dim bamei As String = CStr(r("bamei"))
+                    Dim cyakujun As Integer = CInt(r("cyakujun"))
+                    For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
+                        If flx.Item(jrow, FlxCol.bamei) = bamei Then
+                            flx.Item(jrow, FlxCol.chk) = cyakujun.ToString("D2")
+                            Exit For
+                        End If
+                    Next
+                End While
+                r.Close()
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
     End Sub
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
