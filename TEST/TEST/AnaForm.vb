@@ -493,12 +493,13 @@ Public Class AnaForm
                 ' 度数分布を格納する辞書
                 Dim frequencyDistribution As New Dictionary(Of Integer, Integer)
 
-                ' 度数分布を計算
-                For Each number As Integer In spanScore
-                    If frequencyDistribution.ContainsKey(number) Then
-                        frequencyDistribution(number) += 1
+                'spanScoreに対する着順のカウント
+                For j As Integer = 0 To spanScore.Count - 1
+                    Dim Number As Integer = spanScore(j)
+                    If frequencyDistribution.ContainsKey(Number) Then
+                        frequencyDistribution(Number) += cyakujun2score(cyakujun(j))
                     Else
-                        frequencyDistribution(number) = 1
+                        frequencyDistribution(Number) = cyakujun2score(cyakujun(j))
                     End If
                 Next
                 ' 度数分布を度数の多い順にソート
@@ -599,7 +600,7 @@ Public Class AnaForm
                 ListBox2.Items.Add("*** SpanScore ***")
                 If chkDosu.Checked Then
                     For Each kvp As KeyValuePair(Of Integer, Integer) In sortedDistribution
-                        ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {kvp.Value}")
+                        ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {AnaValClass.Score2String(kvp.Value)}")
                     Next
                 Else
                     ListBox2.Items.Add("－：" & cnt.ToString)
@@ -622,6 +623,22 @@ Public Class AnaForm
         End Using
 
     End Sub
+
+    '着順をscore値に変換
+    Private Function cyakujun2score(ByVal cyakujun As Integer) As Integer
+        Select Case cyakujun
+            Case 1
+                Return 10 ^ 6
+            Case 2
+                Return 10 ^ 4
+            Case 3
+                Return 10 ^ 2
+            Case 4 To 18
+                Return 1
+            Case Else
+                Return 0
+        End Select
+    End Function
 
     Private Function intAry2str(ByVal ary() As Integer) As String
         Dim ss As String = ""
