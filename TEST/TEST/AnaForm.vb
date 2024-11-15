@@ -1,7 +1,6 @@
 ﻿Imports C1.Win.C1FlexGrid
 Imports System.Data.SQLite
 Imports System.IO
-Imports System.Security.Policy
 
 Public Class AnaForm
 
@@ -439,9 +438,13 @@ Public Class AnaForm
                     sql &= " AND R.class_code=@class_code"
                     cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
                 End If
-                If CbCyakujun.SelectedIndex >= 0 Then
+                If CbCyakujun.SelectedIndex >= 1 AndAlso CbCyakujun.SelectedIndex <= 3 Then
                     sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
-                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex + 1)
+                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
+                ElseIf CbCyakujun.SelectedIndex = 4 Then
+                    sql &= " AND A.cyakujun>3 AND A.cyakujun<=20 "
+                Else
+                    sql &= " AND A.cyakujun>0 AND A.cyakujun<=20 "
                 End If
 
                 If chkMonth.Checked Then
@@ -624,21 +627,6 @@ Public Class AnaForm
 
     End Sub
 
-    '着順をscore値に変換
-    Private Function cyakujun2score(ByVal cyakujun As Integer) As Integer
-        Select Case cyakujun
-            Case 1
-                Return 10 ^ 6
-            Case 2
-                Return 10 ^ 4
-            Case 3
-                Return 10 ^ 2
-            Case 4 To 18
-                Return 1
-            Case Else
-                Return 0
-        End Select
-    End Function
 
     Private Function intAry2str(ByVal ary() As Integer) As String
         Dim ss As String = ""
@@ -683,9 +671,10 @@ Public Class AnaForm
     Private Sub BtnDof_Click(sender As Object, e As EventArgs) Handles BtnDof.Click
         If spanScore.Count > 0 Then
             Dim cmp_cyakujun As Integer = 1
-            If CbCyakujun.SelectedIndex > 0 Then
-                cmp_cyakujun = CbCyakujun.SelectedIndex + 1
+            If CbCyakujun2.SelectedIndex >= 0 Then
+                cmp_cyakujun = CbCyakujun2.SelectedIndex + 1
             End If
+
             For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
                 If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
                     Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
@@ -726,6 +715,7 @@ Public Class AnaForm
         Dim dataCnt As Integer = 0
         Dim agarisaPoint As Integer = 0
         cyakusaPoint = 0
+        Dim nCyakujunOk As Integer = 0
         For j As Integer = 0 To 3
             Dim tmpcyakusa As Single
             Dim tmpagarisa As Single = cnvAgarisaStr2Val(flx.Item(jrow, FlxCol.histStart + j), tmpcyakusa)
@@ -738,34 +728,35 @@ Public Class AnaForm
                                 If Math.Abs(cyakusa1(i)) < 999 Then '取消,中止,除外などで変なのが混じってる
                                     agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa1(i), j)
                                     cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa1(i), j)
+                                    nCyakujunOk += 1
                                 End If
                             Case 1
                                 If Math.Abs(cyakusa2(i)) < 999 Then
                                     agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa2(i), j)
                                     cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa2(i), j)
+                                    nCyakujunOk += 1
                                 End If
                             Case 2
                                 If Math.Abs(cyakusa3(i)) < 999 Then
                                     agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa3(i), j)
                                     cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa3(i), j)
+                                    nCyakujunOk += 1
                                 End If
                             Case 3
                                 If Math.Abs(cyakusa4(i)) < 999 Then
                                     agarisaPoint += GetDegreeOfFit_time(tmpagarisa, agarisa4(i), j)
                                     cyakusaPoint += GetDegreeOfFit_time(tmpagarisa, cyakusa4(i), j)
+                                    nCyakujunOk += 1
                                 End If
                         End Select
                     End If
                 Next
             End If
         Next
-        If dataCnt > 0 Then
-            '取消しや海外レース等でデータの無い回の影響を除くため平均をとる
-            agarisaPoint /= dataCnt
-            cyakusaPoint /= dataCnt
-            '比較対象数の多い少ないの影響を除くため平均をとる
-            agarisaPoint /= agarisa1.Count
-            cyakusaPoint /= agarisa1.Count
+        '比較対象数の多い少ないの影響を除くため平均をとる
+        If nCyakujunOk > 0 Then
+            agarisaPoint /= nCyakujunOk
+            cyakusaPoint /= nCyakujunOk
         End If
         Return agarisaPoint
     End Function

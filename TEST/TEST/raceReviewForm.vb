@@ -145,6 +145,7 @@ Public Class raceReviewForm
             .Styles.Normal.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.WordWrap = True
             .Rows.MinSize = 25
+            .Cols.MaxSize = 120
 
             .Cols(FlxCol.racename).TextAlign = TextAlignEnum.LeftCenter
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
@@ -170,7 +171,7 @@ Public Class raceReviewForm
             End If
 
             For j As Integer = 0 To .Cols.Count - 1
-                If j > 0 AndAlso j <= 4 Then
+                If j > 0 AndAlso j <= FlxCol.spanVal OrElse j <= FlxCol.kyoriScore OrElse j <= FlxCol.dateScore Then
                     .Cols(j).AllowFiltering = AllowFiltering.Default
                 Else
                     .Cols(j).AllowFiltering = AllowFiltering.None
@@ -315,7 +316,7 @@ Public Class raceReviewForm
                     xx(FlxCol.dt) = CDate(r("dt")).ToString("yyyy.MM.dd")
                     xx(FlxCol.racename) = r("race_name")
                     xx(FlxCol.bamei) = r("bamei")
-                    xx(FlxCol.cyakujun) = r("cyakujun")
+                    xx(FlxCol.cyakujun) = CInt(r("cyakujun")).ToString("D2")
                     xx(FlxCol.ninki) = r("ninki")
                     xx(FlxCol.spanVal) = AnaValClass.Score2String(r("spanScore"))
                     For i As Integer = 0 To HIS_CNT - 1
@@ -371,14 +372,16 @@ Public Class raceReviewForm
             ' 度数分布を格納する辞書
             Dim frequencyDistribution As New Dictionary(Of Integer, Integer)
 
-            ' 度数分布を計算
-            For Each number As Integer In spanScore
-                If frequencyDistribution.ContainsKey(number) Then
-                    frequencyDistribution(number) += 1
+            'spanScoreに対する着順のカウント
+            For j As Integer = 0 To spanScore.Count - 1
+                Dim Number As Integer = spanScore(j)
+                If frequencyDistribution.ContainsKey(Number) Then
+                    frequencyDistribution(Number) += cyakujun2score(cyakujun(j))
                 Else
-                    frequencyDistribution(number) = 1
+                    frequencyDistribution(Number) = cyakujun2score(cyakujun(j))
                 End If
             Next
+
             ' 度数分布を度数の多い順にソート
             Dim sortedDistribution = frequencyDistribution.OrderByDescending(Function(kvp) kvp.Value)
 
@@ -448,7 +451,7 @@ Public Class raceReviewForm
             ListBox2.Items.Add("*** SpanScore ***")
             If chkDosu.Checked Then
                 For Each kvp As KeyValuePair(Of Integer, Integer) In sortedDistribution
-                    ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {kvp.Value}")
+                    ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {AnaValClass.Score2String(kvp.Value)}")
                 Next
             Else
                 ListBox2.Items.Add("－：" & cnt.ToString)
@@ -524,5 +527,24 @@ Public Class raceReviewForm
     Private Sub BtnWinRate_Click(sender As Object, e As EventArgs) Handles BtnWinRate.Click
         Dim a As New WinRateForm
         a.entry(spanScore, cyakujun, agarisa1, agarisa2, agarisa3, agarisa4)
+    End Sub
+
+    Private Sub BtnFilterClear_Click(sender As Object, e As EventArgs) Handles BtnFilterClear.Click
+        FlexFilterClear(flx)
+    End Sub
+
+    'フィルタークリア
+    Public Sub FlexFilterClear(ByVal arg_flx As C1FlexGrid)
+        With arg_flx
+            Dim redraw As Boolean = .Redraw
+            .Redraw = False
+            '.ClearFilter() <==これだとエラーが発生する！ 
+            For j As Integer = 0 To .Cols.Count - 1
+                If .Cols(j).AllowFiltering = AllowFiltering.Default OrElse .Cols(j).AllowFiltering = AllowFiltering.ByCondition Then
+                    .ClearFilter(j)
+                End If
+            Next
+            .Redraw = redraw
+        End With
     End Sub
 End Class

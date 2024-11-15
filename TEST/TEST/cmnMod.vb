@@ -188,4 +188,21 @@ Module cmnMod
         End If
         Return ans
     End Function
+
+    '着順をscore値に変換
+    Public Function cyakujun2score(ByVal cyakujun As Integer) As Integer
+        Select Case cyakujun
+            Case 1
+                Return 10 ^ 6
+            Case 2
+                Return 10 ^ 4
+            Case 3
+                Return 10 ^ 2
+            Case 4 To 18
+                Return 1
+            Case Else
+                Return 0
+        End Select
+    End Function
+
 End Module
