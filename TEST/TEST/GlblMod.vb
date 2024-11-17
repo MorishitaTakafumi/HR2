@@ -194,6 +194,26 @@ Public Module GlblMod
         Return Int(psum)
     End Function
 
+    'spanScoreによる係数
+    'Return 係数
+    Public Function GetspanScoreCoefficient(ByVal myScore As Integer) As Double
+        'spanScoreによる係数
+        '1着,2着,3着,4着以下の４区分で
+        '1着回数×0.025
+        '2着回数×0.012
+        '3着回数×0.006
+        '4着以下回数×(-0.01)
+        '
+        '
+        Dim P() As Double = {-0.01, 0.006, 0.012, 0.025}
+        Dim psum As Double = 1
+        For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
+            Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
+            psum += myp * P(j)
+        Next
+        Return psum
+    End Function
+
     '上り差／着差の適合度を得点化する
     'Return 得点(0～100)
     Public Function GetDegreeOfFit_time(ByVal myTime As Single, ByVal cmpTime As Single, ByVal soumaeV As Integer) As Integer

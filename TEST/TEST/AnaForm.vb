@@ -15,7 +15,8 @@ Public Class AnaForm
         histStart = 6
         kyoriScore = histStart + HIS_CNT
         dateScore
-        dof_span
+        coef_span
+        coef_date
         dof_agarisa
         dof_cyakusa
         dof_total
@@ -53,27 +54,29 @@ Public Class AnaForm
             .Rows.Count = 1
             .Rows.Fixed = 1
             .Cols.Fixed = 2
-            .Item(0, FlxCol.waku) = "枠番"
-            .Item(0, FlxCol.umaban) = "馬番"
+            .Item(0, FlxCol.waku) = "枠" & vbLf & "番"
+            .Item(0, FlxCol.umaban) = "馬" & vbLf & "番"
             .Item(0, FlxCol.bamei) = "馬名"
-            .Item(0, FlxCol.chk) = " マーク "
+            .Item(0, FlxCol.chk) = "印"
             .Item(0, FlxCol.ninki) = "人気"
             .Item(0, FlxCol.spanVal) = "前走間隔" & vbLf & "±７日"
             For j As Integer = 0 To 5
                 .Item(0, FlxCol.histStart + j) = (j + 1).ToString & "走前"
             Next
             .Item(0, FlxCol.kyoriScore) = "今回距離" & vbLf & "成績"
-            .Item(0, FlxCol.dateScore) = "今回日付" & vbLf & "±７日成績"
-            .Item(0, FlxCol.dof_span) = "span" & vbLf & "適合度"
+            .Item(0, FlxCol.dateScore) = "今回日付" & vbLf & "±７日" & vbLf & "成績"
+            .Item(0, FlxCol.coef_span) = "span" & vbLf & "係数"
+            .Item(0, FlxCol.coef_date) = "date" & vbLf & "係数"
             .Item(0, FlxCol.dof_agarisa) = "上差" & vbLf & "適合度"
             .Item(0, FlxCol.dof_cyakusa) = "着差" & vbLf & "適合度"
-            .Item(0, FlxCol.dof_total) = "適合度合計"
+            .Item(0, FlxCol.dof_total) = "適合度" & vbLf & "合計"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.TextAlign = TextAlignEnum.CenterCenter
             .Styles.Normal.WordWrap = True
             .Rows.MinSize = 25
+            .Cols.MaxSize = 120
 
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
 
@@ -678,13 +681,16 @@ Public Class AnaForm
             For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
                 If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
                     Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
-                    Dim spanPoint As Integer = GetDofSpan(myScore, cmp_cyakujun)
-                    flx.Item(jrow, FlxCol.dof_span) = spanPoint
+                    Dim coefSpan As Double = GetspanScoreCoefficient(myScore)
+                    flx.Item(jrow, FlxCol.coef_span) = coefSpan.ToString("F3")
+                    myScore = cnvScoreStr2Val(flx.Item(jrow, FlxCol.dateScore))
+                    Dim coefDate As Double = GetspanScoreCoefficient(myScore)
+                    flx.Item(jrow, FlxCol.coef_date) = coefDate.ToString("F3")
                     Dim agarisaPoint, cyakusaPoint As Integer
                     agarisaPoint = GetDofTime(jrow, cmp_cyakujun, cyakusaPoint)
                     flx.Item(jrow, FlxCol.dof_agarisa) = agarisaPoint
                     flx.Item(jrow, FlxCol.dof_cyakusa) = cyakusaPoint
-                    flx.Item(jrow, FlxCol.dof_total) = spanPoint + agarisaPoint + cyakusaPoint
+                    flx.Item(jrow, FlxCol.dof_total) = Int(coefSpan * coefDate * (agarisaPoint + cyakusaPoint))
                 End If
             Next
         Else
