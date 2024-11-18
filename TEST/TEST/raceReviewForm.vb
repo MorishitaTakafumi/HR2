@@ -547,4 +547,121 @@ Public Class raceReviewForm
             .Redraw = redraw
         End With
     End Sub
+
+    Private Sub BtnCoefReview_Click(sender As Object, e As EventArgs) Handles BtnCoefReview.Click
+        Dim spanCoefRankCnt(10, 2) As Integer
+        Dim dateCoefRankCnt(10, 2) As Integer
+        Dim distCoefRankCnt(10, 2) As Integer
+        Dim errmsg As String = ""
+
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Try
+                '（注）AnaValの最初の1998件は3着以内のデータしかないので対象外とする
+                cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0 AND A.id>=1999"
+                Dim sql As String = ""
+                If CbJo.SelectedIndex > 0 Then
+                    sql &= " AND R.jo_code=@jo_code"
+                    cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
+                End If
+                If CbKyori.SelectedIndex > 0 Then
+                    sql &= " AND R.kyori=@kyori"
+                    cmd.Parameters.AddWithValue("@kyori", CInt(CbKyori.Text))
+                End If
+                If CbSyubetu.SelectedIndex > 0 Then
+                    sql &= " AND R.type_code=@type_code"
+                    cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
+                End If
+                If CbRacename.SelectedIndex > 0 Then
+                    sql &= " AND R.race_name=@race_name"
+                    cmd.Parameters.AddWithValue("@race_name", CbRacename.Text)
+                End If
+                If CbGrade.SelectedIndex > 0 Then
+                    sql &= " AND R.class_code=@class_code"
+                    cmd.Parameters.AddWithValue("@class_code", CbGrade.SelectedIndex - 1)
+                End If
+                If CbCyakujun.SelectedIndex > 0 Then
+                    If RbInai.Checked Then
+                        sql &= " AND A.cyakujun<=@cyakujun"
+                    Else
+                        sql &= " AND A.cyakujun>=@cyakujun"
+                    End If
+                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
+                End If
+                If CbMonth.SelectedIndex > 0 Then
+                    sql &= " AND strftime('%m', R.dt) = @tuki"
+                    cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
+                End If
+                If sql.Length > 0 Then
+                    cmd.CommandText &= sql
+                End If
+                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                Dim CyakujunNinkiSa As Integer
+                Dim CyakujunNinkiSaIdx As Integer
+                Dim rank As Integer
+                While r.Read
+                    CyakujunNinkiSa = CInt(r("cyakujun")) - CInt(r("ninki"))
+                    CyakujunNinkiSaIdx = GetCyakujunNinkiSaIndex(CyakujunNinkiSa)
+                    rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
+                    spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa '+=1
+                    rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
+                    dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa '+=1
+                    rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
+                    distCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa '+=1
+                End While
+                r.Close()
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        Else
+            Dim a As New CoefReviewForm
+            a.entry(spanCoefRankCnt, dateCoefRankCnt, distCoefRankCnt)
+        End If
+    End Sub
+
+    Private Function GetCyakujunNinkiSaIndex(ByVal CyakujunNinkiSa As Integer) As Integer
+        If CyakujunNinkiSa < 0 Then
+            Return 0
+        ElseIf CyakujunNinkiSa = 0 Then
+            Return 1
+        Else
+            Return 2
+        End If
+    End Function
+
+    Private Function GetCoefRank(ByVal coef As Double) As Integer
+        If coef = 1 Then
+            Return 5
+        ElseIf coef > 1 Then
+            Dim sa As Double = coef - 1
+            If sa < 0.0251 Then
+                Return 4
+            ElseIf sa < 0.051 Then
+                Return 3
+            ElseIf sa < 0.0751 Then
+                Return 2
+            ElseIf sa < 0.1001 Then
+                Return 1
+            Else
+                Return 0
+            End If
+        Else
+            Dim sa As Double = 1 - coef
+            If sa < 0.0251 Then
+                Return 6
+            ElseIf sa < 0.051 Then
+                Return 7
+            ElseIf sa < 0.0751 Then
+                Return 8
+            ElseIf sa < 0.1001 Then
+                Return 9
+            Else
+                Return 10
+            End If
+        End If
+    End Function
 End Class

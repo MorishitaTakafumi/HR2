@@ -136,6 +136,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoefReviewForm.Designer.vb">
+      <DependentUpon>CoefReviewForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CoefReviewForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="raceReviewForm.Designer.vb">
       <DependentUpon>raceReviewForm.vb</DependentUpon>
     </Compile>
@@ -221,6 +227,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CoefReviewForm.resx">
+      <DependentUpon>CoefReviewForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="raceReviewForm.resx">
       <DependentUpon>raceReviewForm.vb</DependentUpon>
     </EmbeddedResource>

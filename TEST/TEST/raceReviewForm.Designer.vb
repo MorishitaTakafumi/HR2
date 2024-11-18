@@ -52,6 +52,7 @@ Partial Class raceReviewForm
         Me.RbIka = New System.Windows.Forms.RadioButton()
         Me.BtnWinRate = New System.Windows.Forms.Button()
         Me.BtnFilterClear = New System.Windows.Forms.Button()
+        Me.BtnCoefReview = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -120,9 +121,9 @@ Partial Class raceReviewForm
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnHistGet.Image = CType(resources.GetObject("BtnHistGet.Image"), System.Drawing.Image)
         Me.BtnHistGet.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.BtnHistGet.Location = New System.Drawing.Point(169, 99)
+        Me.BtnHistGet.Location = New System.Drawing.Point(169, 83)
         Me.BtnHistGet.Name = "BtnHistGet"
-        Me.BtnHistGet.Size = New System.Drawing.Size(93, 69)
+        Me.BtnHistGet.Size = New System.Drawing.Size(93, 50)
         Me.BtnHistGet.TabIndex = 7
         Me.BtnHistGet.Text = "検索" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "実行"
         Me.BtnHistGet.TextAlign = System.Drawing.ContentAlignment.BottomRight
@@ -304,7 +305,7 @@ Partial Class raceReviewForm
         Me.BtnJokenCls.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnJokenCls.Location = New System.Drawing.Point(169, 40)
         Me.BtnJokenCls.Name = "BtnJokenCls"
-        Me.BtnJokenCls.Size = New System.Drawing.Size(47, 53)
+        Me.BtnJokenCls.Size = New System.Drawing.Size(47, 37)
         Me.BtnJokenCls.TabIndex = 34
         Me.BtnJokenCls.Text = "条件クリア"
         Me.BtnJokenCls.UseVisualStyleBackColor = True
@@ -361,7 +362,7 @@ Partial Class raceReviewForm
         Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnWinRate.Location = New System.Drawing.Point(222, 40)
         Me.BtnWinRate.Name = "BtnWinRate"
-        Me.BtnWinRate.Size = New System.Drawing.Size(47, 53)
+        Me.BtnWinRate.Size = New System.Drawing.Size(47, 37)
         Me.BtnWinRate.TabIndex = 39
         Me.BtnWinRate.Text = "勝率検索"
         Me.BtnWinRate.UseVisualStyleBackColor = True
@@ -376,11 +377,22 @@ Partial Class raceReviewForm
         Me.BtnFilterClear.Text = "フィルタークリア"
         Me.BtnFilterClear.UseVisualStyleBackColor = True
         '
+        'BtnCoefReview
+        '
+        Me.BtnCoefReview.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnCoefReview.Location = New System.Drawing.Point(169, 139)
+        Me.BtnCoefReview.Name = "BtnCoefReview"
+        Me.BtnCoefReview.Size = New System.Drawing.Size(91, 37)
+        Me.BtnCoefReview.TabIndex = 41
+        Me.BtnCoefReview.Text = "係数検証"
+        Me.BtnCoefReview.UseVisualStyleBackColor = True
+        '
         'raceReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.BtnCoefReview)
         Me.Controls.Add(Me.BtnFilterClear)
         Me.Controls.Add(Me.BtnWinRate)
         Me.Controls.Add(Me.RbIka)
@@ -450,4 +462,5 @@ Partial Class raceReviewForm
     Friend WithEvents RbIka As RadioButton
     Friend WithEvents BtnWinRate As Button
     Friend WithEvents BtnFilterClear As Button
+    Friend WithEvents BtnCoefReview As Button
 End Class

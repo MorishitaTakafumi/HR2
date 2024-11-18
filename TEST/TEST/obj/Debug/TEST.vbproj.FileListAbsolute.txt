@@ -69,4 +69,5 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.raceReviewForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.raceReviewForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.WinRateForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.WinRateForm.resources
+C:\学習\HR2\TEST\TEST\obj\Debug\TEST.CoefReviewForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache

@@ -194,18 +194,19 @@ Public Module GlblMod
         Return Int(psum)
     End Function
 
-    'spanScoreによる係数
+    'spanScore/dateScore/distancrScoreによる係数
     'Return 係数
-    Public Function GetspanScoreCoefficient(ByVal myScore As Integer) As Double
+    Public Function GetScoreCoefficient(ByVal myScore As Integer) As Double
         'spanScoreによる係数
         '1着,2着,3着,4着以下の４区分で
         '1着回数×0.025
         '2着回数×0.012
         '3着回数×0.006
-        '4着以下回数×(-0.01)
+        '4着以下回数×(-0.007)
         '
         '
-        Dim P() As Double = {-0.01, 0.006, 0.012, 0.025}
+        'Dim P() As Double = {-0.00625, 0.00625, 0.01, 0.025}
+        Dim P() As Double = {0.001, 0.00625, 0.01, 0.025}
         Dim psum As Double = 1
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100

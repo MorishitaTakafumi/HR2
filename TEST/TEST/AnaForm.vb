@@ -681,10 +681,10 @@ Public Class AnaForm
             For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
                 If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
                     Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
-                    Dim coefSpan As Double = GetspanScoreCoefficient(myScore)
+                    Dim coefSpan As Double = GetScoreCoefficient(myScore)
                     flx.Item(jrow, FlxCol.coef_span) = coefSpan.ToString("F3")
                     myScore = cnvScoreStr2Val(flx.Item(jrow, FlxCol.dateScore))
-                    Dim coefDate As Double = GetspanScoreCoefficient(myScore)
+                    Dim coefDate As Double = GetScoreCoefficient(myScore)
                     flx.Item(jrow, FlxCol.coef_date) = coefDate.ToString("F3")
                     Dim agarisaPoint, cyakusaPoint As Integer
                     agarisaPoint = GetDofTime(jrow, cmp_cyakujun, cyakusaPoint)
