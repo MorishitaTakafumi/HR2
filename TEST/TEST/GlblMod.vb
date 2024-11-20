@@ -5,6 +5,7 @@ Public Module GlblMod
     Public Const DMY_VAL As Integer = -9999
 
     Public JoMei() As String = {"札幌", "函館", "福島", "新潟", "中山", "東京", "中京", "京都", "阪神", "小倉"}
+    Public RaceSyubetuMei() As String = {"", "芝", "ダート", "障害"}
 
     Public Function GetKeibajoCode(ByVal keibajo As String) As Short
         For j As Integer = 0 To JoMei.Length - 1
@@ -13,6 +14,35 @@ Public Module GlblMod
             End If
         Next
         Return -1
+    End Function
+
+    Public Function GetKeibajoName(ByVal jo_code As Short) As String
+        If jo_code >= 0 AndAlso jo_code < JoMei.Length Then
+            Return JoMei(jo_code)
+        Else
+            Return ""
+        End If
+    End Function
+
+    '種別名を種別コードに変換
+    Public Function GetTypeCode(ByVal typename As String) As Short
+        If InStr(typename, "芝") > 0 Then
+            If InStr(typename, "ダート") > 0 Then
+                Return 3 '障害
+            Else
+                Return 1
+            End If
+        Else
+            Return 2
+        End If
+    End Function
+
+    Public Function GetRaceTypeName(ByVal type_code As Short) As String
+        If type_code >= 0 AndAlso type_code < RaceSyubetuMei.Length Then
+            Return RaceSyubetuMei(type_code)
+        Else
+            Return ""
+        End If
     End Function
 
     Public Function cnvTimeStr2Sec(ByVal strTime As String) As Single
@@ -206,7 +236,9 @@ Public Module GlblMod
         '
         '
         'Dim P() As Double = {-0.00625, 0.00625, 0.01, 0.025}
-        Dim P() As Double = {0.001, 0.00625, 0.01, 0.025}
+        'Dim P() As Double = {0.001, 0.00625, 0.01, 0.025}
+        'Dim P() As Double = {0.001, 0.005, 0.02, 0.05}
+        Dim P() As Double = {0.003, 0.01, 0.025, 0.05}
         Dim psum As Double = 1
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100

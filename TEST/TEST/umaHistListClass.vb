@@ -1,4 +1,8 @@
-﻿Public Class umaHistListClass
+﻿Imports System.Data.SQLite
+
+Public Class umaHistListClass
+    '競走馬レース履歴
+
     Private m_bf As New List(Of UmaHistClass)
 
     Public ReadOnly Property cnt As Integer
@@ -12,6 +16,11 @@
     End Sub
 
     Public Sub add1(ByVal o As UmaHistClass)
+        For j As Integer = 0 To cnt - 1
+            If o.dt.Date = m_bf(j).dt.Date AndAlso o.racename = m_bf(j).racename Then
+                Return
+            End If
+        Next
         m_bf.Add(o)
     End Sub
 
@@ -142,6 +151,57 @@
 
     Private Function makeScore(ByVal score() As Short) As Integer
         Return score(0) * 10 ^ 6 + score(1) * 10 ^ 4 + score(2) * 10 ^ 2 + score(3)
+    End Function
+
+    Public Function load(ByVal cmd As SQLiteCommand, ByVal uma_id As Integer) As String
+        Dim errmsg As String = ""
+        init()
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "SELECT * FROM UmaHist WHERE uma_id=@uma_id"
+            cmd.Parameters.AddWithValue("@uma_id", uma_id)
+            Dim r As SQLiteDataReader = cmd.ExecuteReader
+            While r.Read
+                Dim a As New UmaHistClass
+                With a
+                    .rec_id = r("id")
+                    'Public Property race_id As Integer
+                    .dt = r("dt")
+                    .keibajo = GetKeibajoName(r("jo_code"))
+                    .racename = r("race_name")
+                    'Public Property grade As String
+                    .distance = r("kyori")
+                    .syubetu = GetRaceTypeName(r("type_code"))
+                    .baba = r("baba")
+                    .tosu = r("tosu")
+                    .ninki = r("ninki")
+                    .cyakujun = r("cyakujun")
+                    .kisyu = r("kisyu")
+                    .hutan = r("hutan")
+                    .w = r("w")
+                    .tokei = r("secs")
+                    .href = r("href")
+                End With
+                add1(a)
+            End While
+            r.Close()
+            Return ""
+        Catch ex As Exception
+            Return "umaHistListClass.load() " & ex.Message
+        End Try
+    End Function
+
+    Public Function save(ByVal cmd As SQLiteCommand, ByVal uma_id As Integer) As String
+        Dim errmsg As String = ""
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).rec_id <= 0 Then
+                errmsg = m_bf(j).addNew(cmd, uma_id)
+                If errmsg.Length > 0 Then
+                    Return errmsg
+                End If
+            End If
+        Next
+        Return ""
     End Function
 
 End Class

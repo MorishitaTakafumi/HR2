@@ -30,13 +30,15 @@ Partial Class Form2
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
         Me.BtnURL = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtBamei = New System.Windows.Forms.TextBox()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'BtnTest
         '
         Me.BtnTest.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnTest.Location = New System.Drawing.Point(55, 47)
+        Me.BtnTest.Location = New System.Drawing.Point(16, 81)
         Me.BtnTest.Name = "BtnTest"
         Me.BtnTest.Size = New System.Drawing.Size(139, 44)
         Me.BtnTest.TabIndex = 0
@@ -46,7 +48,7 @@ Partial Class Form2
         'txtURL
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.txtURL.Location = New System.Drawing.Point(55, 21)
+        Me.txtURL.Location = New System.Drawing.Point(61, 12)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(852, 20)
         Me.txtURL.TabIndex = 1
@@ -56,7 +58,7 @@ Partial Class Form2
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label1.Location = New System.Drawing.Point(13, 24)
+        Me.Label1.Location = New System.Drawing.Point(19, 15)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(30, 13)
         Me.Label1.TabIndex = 2
@@ -64,7 +66,7 @@ Partial Class Form2
         '
         'txtResult
         '
-        Me.txtResult.Location = New System.Drawing.Point(200, 47)
+        Me.txtResult.Location = New System.Drawing.Point(161, 81)
         Me.txtResult.Multiline = True
         Me.txtResult.Name = "txtResult"
         Me.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both
@@ -76,7 +78,7 @@ Partial Class Form2
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.ItemHeight = 15
-        Me.ListBox1.Location = New System.Drawing.Point(16, 114)
+        Me.ListBox1.Location = New System.Drawing.Point(16, 144)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(320, 244)
         Me.ListBox1.TabIndex = 4
@@ -87,10 +89,10 @@ Partial Class Form2
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(358, 114)
+        Me.flx.Location = New System.Drawing.Point(358, 144)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 19
-        Me.flx.Size = New System.Drawing.Size(917, 495)
+        Me.flx.Size = New System.Drawing.Size(917, 465)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 5
         '
@@ -104,11 +106,31 @@ Partial Class Form2
         Me.BtnURL.Text = "URL貼り付け"
         Me.BtnURL.UseVisualStyleBackColor = True
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Label2.Location = New System.Drawing.Point(19, 41)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(33, 13)
+        Me.Label2.TabIndex = 10
+        Me.Label2.Text = "馬名"
+        '
+        'txtBamei
+        '
+        Me.txtBamei.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.txtBamei.Location = New System.Drawing.Point(61, 38)
+        Me.txtBamei.Name = "txtBamei"
+        Me.txtBamei.Size = New System.Drawing.Size(299, 20)
+        Me.txtBamei.TabIndex = 9
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1312, 631)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.txtBamei)
         Me.Controls.Add(Me.BtnURL)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.ListBox1)
@@ -132,4 +154,6 @@ Partial Class Form2
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
     Friend WithEvents BtnURL As Button
+    Friend WithEvents Label2 As Label
+    Friend WithEvents txtBamei As TextBox
 End Class

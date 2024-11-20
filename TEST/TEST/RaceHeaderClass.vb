@@ -95,19 +95,6 @@ Public Class RaceHeaderClass
         Return 0 '新馬・未勝利
     End Function
 
-    '種別名を種別コードに変換
-    Private Function GetTypeCode(ByVal typename As String) As Short
-        If InStr(typename, "芝") > 0 Then
-            If InStr(typename, "ダート") > 0 Then
-                Return 3 '障害
-            Else
-                Return 1
-            End If
-        Else
-            Return 2
-        End If
-    End Function
-
     '上り差の補正値を計算するため何コーナーでの通過順位を使うか
     Public Function GetCornerToCalcAgarisa() As Integer
 

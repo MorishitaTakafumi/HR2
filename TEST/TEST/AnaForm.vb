@@ -311,7 +311,7 @@ Public Class AnaForm
             rA.umaban = o.umaban
             rA.bamei = o.bamei
             rA.ninki = o.ninki
-            fm2.entry(o.href, oHead.dt)
+            fm2.entry(o.href, o.bamei, oHead.dt)
             rA.spanScore = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
             rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
             For i As Integer = 0 To fm2.umaHistList.cnt - 1
@@ -328,7 +328,7 @@ Public Class AnaForm
                 '    MsgBox(o.bamei & " " & oS.racename)
                 'End If
 
-                fm1.entry(oS.href)
+                fm1.entry(oS.href, oS.dt.ToString("yyyy/MM/dd"), oS.racename)
                 rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
             Next
 

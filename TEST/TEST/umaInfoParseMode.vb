@@ -65,7 +65,6 @@
 
     '履歴表の取得
     Public Function GetUmaHist(ByVal src As String, ByVal hlist As umaHistListClass, ByVal dt_max As Date) As Integer
-        hlist.init()
         Dim findpos As Integer = 1
         Dim lineStr As String = SearchLineByKeyword(findpos, src, "<tbody>", findpos)
         If lineStr.Length > 0 Then

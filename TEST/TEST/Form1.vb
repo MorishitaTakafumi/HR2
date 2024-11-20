@@ -138,11 +138,13 @@ Public Class Form1
         End If
     End Sub
 
-    Public Sub entry(ByVal url As String)
+    Public Sub entry(ByVal url As String, Optional ByVal dt_race As String = "", Optional ByVal racename As String = "")
         If InStr(url, "https://www.jra.go.jp") = 0 Then
             url = "https://www.jra.go.jp" & url
         End If
         txtURL.Text = url
+        txtDate.Text = dt_race
+        txtRaceName.Text = racename
         Me.WindowState = FormWindowState.Minimized
         Show()
         BtnTest.PerformClick()
@@ -156,7 +158,8 @@ Public Class Form1
 
     Private Sub flx_Click(sender As Object, e As EventArgs) Handles flx.Click
         Dim url As String = flx.Item(flx.Row, FlxCol.href)
+        Dim bamei As String = flx.Item(flx.Row, FlxCol.bamei)
         Dim a As New Form2
-        a.entry(url)
+        a.entry(url, bamei)
     End Sub
 End Class

@@ -275,6 +275,10 @@ Public Class raceReviewForm
             Try
                 cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
                 Dim sql As String = ""
+                '（注）AnaValの最初の1998件は3着以内のデータしかない
+                If chkRmv1999.Checked Then
+                    sql &= " AND A.id>=1999"
+                End If
                 If CbJo.SelectedIndex > 0 Then
                     sql &= " AND R.jo_code=@jo_code"
                     cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
@@ -558,9 +562,12 @@ Public Class raceReviewForm
             Dim cmd As SQLiteCommand = conn.CreateCommand
             conn.Open()
             Try
-                '（注）AnaValの最初の1998件は3着以内のデータしかないので対象外とする
-                cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0 AND A.id>=1999"
+                cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
                 Dim sql As String = ""
+                '（注）AnaValの最初の1998件は3着以内のデータしかない
+                If chkRmv1999.Checked Then
+                    sql &= " AND A.id>=1999"
+                End If
                 If CbJo.SelectedIndex > 0 Then
                     sql &= " AND R.jo_code=@jo_code"
                     cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
@@ -601,14 +608,22 @@ Public Class raceReviewForm
                 Dim CyakujunNinkiSaIdx As Integer
                 Dim rank As Integer
                 While r.Read
-                    CyakujunNinkiSa = CInt(r("cyakujun")) - CInt(r("ninki"))
-                    CyakujunNinkiSaIdx = GetCyakujunNinkiSaIndex(CyakujunNinkiSa)
+                    'CyakujunNinkiSa = CInt(r("cyakujun")) - CInt(r("ninki"))
+                    'CyakujunNinkiSaIdx = GetCyakujunNinkiSaIndex(CyakujunNinkiSa)
+                    'rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
+                    'spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1 ' CyakujunNinkiSa '+=1
+                    'rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
+                    'dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1 'CyakujunNinkiSa '+=1
+                    'rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
+                    'distCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1 'CyakujunNinkiSa '+=1
+
+                    CyakujunNinkiSa = NinkiCyakujunPoint(CInt(r("cyakujun")), CInt(r("ninki")))
                     rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
-                    spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa '+=1
+                    spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
                     rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
-                    dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa '+=1
+                    dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
                     rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
-                    distCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa '+=1
+                    distCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
                 End While
                 r.Close()
             Catch ex As Exception
@@ -622,6 +637,77 @@ Public Class raceReviewForm
             a.entry(spanCoefRankCnt, dateCoefRankCnt, distCoefRankCnt)
         End If
     End Sub
+
+    '人気と着順から得点を決める
+    Private Function NinkiCyakujunPoint(ByVal ninki As Integer, ByVal cyakujun As Integer) As Integer
+        Select Case ninki
+            Case 1
+                Select Case cyakujun
+                    Case 1
+                        Return 2
+                    Case 2, 3
+                        Return 1
+                    Case 4, 5
+                        Return -2
+                    Case 6, 7, 8, 9
+                        Return -3
+                    Case Else
+                        Return -4
+                End Select
+            Case 2, 3
+                Select Case cyakujun
+                    Case 1
+                        Return 3
+                    Case 2, 3
+                        Return 1
+                    Case 4, 5
+                        Return -1
+                    Case 6, 7, 8, 9
+                        Return -2
+                    Case Else
+                        Return -3
+                End Select
+            Case 4, 5
+                Select Case cyakujun
+                    Case 1
+                        Return 4
+                    Case 2, 3
+                        Return 2
+                    Case 4, 5
+                        Return 0
+                    Case 6, 7, 8, 9
+                        Return -1
+                    Case Else
+                        Return -2
+                End Select
+            Case 6, 7, 8, 9
+                Select Case cyakujun
+                    Case 1
+                        Return 5
+                    Case 2, 3
+                        Return 2
+                    Case 4, 5
+                        Return 1
+                    Case 6, 7, 8, 9
+                        Return 0
+                    Case Else
+                        Return -1
+                End Select
+            Case Else
+                Select Case cyakujun
+                    Case 1
+                        Return 6
+                    Case 2, 3
+                        Return 3
+                    Case 4, 5
+                        Return 1
+                    Case 6, 7, 8, 9
+                        Return 0
+                    Case Else
+                        Return 0
+                End Select
+        End Select
+    End Function
 
     Private Function GetCyakujunNinkiSaIndex(ByVal CyakujunNinkiSa As Integer) As Integer
         If CyakujunNinkiSa < 0 Then
@@ -638,13 +724,13 @@ Public Class raceReviewForm
             Return 5
         ElseIf coef > 1 Then
             Dim sa As Double = coef - 1
-            If sa < 0.0251 Then
+            If sa < 0.0331 Then
                 Return 4
-            ElseIf sa < 0.051 Then
+            ElseIf sa < 0.0661 Then
                 Return 3
-            ElseIf sa < 0.0751 Then
+            ElseIf sa < 0.0991 Then
                 Return 2
-            ElseIf sa < 0.1001 Then
+            ElseIf sa < 0.1291 Then
                 Return 1
             Else
                 Return 0

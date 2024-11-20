@@ -1,4 +1,6 @@
-﻿Public Class UmaHistClass
+﻿Imports System.Data.SQLite
+
+Public Class UmaHistClass
     '競走馬レース履歴
 
     Public Property rec_id As Integer
@@ -44,4 +46,34 @@
     Public Function CyakujunStr() As String
         Return cyakujunDecode(cyakujun)
     End Function
+
+    '新規登録
+    Public Function addNew(ByVal cmd As SQLiteCommand, ByVal uma_id As Integer) As String
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "INSERT INTO UmaHist(uma_id, dt, jo_code, race_name, type_code, kyori, baba, tosu, ninki, cyakujun, kisyu, hutan, w, secs, href) 
+                            VALUES(@uma_id, @dt, @jo_code, @race_name, @type_code, @kyori, @baba, @tosu, @ninki, @cyakujun, @kisyu, @hutan, @w, @secs, @href)"
+
+            cmd.Parameters.AddWithValue("@uma_id", uma_id)
+            cmd.Parameters.AddWithValue("@dt", dt)
+            cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(keibajo))
+            cmd.Parameters.AddWithValue("@race_name", racename)
+            cmd.Parameters.AddWithValue("@type_code", GetTypeCode(syubetu))
+            cmd.Parameters.AddWithValue("@kyori", distance)
+            cmd.Parameters.AddWithValue("@baba", baba)
+            cmd.Parameters.AddWithValue("@tosu", tosu)
+            cmd.Parameters.AddWithValue("@ninki", ninki)
+            cmd.Parameters.AddWithValue("@cyakujun", cyakujun)
+            cmd.Parameters.AddWithValue("@kisyu", kisyu)
+            cmd.Parameters.AddWithValue("@hutan", hutan)
+            cmd.Parameters.AddWithValue("@w", w)
+            cmd.Parameters.AddWithValue("@secs", tokei)
+            cmd.Parameters.AddWithValue("@href", href)
+            cmd.ExecuteNonQuery()
+            Return ""
+        Catch ex As Exception
+            Return "UmaHistClass.addNew() " & ex.Message
+        End Try
+    End Function
+
 End Class

@@ -1,4 +1,5 @@
 ﻿Imports C1.Win.C1FlexGrid
+Imports System.Data.SQLite
 
 Public Class Form2
     '競走馬情報とりこみ
@@ -101,30 +102,83 @@ Public Class Form2
         GetData(DMY_DATE)
     End Sub
 
+    'DBからデータ取得
+    'Return True=成功、False=ない/失敗
+    Private Function DB_GetDataByName() As String
+        If txtBamei.Text.Length > 0 Then
+            Using conn As New SQLiteConnection(GetDbConnectionString)
+                Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+                conn.Open()
+                Dim a As New UmaHeaderClass
+                Dim errmsg As String = a.load(cmd, txtBamei.Text.Trim)
+                If errmsg.Length = 0 AndAlso a.rec_id > 0 Then
+                    errmsg = umaHistList.load(cmd, a.rec_id)
+                    If errmsg.Length = 0 Then
+                        oUmaHeader = a
+                    End If
+                End If
+                Return errmsg
+            End Using
+        End If
+        Return ""
+    End Function
+
     Private Sub GetData(ByVal dt_max As Date)
+        oUmaHeader = Nothing
+        umaHistList.init()
+        Dim errmsg As String = DB_GetDataByName()
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+
         Dim url As String = txtURL.Text.Trim
         If url.Length > 0 Then
             Dim contents As String = GetWebPageText(txtURL.Text.Trim)
             txtResult.Text = contents
-            ListBox1.Items.Clear()
-            oUmaHeader = GetUmaHeader(contents)
+            Dim oTmpHeader As UmaHeaderClass = GetUmaHeader(contents)
+            If oUmaHeader Is Nothing Then
+                oUmaHeader = oTmpHeader
+            Else
+                If oUmaHeader.titi <> oTmpHeader.titi Then
+                    oUmaHeader.titi = oTmpHeader.titi
+                    oUmaHeader.dirtyFlag = True
+                End If
+                If oUmaHeader.haha <> oTmpHeader.haha Then
+                    oUmaHeader.haha = oTmpHeader.haha
+                    oUmaHeader.dirtyFlag = True
+                End If
+                If oUmaHeader.sex <> oTmpHeader.sex Then
+                    oUmaHeader.sex = oTmpHeader.sex
+                    oUmaHeader.dirtyFlag = True
+                End If
+            End If
+            GetUmaHist(contents, umaHistList, dt_max)
+        End If
 
+        If (oUmaHeader IsNot Nothing) AndAlso oUmaHeader.bamei.Length > 0 Then
+            ListBox1.Items.Clear()
             ListBox1.Items.Add("馬名：" & oUmaHeader.bamei)
             ListBox1.Items.Add("父：" & oUmaHeader.titi)
             ListBox1.Items.Add("母：" & oUmaHeader.haha)
             ListBox1.Items.Add("性別：" & oUmaHeader.sex)
             ListBox1.Items.Add("誕生日：" & oUmaHeader.birthday.ToString("yyyy年MM月dd日"))
-
-            GetUmaHist(contents, umaHistList, dt_max)
             ShowTable(umaHistList)
+            If oUmaHeader.dt_update < Today OrElse oUmaHeader.dirtyFlag = True Then
+                errmsg = oUmaHeader.save(umaHistList)
+                If errmsg.Length > 0 Then
+                    MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+                End If
+            End If
         End If
     End Sub
 
-    Public Sub entry(ByVal url As String, Optional ByVal dt_max As Date = DMY_DATE)
+    Public Sub entry(ByVal url As String, Optional ByVal bamei As String = "", Optional ByVal dt_max As Date = DMY_DATE)
         If InStr(url, "https://www.jra.go.jp") = 0 Then
             url = "https://www.jra.go.jp" & url
         End If
         txtURL.Text = url
+        txtBamei.Text = bamei
         Me.WindowState = FormWindowState.Minimized
         Show()
         GetData(dt_max)

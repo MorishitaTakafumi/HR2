@@ -170,8 +170,9 @@ Public Class Form3
 
     Private Sub flx_Click(sender As Object, e As EventArgs) Handles flx.Click
         Dim url As String = flx.Item(flx.Row, FlxCol.href)
+        Dim bamei As String = flx.Item(flx.Row, FlxCol.bamei)
         Dim a As New Form2
-        a.entry(url)
+        a.entry(url, bamei)
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
