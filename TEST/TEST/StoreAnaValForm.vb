@@ -16,6 +16,7 @@ Public Class StoreAnaValForm
     End Enum
 
     Private raceURLque As New Queue(Of String)
+    Private raceNameque As New Queue(Of String)
     Private saveCount As Integer
     Private fm1 As New Form1 'レース結果
     Private fm1sub As New Form1
@@ -106,6 +107,8 @@ Public Class StoreAnaValForm
         If url.Length > 0 Then
             raceURLque.Clear()
             raceURLque.Enqueue(url)
+            raceNameque.Clear()
+            raceNameque.Enqueue("???")
             analysis()
         End If
     End Sub
@@ -117,8 +120,10 @@ Public Class StoreAnaValForm
         saveCount = 0
         While raceURLque.Count > 0 AndAlso saveCount < NumericUpDown1.Value AndAlso (Not CancelFlag)
             Dim url As String = raceURLque.Dequeue()
-            If analysis1(url) Then
+            Dim racename As String = raceNameque.Dequeue()
+            If analysis1(url, racename) Then
                 lb_cnt.Text = "今回登録数：" & saveCount.ToString & " Stack残数：" & raceURLque.Count.ToString
+                lb_cnt.Refresh()
                 Application.DoEvents()
             Else
                 Exit While
@@ -137,7 +142,12 @@ Public Class StoreAnaValForm
 
     'URLを指定して１レース分を解析・登録する
     '戻り値：True=成功、False=失敗
-    Private Function analysis1(ByVal url As String) As Boolean
+    Private Function analysis1(ByVal url As String, ByVal racename As String) As Boolean
+
+        If chkSameNameOnly.Checked AndAlso TopRaceName.Length > 0 AndAlso TopRaceName <> racename Then
+            lb_msg.Text = "別名レース！"
+            Return True
+        End If
 
         Me.Cursor = Cursors.WaitCursor
         Me.Refresh()
@@ -187,6 +197,7 @@ Public Class StoreAnaValForm
                         If oRaceHeader.dt > fm2.umaHistList.GetBodyRef(i).dt Then
 
                             raceURLque.Enqueue(fm2.umaHistList.GetBodyRef(i).href)
+                            raceNameque.Enqueue(fm2.umaHistList.GetBodyRef(i).racename)
                             fm1sub.entry(fm2.umaHistList.GetBodyRef(i).href)
 
                             Dim oKekkaSub As KekkaClass = fm1sub.kekkaList.GetBodyRefByBamei(fm2.oUmaHeader.bamei)
