@@ -101,7 +101,7 @@ Partial Class TopMenu
         Me.BtnStoreAnaVal.Name = "BtnStoreAnaVal"
         Me.BtnStoreAnaVal.Size = New System.Drawing.Size(249, 54)
         Me.BtnStoreAnaVal.TabIndex = 4
-        Me.BtnStoreAnaVal.Text = "レース勝ち馬解析値の登録"
+        Me.BtnStoreAnaVal.Text = "レース解析値の登録"
         Me.BtnStoreAnaVal.UseVisualStyleBackColor = False
         '
         'BtnReview

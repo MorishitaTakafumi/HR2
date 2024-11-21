@@ -1,4 +1,5 @@
-﻿Imports C1.Win.C1FlexGrid
+﻿Imports System.Data.SQLite
+Imports C1.Win.C1FlexGrid
 
 Public Class StoreAnaValForm
 
@@ -20,6 +21,7 @@ Public Class StoreAnaValForm
     Private fm1sub As New Form1
     Private fm2 As New Form2 '馬情報
     Private CancelFlag As Boolean
+    Private TopRaceName As String = ""
 
     Public Sub New()
         InitializeComponent()
@@ -144,6 +146,14 @@ Public Class StoreAnaValForm
         Dim exist_flg As Boolean = False
         Dim oRaceHeader As RaceHeaderClass = fm1.kekkaList.raceHeader
         ShowRaceHeader(oRaceHeader)
+        If TopRaceName.Length = 0 Then
+            TopRaceName = oRaceHeader.race_name
+        Else
+            If chkSameNameOnly.Checked AndAlso TopRaceName <> oRaceHeader.race_name Then
+                lb_msg.Text = "別名レース！"
+                Return True
+            End If
+        End If
 
         lb_msg.Text = "既登録済みか調査"
         Dim errmsg As String = oRaceHeader.IsExist(exist_flg)
@@ -194,7 +204,7 @@ Public Class StoreAnaValForm
             Next
             ShowTable(anaValAry)
             lb_msg.Text = "結果登録"
-            errmsg = oRaceHeader.save(anaValAry)
+            errmsg = SaveData(fm1.kekkaList, anaValAry)
         End If
         Me.Cursor = Cursors.Default
         If errmsg.Length > 0 Then
@@ -211,6 +221,21 @@ Public Class StoreAnaValForm
             End If
             Return True
         End If
+    End Function
+
+    Private Function SaveData(ByVal kekkalist As KekkaListClass, ByVal anavalary() As AnaValClass) As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim errmsg As String = ""
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            If kekkalist.raceHeader.id < 0 Then
+                errmsg = kekkalist.raceHeader.save(anavalary)
+            End If
+            If errmsg.Length = 0 Then
+                errmsg = kekkalist.save(cmd)
+            End If
+            Return errmsg
+        End Using
     End Function
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click

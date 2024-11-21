@@ -1,4 +1,6 @@
-﻿Public Class KekkaClass
+﻿Imports System.Data.SQLite
+
+Public Class KekkaClass
     'レース結果・・・ある1頭の馬のある１つのレース結果
 
     Public Property rec_id As Integer
@@ -57,6 +59,82 @@
 
     Public Function CyakujunStr() As String
         Return cyakujunDecode(cyakujun)
+    End Function
+
+    '性齢パック
+    Public Function packSeirei() As String
+        Return sex & "-" & age.ToString
+    End Function
+
+    '性齢アンパック
+    Public Sub unpackSeirei(ByVal seirei As String)
+        If seirei.Trim.Length >= 3 Then
+            Dim ip As Integer = InStr(seirei, "-")
+            If ip > 1 Then
+                sex = Left(seirei, ip - 1)
+                Try
+                    age = CInt(Mid(seirei, ip + 1))
+                Catch ex As Exception
+                    age = 0
+                End Try
+                Return
+            End If
+        End If
+        sex = ""
+        age = 0
+    End Sub
+
+    '通過順パック
+    Public Function packTukajun() As String
+        Return m_tukajun(0).ToString & "-" & m_tukajun(1).ToString & "-" & m_tukajun(2).ToString & "-" & m_tukajun(3).ToString
+    End Function
+
+    '通過順アンパック
+    Public Sub unpackTukajun(ByVal tukajun As String)
+        For j As Integer = 0 To 3
+            m_tukajun(j) = 0
+        Next
+        If tukajun.Trim.Length > 0 Then
+            Dim sbf() As String = Split(tukajun, "-")
+            For j As Integer = 0 To sbf.Length - 1
+                If IsNumeric(sbf(j)) Then
+                    m_tukajun(j) = CInt(sbf(j))
+                End If
+            Next
+        End If
+    End Sub
+
+    '新規登録
+    Public Function addNew(ByVal cmd As SQLiteCommand) As String
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "INSERT INTO Kekka(race_header_id, cyakujun, umaban, bamei, seirei, hutan, kisyu, secs, tocyu, agari, agarisa, 
+                                cyakusa, w, zogen, cyokyosi, ninki, href) 
+                            VALUES(@race_header_id, @cyakujun, @umaban, @bamei, @seirei, @hutan, @kisyu, @secs, @tocyu, @agari, @agarisa, 
+                                @cyakusa, @w, @zogen, @cyokyosi, @ninki, @href)"
+
+            cmd.Parameters.AddWithValue("@race_header_id", race_id)
+            cmd.Parameters.AddWithValue("@cyakujun", cyakujun)
+            cmd.Parameters.AddWithValue("@umaban", umaban)
+            cmd.Parameters.AddWithValue("@bamei", bamei)
+            cmd.Parameters.AddWithValue("@seirei", packSeirei())
+            cmd.Parameters.AddWithValue("@hutan", hutan)
+            cmd.Parameters.AddWithValue("@kisyu", kisyu)
+            cmd.Parameters.AddWithValue("@secs", tokei)
+            cmd.Parameters.AddWithValue("@tocyu", packTukajun())
+            cmd.Parameters.AddWithValue("@agari", agari)
+            cmd.Parameters.AddWithValue("@agarisa", agarisa)
+            cmd.Parameters.AddWithValue("@cyakusa", cyakusa)
+            cmd.Parameters.AddWithValue("@w", w)
+            cmd.Parameters.AddWithValue("@zogen", zogen)
+            cmd.Parameters.AddWithValue("@cyokyosi", cyokyosi)
+            cmd.Parameters.AddWithValue("@ninki", ninki)
+            cmd.Parameters.AddWithValue("@href", uma_href)
+            cmd.ExecuteNonQuery()
+            Return ""
+        Catch ex As Exception
+            Return "KekkaClass.addNew() " & ex.Message
+        End Try
     End Function
 
 End Class

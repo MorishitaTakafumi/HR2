@@ -111,7 +111,7 @@
 
     '結果表の取得
     Public Function GetKekka(ByVal src As String, ByVal klist As KekkaListClass) As Integer
-        klist.init()
+        'klistの初期化は呼び出し側責任
         Dim findpos As Integer = 1
         Dim lineStr As String = SearchLineByKeyword(findpos, src, "<tbody>", findpos)
         If lineStr.Length > 0 Then

@@ -1,4 +1,6 @@
-﻿Public Class KekkaListClass
+﻿Imports System.Data.SQLite
+
+Public Class KekkaListClass
     'レース結果リスト・・・ある１つの出走各場のレース結果のリスト
 
     Private m_bf As New List(Of KekkaClass)
@@ -11,6 +13,7 @@
     End Property
 
     Public Sub init()
+        raceHeader.init()
         m_bf.Clear()
     End Sub
 
@@ -146,4 +149,59 @@
         Next
 
     End Sub
+
+    Public Function load(ByVal cmd As SQLiteCommand, ByVal race_header_id As Integer) As String
+        Dim errmsg As String = ""
+        m_bf.Clear()
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "SELECT * FROM Kekka WHERE race_header_id=@race_header_id"
+            cmd.Parameters.AddWithValue("@race_header_id", race_header_id)
+            Dim r As SQLiteDataReader = cmd.ExecuteReader
+            While r.Read
+                Dim a As New KekkaClass
+                With a
+                    .rec_id = r("id")
+                    .race_id = r("race_header_id")
+                    .cyakujun = r("cyakujun")
+                    .umaban = r("umaban")
+                    .bamei = r("bamei")
+                    .unpackSeirei(r("seirei"))
+                    .hutan = r("hutan")
+                    .kisyu = r("kisyu")
+                    .tokei = r("secs")
+                    .unpackTukajun(r("tocyu"))
+                    .agari = r("agari")
+                    .agarisa = r("agarisa")
+                    .cyakusa = r("cyakusa")
+                    .w = r("w")
+                    .zogen = r("zogen")
+                    .cyokyosi = r("cyokyosi")
+                    .ninki = r("ninki")
+                    .uma_href = r("href")
+                End With
+                m_bf.Add(a)
+            End While
+            r.Close()
+            Return ""
+        Catch ex As Exception
+            Return "kekkaListClass.load() " & ex.Message
+        End Try
+    End Function
+
+    'レース結果登録
+    Public Function save(ByVal cmd As SQLiteCommand) As String
+        Dim errmsg As String = ""
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).rec_id <= 0 Then
+                m_bf(j).race_id = raceHeader.id
+                errmsg = m_bf(j).addNew(cmd)
+                If errmsg.Length > 0 Then
+                    Return errmsg
+                End If
+            End If
+        Next
+        Return ""
+    End Function
+
 End Class

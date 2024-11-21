@@ -34,6 +34,7 @@ Partial Class Form1
         Me.txtDate = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtRaceName = New System.Windows.Forms.TextBox()
+        Me.chkAutoSave = New System.Windows.Forms.CheckBox()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -145,11 +146,22 @@ Partial Class Form1
         Me.txtRaceName.Size = New System.Drawing.Size(204, 20)
         Me.txtRaceName.TabIndex = 11
         '
+        'chkAutoSave
+        '
+        Me.chkAutoSave.AutoSize = True
+        Me.chkAutoSave.Location = New System.Drawing.Point(913, 80)
+        Me.chkAutoSave.Name = "chkAutoSave"
+        Me.chkAutoSave.Size = New System.Drawing.Size(128, 16)
+        Me.chkAutoSave.TabIndex = 13
+        Me.chkAutoSave.Text = "データを自動登録する"
+        Me.chkAutoSave.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1312, 631)
+        Me.Controls.Add(Me.chkAutoSave)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.txtRaceName)
         Me.Controls.Add(Me.Label2)
@@ -181,4 +193,5 @@ Partial Class Form1
     Friend WithEvents txtDate As TextBox
     Friend WithEvents Label3 As Label
     Friend WithEvents txtRaceName As TextBox
+    Friend WithEvents chkAutoSave As CheckBox
 End Class

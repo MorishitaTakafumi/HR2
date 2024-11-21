@@ -1,4 +1,5 @@
 ﻿Imports C1.Win.C1FlexGrid
+Imports System.Data.SQLite
 
 Public Class Form1
     'レース結果の取り込み
@@ -103,40 +104,122 @@ Public Class Form1
         flx.AutoSizeRows()
     End Sub
 
+    Private Sub ShowHeader()
+        ListBox1.Items.Clear()
+        Dim oRaceHeader As RaceHeaderClass = kekkaList.raceHeader
+        ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)
+        ListBox1.Items.Add("開催日：" & oRaceHeader.dt.ToString("yyyy年MM月dd日"))
+        ListBox1.Items.Add("レースNo.：" & oRaceHeader.race_no)
+        ListBox1.Items.Add("レース名：" & oRaceHeader.race_name)
+        ListBox1.Items.Add("グレード：" & oRaceHeader.grade)
+        ListBox1.Items.Add("距離：" & oRaceHeader.kyori.ToString)
+        ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
+        ListBox1.Items.Add("クラス：" & oRaceHeader.class_name)
+        ListBox1.Items.Add("頭数：" & oRaceHeader.tosu)
+    End Sub
+
     Private Sub BtnTest_Click(sender As Object, e As EventArgs) Handles BtnTest.Click
+        GetData()
+    End Sub
+
+    'DBからデータ取得
+    'Return True=成功、False=ない/失敗
+    Private Function DB_GetDataByName(ByVal dt_race As Date, ByVal racename As String) As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Dim errmsg As String = kekkaList.raceHeader.loadByDateAndName(cmd, dt_race, racename)
+            If errmsg.Length = 0 AndAlso kekkaList.raceHeader.id > 0 Then
+                errmsg = kekkaList.load(cmd, kekkaList.raceHeader.id)
+            End If
+            Return errmsg
+        End Using
+    End Function
+
+    'URLからWebPageデータを取得
+    Private Function GetWebPageContents() As String
         Dim url As String = txtURL.Text.Trim
-        If url.Length > 0 Then
-            Dim contents As String = GetWebPageText(txtURL.Text.Trim)
-            txtResult.Text = contents
-            ListBox1.Items.Clear()
-            Dim oRaceHeader As RaceHeaderClass = kekkaList.raceHeader
-            oRaceHeader.init()
-            oRaceHeader.keibajo = GetWhenWhere(contents, oRaceHeader.dt)
-            ListBox1.Items.Add("競馬場：" & oRaceHeader.keibajo)
-            ListBox1.Items.Add("開催日：" & oRaceHeader.dt.ToString("yyyy年MM月dd日"))
+        If url.Length = 0 Then
+            Return ""
+        Else
+            Return GetWebPageText(url)
+        End If
+    End Function
 
-            oRaceHeader.race_no = GetRaceNo(contents)
-            ListBox1.Items.Add("レースNo.：" & oRaceHeader.race_no)
-            oRaceHeader.race_name = GetRaceName(contents, oRaceHeader.grade)
-            ListBox1.Items.Add("レース名：" & oRaceHeader.race_name)
-            ListBox1.Items.Add("グレード：" & oRaceHeader.grade)
-
-            oRaceHeader.class_name = GetClassCource(contents, oRaceHeader.kyori, oRaceHeader.syubetu)
-            ListBox1.Items.Add("距離：" & oRaceHeader.kyori.ToString)
-            ListBox1.Items.Add("種別：" & oRaceHeader.syubetu)
-            ListBox1.Items.Add("クラス：" & oRaceHeader.class_name)
-            oRaceHeader.class_code = oRaceHeader.GetClassCode()
-
-            GetKekka(contents, kekkaList)
-            oRaceHeader.tosu = kekkaList.cnt
-            ListBox1.Items.Add("頭数：" & oRaceHeader.tosu)
-
-            kekkaList.setCyakusa()
-            kekkaList.setAgarisa(oRaceHeader)
-
-            ShowTable(kekkaList)
+    Private Sub GetData()
+        kekkaList.init()
+        ListBox1.Items.Clear()
+        'Case 1:レース日とレース名が既知でDBに登録済み 
+        Dim errmsg As String = ""
+        Dim DbGetTry As Boolean = False
+        If IsDate(txtDate.Text) AndAlso txtRaceName.Text.Trim.Length > 0 Then
+            errmsg = DB_GetDataByName(CDate(txtDate.Text), txtRaceName.Text)
+            If errmsg.Length > 0 Then
+                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+                Return
+            Else
+                DbGetTry = True
+                If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
+                    ShowHeader()
+                    ShowTable(kekkaList)
+                    Return
+                End If
+            End If
+        End If
+        'Case 2:レース日とレース名が未知でDBに登録済み 
+        Dim contents As String = GetWebPageContents()
+        If contents.Length = 0 Then
+            Return
+        End If
+        txtResult.Text = contents
+        Dim oRaceHeader As RaceHeaderClass = kekkaList.raceHeader
+        oRaceHeader.keibajo = GetWhenWhere(contents, oRaceHeader.dt)
+        oRaceHeader.race_no = GetRaceNo(contents)
+        oRaceHeader.race_name = GetRaceName(contents, oRaceHeader.grade)
+        oRaceHeader.class_name = GetClassCource(contents, oRaceHeader.kyori, oRaceHeader.syubetu)
+        oRaceHeader.class_code = oRaceHeader.GetClassCode()
+        If Not DbGetTry Then
+            errmsg = DB_GetDataByName(oRaceHeader.dt, oRaceHeader.race_name)
+            If errmsg.Length > 0 Then
+                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+                Return
+            Else
+                If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
+                    ShowHeader()
+                    ShowTable(kekkaList)
+                    Return
+                End If
+            End If
+        End If
+        'Case 3:DB未登録 
+        GetKekka(contents, kekkaList)
+        oRaceHeader.tosu = kekkaList.cnt
+        kekkaList.setCyakusa()
+        kekkaList.setAgarisa(oRaceHeader)
+        ShowHeader()
+        ShowTable(kekkaList)
+        If chkAutoSave.Checked Then
+            errmsg = SaveData()
+            If errmsg.Length > 0 Then
+                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            End If
         End If
     End Sub
+
+    Private Function SaveData() As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim errmsg As String = ""
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            If kekkaList.raceHeader.id < 0 Then
+                errmsg = kekkaList.raceHeader.addNew(cmd)
+            End If
+            If errmsg.Length = 0 Then
+                errmsg = kekkaList.save(cmd)
+            End If
+            Return errmsg
+        End Using
+    End Function
 
     Public Sub entry(ByVal url As String, Optional ByVal dt_race As String = "", Optional ByVal racename As String = "")
         If InStr(url, "https://www.jra.go.jp") = 0 Then
@@ -147,7 +230,7 @@ Public Class Form1
         txtRaceName.Text = racename
         Me.WindowState = FormWindowState.Minimized
         Show()
-        BtnTest.PerformClick()
+        GetData()
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click

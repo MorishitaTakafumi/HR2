@@ -95,6 +95,29 @@ Public Class RaceHeaderClass
         Return 0 '新馬・未勝利
     End Function
 
+    Private Sub SetGradeAndClassname()
+        Select Case class_code
+            Case 0
+                grade = ""
+                class_name = "新・未"
+            Case 1, 2, 3
+                grade = ""
+                class_name = class_code.ToString & "勝"
+            Case 4
+                grade = ""
+                class_name = "Op・L"
+            Case 5
+                grade = "G3"
+                class_name = "Open"
+            Case 6
+                grade = "G2"
+                class_name = "Open"
+            Case 7
+                grade = "G1"
+                class_name = "Open"
+        End Select
+    End Sub
+
     '上り差の補正値を計算するため何コーナーでの通過順位を使うか
     Public Function GetCornerToCalcAgarisa() As Integer
 
@@ -183,6 +206,37 @@ Public Class RaceHeaderClass
             conn.Open()
             Return IsExist(cmd, exist_flag)
         End Using
+    End Function
+
+    '日付とレース名を指定してロード
+    'Return① DBアクセス正常ならば "" を返す
+    'Return② DBアクセス失敗ならばエラーメッセージを返す
+    Public Function loadByDateAndName(ByVal cmd As SQLiteCommand, ByVal dt_race As Date, ByVal racename As String) As String
+        '初期化は呼び出し側責任とする init()
+        Try
+            cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND race_name=@race_name"
+            cmd.Parameters.AddWithValue("@dt", dt_race)
+            cmd.Parameters.AddWithValue("@race_name", racename)
+            Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+            If r.Read Then
+                id = r("id")
+                dt = r("dt")
+                class_code = r("class_code")
+                SetGradeAndClassname()
+                type_code = r("type_code")
+                syubetu = GetRaceTypeName(type_code)
+                kyori = r("kyori")
+                jo_code = r("jo_code")
+                keibajo = GetKeibajoName(jo_code)
+                race_name = r("race_name")
+                race_no = r("race_no")
+                tosu = r("tosu")
+            End If
+            r.Close()
+            Return ""
+        Catch ex As Exception
+            Return "raceHeaderClass.loadByDateAndName() " & ex.Message
+        End Try
     End Function
 
     '新規登録
