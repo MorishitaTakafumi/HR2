@@ -53,7 +53,6 @@ Partial Class raceReviewForm
         Me.BtnWinRate = New System.Windows.Forms.Button()
         Me.BtnFilterClear = New System.Windows.Forms.Button()
         Me.BtnCoefReview = New System.Windows.Forms.Button()
-        Me.chkRmv1999 = New System.Windows.Forms.CheckBox()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -388,24 +387,11 @@ Partial Class raceReviewForm
         Me.BtnCoefReview.Text = "係数検証"
         Me.BtnCoefReview.UseVisualStyleBackColor = True
         '
-        'chkRmv1999
-        '
-        Me.chkRmv1999.AutoSize = True
-        Me.chkRmv1999.Checked = True
-        Me.chkRmv1999.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkRmv1999.Location = New System.Drawing.Point(169, 220)
-        Me.chkRmv1999.Name = "chkRmv1999"
-        Me.chkRmv1999.Size = New System.Drawing.Size(97, 16)
-        Me.chkRmv1999.TabIndex = 42
-        Me.chkRmv1999.Text = "id<1999は除外"
-        Me.chkRmv1999.UseVisualStyleBackColor = True
-        '
         'raceReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
-        Me.Controls.Add(Me.chkRmv1999)
         Me.Controls.Add(Me.BtnCoefReview)
         Me.Controls.Add(Me.BtnFilterClear)
         Me.Controls.Add(Me.BtnWinRate)
@@ -477,5 +463,4 @@ Partial Class raceReviewForm
     Friend WithEvents BtnWinRate As Button
     Friend WithEvents BtnFilterClear As Button
     Friend WithEvents BtnCoefReview As Button
-    Friend WithEvents chkRmv1999 As CheckBox
 End Class

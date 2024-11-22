@@ -22,16 +22,16 @@ Public Class CoefReviewForm
             .Item(0, FlxCol.dateScore) = "date係数"
             .Item(0, FlxCol.distScore) = "dist係数"
 
-            .Item(1, FlxCol.coefRank) = "1.129～"
-            .Item(2, FlxCol.coefRank) = "1.099～1.129"
-            .Item(3, FlxCol.coefRank) = "1.066～1.099"
-            .Item(4, FlxCol.coefRank) = "1.033～1.066"
-            .Item(5, FlxCol.coefRank) = "1.000～1.033"
+            .Item(1, FlxCol.coefRank) = "1.300～"
+            .Item(2, FlxCol.coefRank) = "1.225～1.300"
+            .Item(3, FlxCol.coefRank) = "1.150～1.225"
+            .Item(4, FlxCol.coefRank) = "1.075～1.150"
+            .Item(5, FlxCol.coefRank) = "1.000～1.075"
             .Item(6, FlxCol.coefRank) = "＝1.000"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
-            .Styles.Normal.TextAlign = TextAlignEnum.CenterCenter
+            .Styles.Normal.TextAlign = TextAlignEnum.LeftCenter
             .Styles.Normal.WordWrap = True
             .Rows.MinSize = 30
             .Cols.MaxSize = 200
@@ -47,16 +47,38 @@ Public Class CoefReviewForm
 
     Public Sub entry(ByVal spanCoefCnt(,) As Integer, ByVal dateCoefCnt(,) As Integer, ByVal distCoefCnt(,) As Integer)
         SetupFlex()
+        Dim cnt As Integer
         For j As Integer = 0 To 5
-            'flx.Item(j + 1, FlxCol.spanScore) = spanCoefCnt(j, 0).ToString("D2") & "-" & spanCoefCnt(j, 1).ToString("D2") & "-" & spanCoefCnt(j, 2).ToString("D2")
-            'flx.Item(j + 1, FlxCol.dateScore) = dateCoefCnt(j, 0).ToString("D2") & "-" & dateCoefCnt(j, 1).ToString("D2") & "-" & dateCoefCnt(j, 2).ToString("D2")
-            'flx.Item(j + 1, FlxCol.distScore) = distCoefCnt(j, 0).ToString("D2") & "-" & distCoefCnt(j, 1).ToString("D2") & "-" & distCoefCnt(j, 2).ToString("D2")
+            cnt = spanCoefCnt(j, 0) + spanCoefCnt(j, 1) + spanCoefCnt(j, 2)
+            If cnt > 0 Then
+                flx.Item(j + 1, FlxCol.spanScore) = (spanCoefCnt(j, 0) / cnt).ToString("F2") & " | " &
+                                                    ((spanCoefCnt(j, 1) + spanCoefCnt(j, 0)) / cnt).ToString("F2") & "(" & cnt.ToString & ")"
+            Else
+                flx.Item(j + 1, FlxCol.spanScore) = "***"
+            End If
 
-            flx.Item(j + 1, FlxCol.spanScore) = (spanCoefCnt(j, 0) + spanCoefCnt(j, 1) + spanCoefCnt(j, 2)).ToString
-            flx.Item(j + 1, FlxCol.dateScore) = (dateCoefCnt(j, 0) + dateCoefCnt(j, 1) + dateCoefCnt(j, 2)).ToString
-            flx.Item(j + 1, FlxCol.distScore) = (distCoefCnt(j, 0) + distCoefCnt(j, 1) + distCoefCnt(j, 2)).ToString
+            cnt = dateCoefCnt(j, 0) + dateCoefCnt(j, 1) + dateCoefCnt(j, 2)
+            If cnt > 0 Then
+                flx.Item(j + 1, FlxCol.dateScore) = (dateCoefCnt(j, 0) / cnt).ToString("F2") & " | " &
+                                                    ((dateCoefCnt(j, 1) + dateCoefCnt(j, 0)) / cnt).ToString("F2") & "(" & cnt.ToString & ")"
+            Else
+                flx.Item(j + 1, FlxCol.dateScore) = "***"
+            End If
+
+            cnt = distCoefCnt(j, 0) + distCoefCnt(j, 1) + distCoefCnt(j, 2)
+            If cnt > 0 Then
+                flx.Item(j + 1, FlxCol.distScore) = (distCoefCnt(j, 0) / cnt).ToString("F2") & " | " &
+                                                    ((distCoefCnt(j, 1) + distCoefCnt(j, 0)) / cnt).ToString("F2") & "(" & cnt.ToString & ")"
+            Else
+                flx.Item(j + 1, FlxCol.distScore) = "***"
+            End If
+
+            'flx.Item(j + 1, FlxCol.spanScore) = (spanCoefCnt(j, 0) + spanCoefCnt(j, 1) + spanCoefCnt(j, 2)).ToString
+            'flx.Item(j + 1, FlxCol.dateScore) = (dateCoefCnt(j, 0) + dateCoefCnt(j, 1) + dateCoefCnt(j, 2)).ToString
+            'flx.Item(j + 1, FlxCol.distScore) = (distCoefCnt(j, 0) + distCoefCnt(j, 1) + distCoefCnt(j, 2)).ToString
         Next
         flx.AutoSizeCols()
+        lb_guide.Text = "凡例）連帯率｜複勝率(件数)"
         Show()
     End Sub
 

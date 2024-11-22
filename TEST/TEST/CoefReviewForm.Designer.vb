@@ -24,7 +24,7 @@ Partial Class CoefReviewForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CoefReviewForm))
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lb_guide = New System.Windows.Forms.Label()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -42,21 +42,21 @@ Partial Class CoefReviewForm
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 13
         '
-        'Label1
+        'lb_guide
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 483)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(395, 12)
-        Me.Label1.TabIndex = 14
-        Me.Label1.Text = "凡例）A＝着順－人気　として　(A＜０の回数)－(A＝０の回数)－(A＞０の回数) "
+        Me.lb_guide.AutoSize = True
+        Me.lb_guide.Location = New System.Drawing.Point(12, 483)
+        Me.lb_guide.Name = "lb_guide"
+        Me.lb_guide.Size = New System.Drawing.Size(35, 12)
+        Me.lb_guide.TabIndex = 14
+        Me.lb_guide.Text = "凡例）"
         '
         'CoefReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 513)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.lb_guide)
         Me.Controls.Add(Me.flx)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CoefReviewForm"
@@ -69,5 +69,5 @@ Partial Class CoefReviewForm
     End Sub
 
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
-    Friend WithEvents Label1 As Label
+    Friend WithEvents lb_guide As Label
 End Class
