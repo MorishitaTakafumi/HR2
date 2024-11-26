@@ -151,14 +151,13 @@ Public Class Form1
         ListBox1.Items.Clear()
         'Case 1:レース日とレース名が既知でDBに登録済み 
         Dim errmsg As String = ""
-        Dim DbGetTry As Boolean = False
+
         If IsDate(txtDate.Text) AndAlso txtRaceName.Text.Trim.Length > 0 Then
             errmsg = DB_GetDataByName(CDate(txtDate.Text), txtRaceName.Text)
             If errmsg.Length > 0 Then
                 MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
                 Return
             Else
-                DbGetTry = True
                 If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
                     ShowHeader()
                     ShowTable(kekkaList)
@@ -178,19 +177,19 @@ Public Class Form1
         oRaceHeader.race_name = GetRaceName(contents, oRaceHeader.grade)
         oRaceHeader.class_name = GetClassCource(contents, oRaceHeader.kyori, oRaceHeader.syubetu)
         oRaceHeader.class_code = oRaceHeader.GetClassCode()
-        If Not DbGetTry Then
-            errmsg = DB_GetDataByName(oRaceHeader.dt, oRaceHeader.race_name)
-            If errmsg.Length > 0 Then
-                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        'Case 1でDB_GetDataByNameやっていてもレース名のテキストが"ジャパンC"のように簡略表記されているケースがあるので正式名で再度トライする
+        errmsg = DB_GetDataByName(oRaceHeader.dt, oRaceHeader.race_name)
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        Else
+            If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
+                ShowHeader()
+                ShowTable(kekkaList)
                 Return
-            Else
-                If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
-                    ShowHeader()
-                    ShowTable(kekkaList)
-                    Return
-                End If
             End If
         End If
+
         'Case 3:DB未登録 
         GetKekka(contents, kekkaList)
         oRaceHeader.tosu = kekkaList.cnt
@@ -211,8 +210,15 @@ Public Class Form1
             Dim errmsg As String = ""
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
-            If kekkaList.raceHeader.id < 0 Then
-                errmsg = kekkaList.raceHeader.addNew(cmd)
+            Dim oK As RaceHeaderClass = kekkaList.raceHeader
+            If oK.id < 0 Then
+                errmsg = oK.loadByDateAndName(cmd, oK.dt, oK.race_name)
+                If errmsg.Length > 0 Then
+                    Return errmsg
+                End If
+                If oK.id < 0 Then
+                    errmsg = oK.addNew(cmd)
+                End If
             End If
             If errmsg.Length = 0 Then
                 errmsg = kekkaList.save(cmd)
@@ -221,13 +227,14 @@ Public Class Form1
         End Using
     End Function
 
-    Public Sub entry(ByVal url As String, Optional ByVal dt_race As String = "", Optional ByVal racename As String = "")
-        If InStr(url, "https://www.jra.go.jp") = 0 Then
+    Public Sub entry(ByVal url As String, Optional ByVal dt_race As String = "", Optional ByVal racename As String = "", Optional ByVal autosave As Boolean = False)
+        If url.Length > 0 AndAlso InStr(url, "https://www.jra.go.jp") = 0 Then
             url = "https://www.jra.go.jp" & url
         End If
         txtURL.Text = url
         txtDate.Text = dt_race
         txtRaceName.Text = racename
+        chkAutoSave.Checked = autosave
         Me.WindowState = FormWindowState.Minimized
         Show()
         GetData()

@@ -328,7 +328,7 @@ Public Class AnaForm
                 '    MsgBox(o.bamei & " " & oS.racename)
                 'End If
 
-                fm1.entry(oS.href, oS.dt.ToString("yyyy/MM/dd"), oS.racename)
+                fm1.entry(oS.href, oS.dt.ToString("yyyy/MM/dd"), oS.racename, True)
                 rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
             Next
 
