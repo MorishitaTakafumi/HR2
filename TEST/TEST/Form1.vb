@@ -190,7 +190,7 @@ Public Class Form1
             End If
         End If
 
-        'Case 3:DB未登録 
+        'Case 3:DB未登録（Headerのみ登録済みのケースがあり得る）
         GetKekka(contents, kekkaList)
         oRaceHeader.tosu = kekkaList.cnt
         kekkaList.setCyakusa()

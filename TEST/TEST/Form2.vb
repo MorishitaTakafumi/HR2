@@ -174,7 +174,7 @@ Public Class Form2
     End Sub
 
     Public Sub entry(ByVal url As String, Optional ByVal bamei As String = "", Optional ByVal dt_max As Date = DMY_DATE)
-        If InStr(url, "https://www.jra.go.jp") = 0 Then
+        If url.Length > 0 AndAlso InStr(url, "https://www.jra.go.jp") = 0 Then
             url = "https://www.jra.go.jp" & url
         End If
         txtURL.Text = url
