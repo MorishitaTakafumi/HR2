@@ -21,16 +21,21 @@ Public Class UmaHistClass
     Public Property tokei As Single
     Public Property bamei As String
     Public Property href As String
+    Public Property jo_code As Integer
+    Public Property type_code As Integer
+
 
     Public Sub New()
         rec_id = -1
         race_id = -1
         dt = #1900/1/1#
         keibajo = ""
+        jo_code = -1
         racename = ""
         grade = ""
         distance = -1
         syubetu = ""
+        type_code = -1
         baba = ""
         tosu = -1
         ninki = -1

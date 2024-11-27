@@ -23,6 +23,7 @@ Public Class Form1
     End Enum
 
     Public kekkaList As New KekkaListClass
+    Public Property DbErrMsg As String = ""
 
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
@@ -150,12 +151,11 @@ Public Class Form1
         kekkaList.init()
         ListBox1.Items.Clear()
         'Case 1:レース日とレース名が既知でDBに登録済み 
-        Dim errmsg As String = ""
-
+        DbErrMsg = ""
         If IsDate(txtDate.Text) AndAlso txtRaceName.Text.Trim.Length > 0 Then
-            errmsg = DB_GetDataByName(CDate(txtDate.Text), txtRaceName.Text)
-            If errmsg.Length > 0 Then
-                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            DbErrMsg = DB_GetDataByName(CDate(txtDate.Text), txtRaceName.Text)
+            If DbErrMsg.Length > 0 Then
+                MsgBox(DbErrMsg, MsgBoxStyle.Critical, Me.Text)
                 Return
             Else
                 If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
@@ -178,9 +178,9 @@ Public Class Form1
         oRaceHeader.class_name = GetClassCource(contents, oRaceHeader.kyori, oRaceHeader.syubetu)
         oRaceHeader.class_code = oRaceHeader.GetClassCode()
         'Case 1でDB_GetDataByNameやっていてもレース名のテキストが"ジャパンC"のように簡略表記されているケースがあるので正式名で再度トライする
-        errmsg = DB_GetDataByName(oRaceHeader.dt, oRaceHeader.race_name)
-        If errmsg.Length > 0 Then
-            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        DbErrMsg = DB_GetDataByName(oRaceHeader.dt, oRaceHeader.race_name)
+        If DbErrMsg.Length > 0 Then
+            MsgBox(DbErrMsg, MsgBoxStyle.Critical, Me.Text)
             Return
         Else
             If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
@@ -198,9 +198,9 @@ Public Class Form1
         ShowHeader()
         ShowTable(kekkaList)
         If chkAutoSave.Checked Then
-            errmsg = SaveData()
-            If errmsg.Length > 0 Then
-                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            DbErrMsg = SaveData()
+            If DbErrMsg.Length > 0 Then
+                MsgBox(DbErrMsg, MsgBoxStyle.Critical, Me.Text)
             End If
         End If
     End Sub

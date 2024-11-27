@@ -48,4 +48,11 @@
         Dim a As New raceReviewForm
         a.Show()
     End Sub
+
+    Private Sub BtnTest_Click(sender As Object, e As EventArgs) Handles BtnTest.Click
+        Hide()
+        Dim a As New TestForm
+        a.ShowDialog()
+        Show()
+    End Sub
 End Class

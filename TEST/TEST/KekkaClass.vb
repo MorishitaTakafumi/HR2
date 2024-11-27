@@ -104,6 +104,43 @@ Public Class KekkaClass
         End If
     End Sub
 
+    'レースヘッダーIDと馬名を指定してロード
+    Public Function load(ByVal cmd As SQLiteCommand, ByVal raceheader_id As Integer, ByVal arg_bamei As String) As String
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "SELECT * FROM kekka WHERE race_header_id=@race_header_id AND bamei=@bamei"
+            cmd.Parameters.AddWithValue("@race_header_id", raceheader_id)
+            cmd.Parameters.AddWithValue("@bamei", arg_bamei)
+            Dim r As SQLiteDataReader = cmd.ExecuteReader
+            If r.Read Then
+                With Me
+                    .rec_id = r("id")
+                    .race_id = r("race_header_id")
+                    .cyakujun = r("cyakujun")
+                    .umaban = r("umaban")
+                    .bamei = r("bamei")
+                    .unpackSeirei(r("seirei"))
+                    .hutan = r("hutan")
+                    .kisyu = r("kisyu")
+                    .tokei = r("secs")
+                    .unpackTukajun(r("tocyu"))
+                    .agari = r("agari")
+                    .agarisa = r("agarisa")
+                    .cyakusa = r("cyakusa")
+                    .w = r("w")
+                    .zogen = r("zogen")
+                    .cyokyosi = r("cyokyosi")
+                    .ninki = r("ninki")
+                    .uma_href = r("href")
+                End With
+            End If
+            r.Close()
+            Return ""
+        Catch ex As Exception
+            Return "KekkaClass.load() " & ex.Message
+        End Try
+    End Function
+
     '新規登録
     Public Function addNew(ByVal cmd As SQLiteCommand) As String
         Try

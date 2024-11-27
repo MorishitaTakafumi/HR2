@@ -239,6 +239,60 @@ Public Class RaceHeaderClass
         End Try
     End Function
 
+    'レース名の照合
+    Private Function IsRaceNameMatch(ByVal fullName As String, ByVal shortname As String) As Boolean
+        If fullName = shortname Then
+            Return True
+        End If
+        Dim front3c As String
+        If shortname.Length > 3 Then
+            front3c = shortname.Substring(0, 3)
+        Else
+            front3c = shortname
+        End If
+        If InStr(fullName, front3c) > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    'UmaHistを指定してロード
+    'Return① DBアクセス正常ならば "" を返す
+    'Return② DBアクセス失敗ならばエラーメッセージを返す
+    Public Function loadByUmaHist(ByVal cmd As SQLiteCommand, ByVal oUmaHist As UmaHistClass) As String
+        init()
+        Try
+            cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND jo_code=@jo_code AND type_code=@type_code AND kyori=@kyori"
+            cmd.Parameters.AddWithValue("@dt", oUmaHist.dt)
+            cmd.Parameters.AddWithValue("@jo_code", oUmaHist.jo_code)
+            cmd.Parameters.AddWithValue("@type_code", oUmaHist.type_code)
+            cmd.Parameters.AddWithValue("@kyori", oUmaHist.distance)
+            Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+            While r.Read
+                If IsRaceNameMatch(r("race_name"), oUmaHist.racename) Then
+                    id = r("id")
+                    dt = r("dt")
+                    class_code = r("class_code")
+                    SetGradeAndClassname()
+                    type_code = r("type_code")
+                    syubetu = GetRaceTypeName(type_code)
+                    kyori = r("kyori")
+                    jo_code = r("jo_code")
+                    keibajo = GetKeibajoName(jo_code)
+                    race_name = r("race_name")
+                    race_no = r("race_no")
+                    tosu = r("tosu")
+                    Exit While
+                End If
+            End While
+            r.Close()
+            Return ""
+        Catch ex As Exception
+            Return "raceHeaderClass.loadByUmaHist() " & ex.Message
+        End Try
+    End Function
+
     '新規登録
     Public Function addNew(ByVal cmd As SQLiteCommand) As String
         Try

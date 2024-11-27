@@ -167,11 +167,13 @@ Public Class umaHistListClass
                     .rec_id = r("id")
                     'Public Property race_id As Integer
                     .dt = r("dt")
-                    .keibajo = GetKeibajoName(r("jo_code"))
+                    .jo_code = r("jo_code")
+                    .keibajo = GetKeibajoName(.jo_code)
                     .racename = r("race_name")
                     'Public Property grade As String
                     .distance = r("kyori")
-                    .syubetu = GetRaceTypeName(r("type_code"))
+                    .type_code = r("type_code")
+                    .syubetu = GetRaceTypeName(.type_code)
                     .baba = r("baba")
                     .tosu = r("tosu")
                     .ninki = r("ninki")
