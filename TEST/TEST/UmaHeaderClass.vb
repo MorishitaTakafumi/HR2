@@ -5,9 +5,9 @@ Public Class UmaHeaderClass
 
     Public Property rec_id As Integer
     Public Property bamei As String
-    Public Property titi As String
-    Public Property haha As String
-    Public Property sex As String
+    Public Property father As String
+    Public Property mother As String
+    Public Property seibetu As String
     Public Property birthday As Date
     Public Property dt_update As Date
 
@@ -20,9 +20,9 @@ Public Class UmaHeaderClass
     Public Sub init()
         rec_id = -1
         bamei = ""
-        titi = ""
-        haha = ""
-        sex = ""
+        father = ""
+        mother = ""
+        seibetu = ""
         birthday = DMY_DATE
         dt_update = DMY_DATE
         dirtyFlag = False
@@ -66,9 +66,9 @@ Public Class UmaHeaderClass
             If r.Read Then
                 rec_id = r("id")
                 bamei = r("name")
-                titi = r("father")
-                haha = r("mother")
-                sex = r("seibetu")
+                father = r("father")
+                mother = r("mother")
+                seibetu = r("seibetu")
                 birthday = r("birthday")
                 dt_update = r("dt_update")
             End If
@@ -86,9 +86,9 @@ Public Class UmaHeaderClass
             cmd.CommandText = "INSERT INTO UmaHeader(name, father, mother, seibetu, birthday, dt_update) 
                             VALUES(@name, @father, @mother, @seibetu, @birthday, @dt_update)"
             cmd.Parameters.AddWithValue("@name", bamei)
-            cmd.Parameters.AddWithValue("@father", titi)
-            cmd.Parameters.AddWithValue("@mother", haha)
-            cmd.Parameters.AddWithValue("@seibetu", sex)
+            cmd.Parameters.AddWithValue("@father", father)
+            cmd.Parameters.AddWithValue("@mother", mother)
+            cmd.Parameters.AddWithValue("@seibetu", seibetu)
             cmd.Parameters.AddWithValue("@birthday", birthday)
             cmd.Parameters.AddWithValue("@dt_update", Now)
             cmd.ExecuteNonQuery()
@@ -110,9 +110,10 @@ Public Class UmaHeaderClass
     Public Function update(ByVal cmd As SQLiteCommand) As String
         Try
             cmd.Parameters.Clear()
-            cmd.CommandText = "UPDATE UmaHeader SET seibetu=@seibetu, dt_update=@dt_update"
-            cmd.Parameters.AddWithValue("@seibetu", sex)
+            cmd.CommandText = "UPDATE UmaHeader SET seibetu=@seibetu, dt_update=@dt_update WHERE id=@id"
+            cmd.Parameters.AddWithValue("@seibetu", seibetu)
             cmd.Parameters.AddWithValue("@dt_update", Now)
+            cmd.Parameters.AddWithValue("@id", rec_id)
             cmd.ExecuteNonQuery()
             Return ""
         Catch ex As Exception

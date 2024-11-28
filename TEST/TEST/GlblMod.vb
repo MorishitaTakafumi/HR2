@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices.WindowsRuntime
+Imports System.Data.SQLite
 
 Public Module GlblMod
     Public Const DMY_DATE As Date = #1900/1/1#

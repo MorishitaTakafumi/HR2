@@ -26,6 +26,9 @@ Partial Class TestForm
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.lb_msg = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Button1
@@ -64,11 +67,41 @@ Partial Class TestForm
         Me.ListBox1.Size = New System.Drawing.Size(846, 420)
         Me.ListBox1.TabIndex = 3
         '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(12, 170)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(179, 44)
+        Me.Button4.TabIndex = 4
+        Me.Button4.Text = "重複登録馬の調査"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(12, 220)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(179, 44)
+        Me.Button5.TabIndex = 5
+        Me.Button5.Text = "重複登録馬の削除"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'lb_msg
+        '
+        Me.lb_msg.AutoSize = True
+        Me.lb_msg.Location = New System.Drawing.Point(12, 429)
+        Me.lb_msg.Name = "lb_msg"
+        Me.lb_msg.Size = New System.Drawing.Size(23, 12)
+        Me.lb_msg.TabIndex = 6
+        Me.lb_msg.Text = "***"
+        '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1081, 450)
+        Me.Controls.Add(Me.lb_msg)
+        Me.Controls.Add(Me.Button5)
+        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
@@ -76,6 +109,7 @@ Partial Class TestForm
         Me.Name = "TestForm"
         Me.Text = "TestForm"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -83,4 +117,7 @@ Partial Class TestForm
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents ListBox1 As ListBox
+    Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents lb_msg As Label
 End Class

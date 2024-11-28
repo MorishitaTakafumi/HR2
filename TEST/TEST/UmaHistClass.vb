@@ -28,7 +28,7 @@ Public Class UmaHistClass
     Public Sub New()
         rec_id = -1
         race_id = -1
-        dt = #1900/1/1#
+        dt = DMY_DATE
         keibajo = ""
         jo_code = -1
         racename = ""

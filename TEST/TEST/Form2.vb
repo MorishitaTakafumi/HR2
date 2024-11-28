@@ -104,7 +104,7 @@ Public Class Form2
 
     'DBからデータ取得
     'Return True=成功、False=ない/失敗
-    Private Function DB_GetDataByName() As String
+    Private Function DB_GetDataByName(ByVal dt_max As Date) As String
         If txtBamei.Text.Length > 0 Then
             Using conn As New SQLiteConnection(GetDbConnectionString)
                 Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
@@ -112,7 +112,7 @@ Public Class Form2
                 Dim a As New UmaHeaderClass
                 Dim errmsg As String = a.load(cmd, txtBamei.Text.Trim)
                 If errmsg.Length = 0 AndAlso a.rec_id > 0 Then
-                    errmsg = umaHistList.load(cmd, a.rec_id)
+                    errmsg = umaHistList.load(cmd, a.rec_id, dt_max)
                     If errmsg.Length = 0 Then
                         oUmaHeader = a
                     End If
@@ -126,7 +126,7 @@ Public Class Form2
     Private Sub GetData(ByVal dt_max As Date)
         oUmaHeader = Nothing
         umaHistList.init()
-        Dim errmsg As String = DB_GetDataByName()
+        Dim errmsg As String = DB_GetDataByName(dt_max)
         If errmsg.Length > 0 Then
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
             Return
@@ -140,16 +140,16 @@ Public Class Form2
             If oUmaHeader Is Nothing Then
                 oUmaHeader = oTmpHeader
             Else
-                If oUmaHeader.titi <> oTmpHeader.titi Then
-                    oUmaHeader.titi = oTmpHeader.titi
+                If oUmaHeader.father <> oTmpHeader.father Then
+                    oUmaHeader.father = oTmpHeader.father
                     oUmaHeader.dirtyFlag = True
                 End If
-                If oUmaHeader.haha <> oTmpHeader.haha Then
-                    oUmaHeader.haha = oTmpHeader.haha
+                If oUmaHeader.mother <> oTmpHeader.mother Then
+                    oUmaHeader.mother = oTmpHeader.mother
                     oUmaHeader.dirtyFlag = True
                 End If
-                If oUmaHeader.sex <> oTmpHeader.sex Then
-                    oUmaHeader.sex = oTmpHeader.sex
+                If oUmaHeader.seibetu <> oTmpHeader.seibetu Then
+                    oUmaHeader.seibetu = oTmpHeader.seibetu
                     oUmaHeader.dirtyFlag = True
                 End If
             End If
@@ -159,9 +159,9 @@ Public Class Form2
         If (oUmaHeader IsNot Nothing) AndAlso oUmaHeader.bamei.Length > 0 Then
             ListBox1.Items.Clear()
             ListBox1.Items.Add("馬名：" & oUmaHeader.bamei)
-            ListBox1.Items.Add("父：" & oUmaHeader.titi)
-            ListBox1.Items.Add("母：" & oUmaHeader.haha)
-            ListBox1.Items.Add("性別：" & oUmaHeader.sex)
+            ListBox1.Items.Add("父：" & oUmaHeader.father)
+            ListBox1.Items.Add("母：" & oUmaHeader.mother)
+            ListBox1.Items.Add("性別：" & oUmaHeader.seibetu)
             ListBox1.Items.Add("誕生日：" & oUmaHeader.birthday.ToString("yyyy年MM月dd日"))
             ShowTable(umaHistList)
             If oUmaHeader.dt_update < Today OrElse oUmaHeader.dirtyFlag = True Then

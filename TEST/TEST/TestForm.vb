@@ -126,4 +126,76 @@ Public Class TestForm
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
         End If
     End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        ListBox1.Items.Clear()
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cnt As Integer = 0
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT name, COUNT(*) AS cnt FROM UmaHeader GROUP BY name HAVING COUNT(*)>1"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    cnt += 1
+                    ListBox1.Items.Add(cnt.ToString & ":" & CStr(r("name")) & " " & CInt(r("cnt")).ToString)
+                End While
+                r.Close()
+                If cnt > 0 Then
+                    ListBox1.Items.Add("以上")
+                Else
+                    ListBox1.Items.Add("該当なし")
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        ListBox1.Items.Clear()
+        Dim bameiList As New List(Of String)
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT name FROM UmaHeader GROUP BY name HAVING COUNT(*)>1"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    bameiList.Add(r("name"))
+                End While
+                r.Close()
+                '
+                Dim cnt As Integer
+                Dim subsql As String
+                For j As Integer = 0 To bameiList.Count - 1
+                    lb_msg.Text = j.ToString & "/" & bameiList.Count.ToString & " 処理中"
+                    Me.Refresh()
+                    cnt = 0
+                    subsql = ""
+                    cmd.CommandText = "SELECT id FROM UmaHeader WHERE name=@name"
+                    cmd.Parameters.Clear()
+                    cmd.Parameters.AddWithValue("@name", bameiList(j))
+                    r = cmd.ExecuteReader
+                    While r.Read
+                        If cnt > 0 Then
+                            subsql &= r.GetInt32(0).ToString & ","
+                        End If
+                        cnt += 1
+                    End While
+                    r.Close()
+
+                    cmd.Parameters.Clear()
+                    cmd.CommandText = "DELETE FROM UmaHeader WHERE id IN(" & subsql.Substring(0, subsql.Length - 1) & ")"
+                    cmd.ExecuteNonQuery()
+
+                    cmd.CommandText = "DELETE FROM UmaHist WHERE uma_id IN(" & subsql.Substring(0, subsql.Length - 1) & ")"
+                    cmd.ExecuteNonQuery()
+                Next
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
 End Class

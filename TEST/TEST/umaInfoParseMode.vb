@@ -26,16 +26,16 @@
                         lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "<dd>", findpos)
                         lineStr = GetTagValue(lineStr, "dd")
                         If InStr(lineStr, "href") > 0 Then
-                            oHeader.titi = GetTagValue(lineStr, "a")
+                            oHeader.father = GetTagValue(lineStr, "a")
                         Else
-                            oHeader.titi = lineStr
+                            oHeader.father = lineStr
                         End If
                     End If
                     lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "性別", findpos)
                     If lineStr.Length > 0 Then
                         lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "<dd>", findpos)
                         lineStr = GetTagValue(lineStr, "dd")
-                        oHeader.sex = lineStr
+                        oHeader.seibetu = lineStr
                     End If
 
                     lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "母", findpos)
@@ -43,9 +43,9 @@
                         lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "<dd>", findpos)
                         lineStr = GetTagValue(lineStr, "dd")
                         If InStr(lineStr, "href") > 0 Then
-                            oHeader.haha = GetTagValue(lineStr, "a")
+                            oHeader.mother = GetTagValue(lineStr, "a")
                         Else
-                            oHeader.haha = lineStr
+                            oHeader.mother = lineStr
                         End If
                     End If
                     lineStr = SearchLineByKeyword(findpos + lineStr.Length, src, "生年月日", findpos)

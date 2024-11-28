@@ -400,6 +400,239 @@ Public Class AnaForm
     End Sub
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
+        new_logic()
+    End Sub
+
+    Private Sub new_logic()
+        Dim kekkaList As New KekkaListClass
+
+        ListBox2.Items.Clear()
+        spanScore.Clear()
+        cyakujun.Clear()
+        agarisa1.Clear()
+        agarisa2.Clear()
+        agarisa3.Clear()
+        agarisa4.Clear()
+        cyakusa1.Clear()
+        cyakusa2.Clear()
+        cyakusa3.Clear()
+        cyakusa4.Clear()
+
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim errmsg As String = ""
+
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            Dim cmd2 As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Try
+                cmd.CommandText = "SELECT R.id, R.dt, A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
+                cmd.Parameters.AddWithValue("@dt", oHead.dt)
+                Dim sql As String = ""
+                If chkJo.Checked Then
+                    sql &= " AND R.jo_code=@jo_code"
+                    cmd.Parameters.AddWithValue("@jo_code", oHead.jo_code)
+                End If
+                If chkKyori.Checked Then
+                    sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
+                    cmd.Parameters.AddWithValue("@kyori", oHead.kyori)
+                    cmd.Parameters.AddWithValue("@type_code", oHead.type_code)
+                End If
+                If chkRacename.Checked Then
+                    sql &= " AND R.race_name=@race_name"
+                    cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                ElseIf chkRacename2.Checked Then
+                    sql &= " AND R.race_name like @race_name"
+                    cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
+                End If
+                If chkGrade.Checked Then
+                    sql &= " AND R.class_code=@class_code"
+                    cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
+                End If
+                If CbCyakujun.SelectedIndex >= 1 AndAlso CbCyakujun.SelectedIndex <= 3 Then
+                    sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
+                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
+                ElseIf CbCyakujun.SelectedIndex = 4 Then
+                    sql &= " AND A.cyakujun>3 AND A.cyakujun<=20 "
+                Else
+                    sql &= " AND A.cyakujun>0 AND A.cyakujun<=20 "
+                End If
+
+                If chkMonth.Checked Then
+                    sql &= " AND strftime('%m', R.dt) = @tuki"
+                    cmd.Parameters.AddWithValue("@tuki", oHead.dt.Month.ToString("D2"))
+                End If
+
+                If sql.Length > 0 Then
+                    cmd.CommandText &= sql
+                End If
+                cmd.CommandText &= " ORDER BY R.id"
+
+                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    errmsg = GetAgarisaCyakusa(cmd2, r("bamei"), r("cyakujun"), r("dt"))
+                    If errmsg.Length > 0 Then
+                        Exit While
+                    End If
+                End While
+                r.Close()
+                ListBox2.Items.Add("COUNT=" & (cyakujun.Count).ToString)
+                Dim cnt As Integer = 0
+                Dim cnt2 As Integer = 0
+                Dim cnt3 As Integer = 0
+                Dim cnt4 As Integer = 0
+                Dim cnt5 As Integer = 0
+                Dim cnt6 As Integer = 0
+                Dim cnt7 As Integer = 0
+                Dim cnt8 As Integer = 0
+                Dim cnt9(4) As Integer
+                Dim cnt10(4) As Integer
+                Dim cnt11(4) As Integer
+                Dim cnt12(4) As Integer
+                Dim cnt13(4) As Integer
+                For j As Integer = 0 To 4
+                    cnt9(j) = 0
+                    cnt10(j) = 0
+                    cnt11(j) = 0
+                    cnt12(j) = 0
+                    cnt13(j) = 0
+                Next
+                Dim tmpcnt As Integer
+                Dim sikii As Single = NumericUpDown1.Value
+
+                ' 度数分布を格納する辞書
+                Dim frequencyDistribution As New Dictionary(Of Integer, Integer)
+
+                'spanScoreに対する着順のカウント
+                For j As Integer = 0 To spanScore.Count - 1
+                    Dim Number As Integer = spanScore(j)
+                    If frequencyDistribution.ContainsKey(Number) Then
+                        frequencyDistribution(Number) += cyakujun2score(cyakujun(j))
+                    Else
+                        frequencyDistribution(Number) = cyakujun2score(cyakujun(j))
+                    End If
+                Next
+                ' 度数分布を度数の多い順にソート
+                Dim sortedDistribution = frequencyDistribution.OrderByDescending(Function(kvp) kvp.Value)
+
+
+                For j As Integer = 0 To spanScore.Count - 1
+                    tmpcnt = 0
+                    If spanScore(j) = 0 Then
+                        cnt += 1
+                    ElseIf spanScore(j) = 2000000 Then
+                        cnt2 += 1
+                    ElseIf spanScore(j) = 1000000 Then
+                        cnt3 += 1
+                    ElseIf spanScore(j) = 10000 Then
+                        cnt4 += 1
+                    ElseIf spanScore(j) = 100 Then
+                        cnt5 += 1
+                    ElseIf spanScore(j) = 1 Then
+                        cnt6 += 1
+                    ElseIf spanScore(j) = 101 Then
+                        cnt7 += 1
+                    ElseIf spanScore(j) <= 10 Then
+                        cnt8 += 1
+                    End If
+
+                    If agarisa1(j) <= 0 Then
+                        cnt9(0) += 1
+                    ElseIf agarisa1(j) <= 0.3 Then
+                        cnt9(1) += 1
+                    ElseIf agarisa1(j) <= 0.6 Then
+                        cnt9(2) += 1
+                    ElseIf agarisa1(j) <= 0.9 Then
+                        cnt9(3) += 1
+                    Else
+                        cnt9(4) += 1
+                    End If
+
+                    If agarisa2(j) <= 0 Then
+                        cnt10(0) += 1
+                    ElseIf agarisa2(j) <= 0.3 Then
+                        cnt10(1) += 1
+                    ElseIf agarisa2(j) <= 0.6 Then
+                        cnt10(2) += 1
+                    ElseIf agarisa2(j) <= 0.9 Then
+                        cnt10(3) += 1
+                    Else
+                        cnt10(4) += 1
+                    End If
+
+                    If agarisa3(j) <= 0 Then
+                        cnt11(0) += 1
+                    ElseIf agarisa3(j) <= 0.3 Then
+                        cnt11(1) += 1
+                    ElseIf agarisa3(j) <= 0.6 Then
+                        cnt11(2) += 1
+                    ElseIf agarisa3(j) <= 0.9 Then
+                        cnt11(3) += 1
+                    Else
+                        cnt11(4) += 1
+                    End If
+
+                    If agarisa4(j) <= 0 Then
+                        cnt12(0) += 1
+                    ElseIf agarisa4(j) <= 0.3 Then
+                        cnt12(1) += 1
+                    ElseIf agarisa4(j) <= 0.6 Then
+                        cnt12(2) += 1
+                    ElseIf agarisa4(j) <= 0.9 Then
+                        cnt12(3) += 1
+                    Else
+                        cnt12(4) += 1
+                    End If
+
+                    If agarisa1(j) <= sikii Then
+                        tmpcnt += 1
+                    End If
+                    If agarisa2(j) <= sikii Then
+                        tmpcnt += 1
+                    End If
+                    If agarisa3(j) <= sikii Then
+                        tmpcnt += 1
+                    End If
+                    If agarisa4(j) <= sikii Then
+                        tmpcnt += 1
+                    End If
+
+                    cnt13(tmpcnt) += 1
+                Next
+                ListBox2.Items.Add("上がり差 <=0, 0.3, 0.6, 0.9, **")
+                ListBox2.Items.Add("1走前 " & intAry2str(cnt9))
+                ListBox2.Items.Add("2走前 " & intAry2str(cnt10))
+                ListBox2.Items.Add("3走前 " & intAry2str(cnt11))
+                ListBox2.Items.Add("4走前 " & intAry2str(cnt12))
+                ListBox2.Items.Add("直近４走の上がり差 <=" & sikii.ToString("F1") & "の回数")
+                ListBox2.Items.Add("0回 " & cnt13(0).ToString & " 1回 " & cnt13(1).ToString & " 2回 " & cnt13(2).ToString & " 3回 " & cnt13(3).ToString & " 4回 " & cnt13(4).ToString)
+
+                ListBox2.Items.Add("*** SpanScore ***")
+                If chkDosu.Checked Then
+                    For Each kvp As KeyValuePair(Of Integer, Integer) In sortedDistribution
+                        ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {AnaValClass.Score2String(kvp.Value)}")
+                    Next
+                Else
+                    ListBox2.Items.Add("－：" & cnt.ToString)
+                    ListBox2.Items.Add("2-0-0-0：" & cnt2.ToString)
+                    ListBox2.Items.Add("1-0-0-0：" & cnt3.ToString)
+                    ListBox2.Items.Add("0-1-0-0：" & cnt4.ToString)
+                    ListBox2.Items.Add("0-0-1-0：" & cnt5.ToString)
+                    ListBox2.Items.Add("0-0-0-1：" & cnt6.ToString)
+                    ListBox2.Items.Add("0-0-1-1：" & cnt7.ToString)
+                    ListBox2.Items.Add("0-0-0-2～10：" & cnt8.ToString)
+                End If
+
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+
+            If errmsg.Length > 0 Then
+                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            End If
+        End Using
+    End Sub
+
+    Private Sub old_logic()
         ListBox2.Items.Clear()
         spanScore.Clear()
         cyakujun.Clear()
@@ -627,9 +860,64 @@ Public Class AnaForm
                 MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
             End If
         End Using
-
     End Sub
 
+    '馬名を指定して直近４走の上り差と着差をagarisa1-4, cyakusa1-4にセットする
+    '
+    Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand, ByVal arg_bamei As String, ByVal arg_cyakujun As Integer, ByVal dt_max As Date) As String
+        Dim oUmaHeader As New UmaHeaderClass
+        Try
+            Dim errmsg As String = oUmaHeader.load(cmd, arg_bamei)
+            If errmsg.Length = 0 Then
+                Dim oUmaHist As New umaHistListClass
+                Dim kekkaList As New KekkaListClass
+                errmsg = oUmaHist.load(cmd, oUmaHeader.rec_id, dt_max)
+                If errmsg.Length = 0 Then
+                    Dim rA As New raceAnanClass
+                    rA.spanScore = oUmaHist.GetSpanScore(dt_max, rA.spanVal)
+                    Dim agarisa(3) As Single
+                    Dim cyakusa(3) As Single
+                    Dim cnt As Integer = 0
+                    For j As Integer = 0 To oUmaHist.cnt - 1
+                        kekkaList.init()
+                        Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
+                        errmsg = oRaceHead.loadByUmaHist(cmd, oUmaHist.GetBodyRef(j))
+                        If errmsg.Length > 0 Then
+                            Return errmsg
+                        End If
+                        If oRaceHead.id > 0 AndAlso DateDiff(DateInterval.Day, oRaceHead.dt, oHead.dt) > 1 Then
+                            errmsg = kekkaList.load(cmd, oRaceHead.id)
+                            If errmsg.Length > 0 Then
+                                Return errmsg
+                            Else
+                                kekkaList.setAgarisa(oRaceHead)
+                                Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
+                                agarisa(cnt) = oK.agarisa
+                                cyakusa(cnt) = oK.cyakusa
+                                cnt += 1
+                                If cnt > 3 Then
+                                    Exit For
+                                End If
+                            End If
+                        End If
+                    Next
+                    cyakujun.Add(arg_cyakujun)
+                    spanScore.Add(rA.spanScore)
+                    agarisa1.Add(agarisa(0))
+                    agarisa2.Add(agarisa(1))
+                    agarisa3.Add(agarisa(2))
+                    agarisa4.Add(agarisa(3))
+                    cyakusa1.Add(cyakusa(0))
+                    cyakusa2.Add(cyakusa(1))
+                    cyakusa3.Add(cyakusa(2))
+                    cyakusa4.Add(cyakusa(3))
+                End If
+            End If
+            Return ""
+        Catch ex As Exception
+            Return "GetAgarisaCyakusa() " & ex.Message
+        End Try
+    End Function
 
     Private Function intAry2str(ByVal ary() As Integer) As String
         Dim ss As String = ""

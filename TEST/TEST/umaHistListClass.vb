@@ -30,7 +30,7 @@ Public Class umaHistListClass
 
     '前走日取得
     Private Function GetDtZenso(ByVal dt_race As Date) As Date
-        Dim dtMax As Date = #1900/1/1#
+        Dim dtMax As Date = DMY_DATE
         For j As Integer = 0 To cnt - 1
             If m_bf(j).cyakujun > 0 OrElse m_bf(j).cyakujun = -999 Then '中止は含めるが取消、除外は含めない
                 If m_bf(j).dt > dtMax AndAlso m_bf(j).dt < dt_race Then
@@ -153,13 +153,18 @@ Public Class umaHistListClass
         Return score(0) * 10 ^ 6 + score(1) * 10 ^ 4 + score(2) * 10 ^ 2 + score(3)
     End Function
 
-    Public Function load(ByVal cmd As SQLiteCommand, ByVal uma_id As Integer) As String
+    Public Function load(ByVal cmd As SQLiteCommand, ByVal uma_id As Integer, Optional ByVal dt_max As Date = DMY_DATE) As String
         Dim errmsg As String = ""
         init()
         Try
             cmd.Parameters.Clear()
             cmd.CommandText = "SELECT * FROM UmaHist WHERE uma_id=@uma_id"
             cmd.Parameters.AddWithValue("@uma_id", uma_id)
+            If dt_max <> DMY_DATE Then
+                cmd.CommandText &= " AND dt<@dt"
+                cmd.Parameters.AddWithValue("@dt", dt_max)
+            End If
+
             Dim r As SQLiteDataReader = cmd.ExecuteReader
             While r.Read
                 Dim a As New UmaHistClass

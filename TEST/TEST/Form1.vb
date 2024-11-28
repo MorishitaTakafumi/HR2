@@ -132,6 +132,7 @@ Public Class Form1
             Dim errmsg As String = kekkaList.raceHeader.loadByDateAndName(cmd, dt_race, racename)
             If errmsg.Length = 0 AndAlso kekkaList.raceHeader.id > 0 Then
                 errmsg = kekkaList.load(cmd, kekkaList.raceHeader.id)
+                kekkaList.setAgarisa(kekkaList.raceHeader)
             End If
             Return errmsg
         End Using

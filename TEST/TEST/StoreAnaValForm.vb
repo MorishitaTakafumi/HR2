@@ -167,7 +167,7 @@ Public Class StoreAnaValForm
 
         lb_msg.Text = "既登録済みか調査"
         Dim errmsg As String = oRaceHeader.IsExist(exist_flg)
-        If errmsg.Length = 0 AndAlso (Not exist_flg) AndAlso oRaceHeader.class_code > 1 Then
+        If errmsg.Length = 0 AndAlso (Not exist_flg) AndAlso oRaceHeader.class_code >= 0 Then
             Dim anaValAry(oRaceHeader.tosu - 1) As AnaValClass
             '全馬の情報
             For j As Short = 0 To oRaceHeader.tosu - 1
@@ -224,8 +224,6 @@ Public Class StoreAnaValForm
         Else
             If exist_flg Then
                 lb_msg.Text = "既登録レース！"
-            ElseIf oRaceHeader.class_code < 2 Then
-                lb_msg.Text = "1勝クラス以下のレース！"
             Else
                 'MsgBox("OK", MsgBoxStyle.Information, Me.Text)
                 saveCount += 1
