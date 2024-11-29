@@ -121,7 +121,7 @@ Public Class StoreAnaValForm
         While raceURLque.Count > 0 AndAlso saveCount < NumericUpDown1.Value AndAlso (Not CancelFlag)
             Dim url As String = raceURLque.Dequeue()
             Dim racename As String = raceNameque.Dequeue()
-            If analysis1(url, racename) Then
+            If analysis1_NEW(url, racename) Then
                 lb_cnt.Text = "今回登録数：" & saveCount.ToString & " Stack残数：" & raceURLque.Count.ToString
                 lb_cnt.Refresh()
                 Application.DoEvents()
@@ -142,7 +142,7 @@ Public Class StoreAnaValForm
 
     'URLを指定して１レース分を解析・登録する
     '戻り値：True=成功、False=失敗
-    Private Function analysis1(ByVal url As String, ByVal racename As String) As Boolean
+    Private Function analysis1_OLD(ByVal url As String, ByVal racename As String) As Boolean
 
         If chkSameNameOnly.Checked AndAlso TopRaceName.Length > 0 AndAlso TopRaceName <> racename Then
             lb_msg.Text = "別名レース！"
@@ -215,7 +215,7 @@ Public Class StoreAnaValForm
             Next
             ShowTable(anaValAry)
             lb_msg.Text = "結果登録"
-            errmsg = SaveData(fm1.kekkaList, anaValAry)
+            errmsg = SaveData_OLD(fm1.kekkaList, anaValAry)
         End If
         Me.Cursor = Cursors.Default
         If errmsg.Length > 0 Then
@@ -232,13 +232,106 @@ Public Class StoreAnaValForm
         End If
     End Function
 
-    Private Function SaveData(ByVal kekkalist As KekkaListClass, ByVal anavalary() As AnaValClass) As String
+    'URLを指定して１レース分を解析・登録する
+    '戻り値：True=成功、False=失敗
+    Private Function analysis1_NEW(ByVal url As String, ByVal racename As String) As Boolean
+
+        If chkSameNameOnly.Checked AndAlso TopRaceName.Length > 0 AndAlso TopRaceName <> racename Then
+            lb_msg.Text = "別名レース！"
+            Return True
+        End If
+
+        Me.Cursor = Cursors.WaitCursor
+        Me.Refresh()
+        lb_msg.Text = "レース結果ページの取り込み"
+        fm1.entry(url)
+        Dim exist_flg As Boolean = False
+        Dim oRaceHeader As RaceHeaderClass = fm1.kekkaList.raceHeader
+        ShowRaceHeader(oRaceHeader)
+        If TopRaceName.Length = 0 Then
+            TopRaceName = oRaceHeader.race_name
+        Else
+            If chkSameNameOnly.Checked AndAlso TopRaceName <> oRaceHeader.race_name Then
+                lb_msg.Text = "別名レース！"
+                Return True
+            End If
+        End If
+
+        lb_msg.Text = "既登録済みか調査"
+        Dim errmsg As String = oRaceHeader.IsExist(exist_flg)
+        If errmsg.Length = 0 AndAlso (Not exist_flg) AndAlso oRaceHeader.class_code >= 0 Then
+            lb_msg.Text = "結果登録"
+            errmsg = SaveData_NEW(fm1.kekkaList)
+            If errmsg.Length > 0 Then
+                Return False
+            End If
+            '全馬の情報
+            For j As Short = 0 To oRaceHeader.tosu - 1
+                Application.DoEvents()
+                lb_msg.Text = "情報処理中" & (j + 1).ToString
+                Dim oKekka As KekkaClass = fm1.kekkaList.GetBodyRef(j)
+                If oKekka IsNot Nothing Then '同着のときNothingとなる
+                    Dim uma_href As String = oKekka.uma_href
+                    fm2.entry(uma_href)
+
+                    Dim hist_idx As Integer = 0
+                    For i As Integer = 0 To fm2.umaHistList.cnt - 1
+                        lb_msg.Text = "情報処理中 " & (j + 1).ToString & " " & hist_idx.ToString & "/4"
+                        Application.DoEvents()
+                        If hist_idx >= HIS_CNT Then
+                            Exit For
+                        End If
+                        If oRaceHeader.dt > fm2.umaHistList.GetBodyRef(i).dt Then
+                            raceURLque.Enqueue(fm2.umaHistList.GetBodyRef(i).href)
+                            raceNameque.Enqueue(fm2.umaHistList.GetBodyRef(i).racename)
+                            fm1sub.entry(fm2.umaHistList.GetBodyRef(i).href)
+                            errmsg = SaveData_NEW(fm1sub.kekkaList)
+                            If errmsg.Length > 0 Then
+                                Return False
+                            End If
+                            hist_idx += 1
+                        End If
+                    Next
+                End If
+            Next
+        End If
+        Me.Cursor = Cursors.Default
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return False
+        Else
+            If exist_flg Then
+                lb_msg.Text = "既登録レース！"
+            Else
+                'MsgBox("OK", MsgBoxStyle.Information, Me.Text)
+                saveCount += 1
+            End If
+            Return True
+        End If
+    End Function
+
+    Private Function SaveData_OLD(ByVal kekkalist As KekkaListClass, ByVal anavalary() As AnaValClass) As String
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim errmsg As String = ""
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
             If kekkalist.raceHeader.id < 0 Then
                 errmsg = kekkalist.raceHeader.save(anavalary)
+            End If
+            If errmsg.Length = 0 Then
+                errmsg = kekkalist.save(cmd)
+            End If
+            Return errmsg
+        End Using
+    End Function
+
+    Private Function SaveData_NEW(ByVal kekkalist As KekkaListClass) As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim errmsg As String = ""
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            If kekkalist.raceHeader.id < 0 Then
+                errmsg = kekkalist.raceHeader.save()
             End If
             If errmsg.Length = 0 Then
                 errmsg = kekkalist.save(cmd)

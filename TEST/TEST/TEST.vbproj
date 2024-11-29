@@ -199,6 +199,7 @@
     <Compile Include="raceAnanClass.vb" />
     <Compile Include="RaceHeaderClass.vb" />
     <Compile Include="resultParseMod.vb" />
+    <Compile Include="ShortRaceNameClass.vb" />
     <Compile Include="StoreAnaValForm.Designer.vb">
       <DependentUpon>StoreAnaValForm.vb</DependentUpon>
     </Compile>

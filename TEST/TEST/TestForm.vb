@@ -198,4 +198,79 @@ Public Class TestForm
             End Try
         End Using
     End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        ListBox1.Items.Clear()
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cnt As Integer = 0
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT race_name, dt, COUNT(*) AS cnt FROM RaceHeader GROUP BY race_name, dt HAVING COUNT(*)>1"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    cnt += 1
+                    ListBox1.Items.Add(cnt.ToString & ":" & CStr(r("race_name")) & " " & CDate(r("dt")).ToString & " " & CInt(r("cnt")).ToString)
+                End While
+                r.Close()
+                If cnt > 0 Then
+                    ListBox1.Items.Add("以上")
+                Else
+                    ListBox1.Items.Add("該当なし")
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        ListBox1.Items.Clear()
+        Dim raceNameList As New List(Of String)
+        Dim dtList As New List(Of Date)
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT race_name, dt FROM RaceHeader GROUP BY race_name, dt HAVING COUNT(*)>1"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    raceNameList.Add(r("race_name"))
+                    dtList.Add(r("dt"))
+                End While
+                r.Close()
+                '
+                Dim cnt As Integer
+                Dim subsql As String
+                For j As Integer = 0 To raceNameList.Count - 1
+                    lb_msg.Text = j.ToString & "/" & raceNameList.Count.ToString & " 処理中"
+                    Me.Refresh()
+                    cnt = 0
+                    subsql = ""
+                    cmd.CommandText = "SELECT id FROM RaceHeader WHERE race_name=@race_name AND dt=@dt"
+                    cmd.Parameters.Clear()
+                    cmd.Parameters.AddWithValue("@race_name", raceNameList(j))
+                    cmd.Parameters.AddWithValue("@dt", dtList(j))
+                    r = cmd.ExecuteReader
+                    While r.Read
+                        If cnt > 0 Then
+                            subsql &= r.GetInt32(0).ToString & ","
+                        End If
+                        cnt += 1
+                    End While
+                    r.Close()
+
+                    cmd.Parameters.Clear()
+                    cmd.CommandText = "DELETE FROM RaceHeader WHERE id IN(" & subsql.Substring(0, subsql.Length - 1) & ")"
+                    cmd.ExecuteNonQuery()
+
+                    cmd.CommandText = "DELETE FROM Kekka WHERE race_header_id IN(" & subsql.Substring(0, subsql.Length - 1) & ")"
+                    cmd.ExecuteNonQuery()
+                Next
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
 End Class

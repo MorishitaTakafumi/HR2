@@ -247,6 +247,12 @@ Public Class RaceHeaderClass
         Dim front3c As String
         If shortname.Length > 3 Then
             front3c = shortname.Substring(0, 3)
+        ElseIf shortname.Length = 3 Then
+            If shortname.Substring(2, 1).ToUpper = "S" Then
+                front3c = shortname.Substring(0, 2) & "ス"
+            Else
+                front3c = shortname
+            End If
         Else
             front3c = shortname
         End If
@@ -340,6 +346,15 @@ Public Class RaceHeaderClass
                 Next
             End If
             Return errmsg
+        End Using
+    End Function
+
+    '登録
+    Public Function save() As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Return addNew(cmd)
         End Using
     End Function
 End Class

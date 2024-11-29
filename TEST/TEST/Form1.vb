@@ -229,10 +229,7 @@ Public Class Form1
     End Function
 
     Public Sub entry(ByVal url As String, Optional ByVal dt_race As String = "", Optional ByVal racename As String = "", Optional ByVal autosave As Boolean = False)
-        If url.Length > 0 AndAlso InStr(url, "https://www.jra.go.jp") = 0 Then
-            url = "https://www.jra.go.jp" & url
-        End If
-        txtURL.Text = url
+        txtURL.Text = makeJRAurl(url)
         txtDate.Text = dt_race
         txtRaceName.Text = racename
         chkAutoSave.Checked = autosave

@@ -29,6 +29,8 @@ Partial Class TestForm
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.lb_msg = New System.Windows.Forms.Label()
+        Me.Button6 = New System.Windows.Forms.Button()
+        Me.Button7 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button1
@@ -94,11 +96,31 @@ Partial Class TestForm
         Me.lb_msg.TabIndex = 6
         Me.lb_msg.Text = "***"
         '
+        'Button6
+        '
+        Me.Button6.Location = New System.Drawing.Point(14, 270)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(179, 44)
+        Me.Button6.TabIndex = 7
+        Me.Button6.Text = "重複登録レースの調査"
+        Me.Button6.UseVisualStyleBackColor = True
+        '
+        'Button7
+        '
+        Me.Button7.Location = New System.Drawing.Point(14, 320)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(179, 44)
+        Me.Button7.TabIndex = 8
+        Me.Button7.Text = "重複登録レースの削除"
+        Me.Button7.UseVisualStyleBackColor = True
+        '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1081, 450)
+        Me.Controls.Add(Me.Button7)
+        Me.Controls.Add(Me.Button6)
         Me.Controls.Add(Me.lb_msg)
         Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.Button4)
@@ -120,4 +142,6 @@ Partial Class TestForm
     Friend WithEvents Button4 As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents lb_msg As Label
+    Friend WithEvents Button6 As Button
+    Friend WithEvents Button7 As Button
 End Class

@@ -23,6 +23,7 @@ Public Class AnaForm
         cols = dof_total + 1
     End Enum
 
+    Private oShortRaceName As New ShortRaceNameClass
     Private anaList As New raceAnaListClass
     Private oHead As RaceHeaderClass
     Private spanScore As New List(Of Integer)
@@ -401,12 +402,10 @@ Public Class AnaForm
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
         new_logic()
+        makeDosu()
     End Sub
 
     Private Sub new_logic()
-        Dim kekkaList As New KekkaListClass
-
-        ListBox2.Items.Clear()
         spanScore.Clear()
         cyakujun.Clear()
         agarisa1.Clear()
@@ -418,13 +417,18 @@ Public Class AnaForm
         cyakusa3.Clear()
         cyakusa4.Clear()
 
+        Dim errmsg As String = ""
         Using conn As New SQLiteConnection(GetDbConnectionString)
-            Dim errmsg As String = ""
 
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             Dim cmd2 As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
             Try
+                errmsg = oShortRaceName.load(cmd)
+                If errmsg.Length > 0 Then
+                    Exit Try
+                End If
+
                 cmd.CommandText = "SELECT R.id, R.dt, A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
@@ -475,165 +479,16 @@ Public Class AnaForm
                     End If
                 End While
                 r.Close()
-                ListBox2.Items.Add("COUNT=" & (cyakujun.Count).ToString)
-                Dim cnt As Integer = 0
-                Dim cnt2 As Integer = 0
-                Dim cnt3 As Integer = 0
-                Dim cnt4 As Integer = 0
-                Dim cnt5 As Integer = 0
-                Dim cnt6 As Integer = 0
-                Dim cnt7 As Integer = 0
-                Dim cnt8 As Integer = 0
-                Dim cnt9(4) As Integer
-                Dim cnt10(4) As Integer
-                Dim cnt11(4) As Integer
-                Dim cnt12(4) As Integer
-                Dim cnt13(4) As Integer
-                For j As Integer = 0 To 4
-                    cnt9(j) = 0
-                    cnt10(j) = 0
-                    cnt11(j) = 0
-                    cnt12(j) = 0
-                    cnt13(j) = 0
-                Next
-                Dim tmpcnt As Integer
-                Dim sikii As Single = NumericUpDown1.Value
-
-                ' 度数分布を格納する辞書
-                Dim frequencyDistribution As New Dictionary(Of Integer, Integer)
-
-                'spanScoreに対する着順のカウント
-                For j As Integer = 0 To spanScore.Count - 1
-                    Dim Number As Integer = spanScore(j)
-                    If frequencyDistribution.ContainsKey(Number) Then
-                        frequencyDistribution(Number) += cyakujun2score(cyakujun(j))
-                    Else
-                        frequencyDistribution(Number) = cyakujun2score(cyakujun(j))
-                    End If
-                Next
-                ' 度数分布を度数の多い順にソート
-                Dim sortedDistribution = frequencyDistribution.OrderByDescending(Function(kvp) kvp.Value)
-
-
-                For j As Integer = 0 To spanScore.Count - 1
-                    tmpcnt = 0
-                    If spanScore(j) = 0 Then
-                        cnt += 1
-                    ElseIf spanScore(j) = 2000000 Then
-                        cnt2 += 1
-                    ElseIf spanScore(j) = 1000000 Then
-                        cnt3 += 1
-                    ElseIf spanScore(j) = 10000 Then
-                        cnt4 += 1
-                    ElseIf spanScore(j) = 100 Then
-                        cnt5 += 1
-                    ElseIf spanScore(j) = 1 Then
-                        cnt6 += 1
-                    ElseIf spanScore(j) = 101 Then
-                        cnt7 += 1
-                    ElseIf spanScore(j) <= 10 Then
-                        cnt8 += 1
-                    End If
-
-                    If agarisa1(j) <= 0 Then
-                        cnt9(0) += 1
-                    ElseIf agarisa1(j) <= 0.3 Then
-                        cnt9(1) += 1
-                    ElseIf agarisa1(j) <= 0.6 Then
-                        cnt9(2) += 1
-                    ElseIf agarisa1(j) <= 0.9 Then
-                        cnt9(3) += 1
-                    Else
-                        cnt9(4) += 1
-                    End If
-
-                    If agarisa2(j) <= 0 Then
-                        cnt10(0) += 1
-                    ElseIf agarisa2(j) <= 0.3 Then
-                        cnt10(1) += 1
-                    ElseIf agarisa2(j) <= 0.6 Then
-                        cnt10(2) += 1
-                    ElseIf agarisa2(j) <= 0.9 Then
-                        cnt10(3) += 1
-                    Else
-                        cnt10(4) += 1
-                    End If
-
-                    If agarisa3(j) <= 0 Then
-                        cnt11(0) += 1
-                    ElseIf agarisa3(j) <= 0.3 Then
-                        cnt11(1) += 1
-                    ElseIf agarisa3(j) <= 0.6 Then
-                        cnt11(2) += 1
-                    ElseIf agarisa3(j) <= 0.9 Then
-                        cnt11(3) += 1
-                    Else
-                        cnt11(4) += 1
-                    End If
-
-                    If agarisa4(j) <= 0 Then
-                        cnt12(0) += 1
-                    ElseIf agarisa4(j) <= 0.3 Then
-                        cnt12(1) += 1
-                    ElseIf agarisa4(j) <= 0.6 Then
-                        cnt12(2) += 1
-                    ElseIf agarisa4(j) <= 0.9 Then
-                        cnt12(3) += 1
-                    Else
-                        cnt12(4) += 1
-                    End If
-
-                    If agarisa1(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-                    If agarisa2(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-                    If agarisa3(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-                    If agarisa4(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-
-                    cnt13(tmpcnt) += 1
-                Next
-                ListBox2.Items.Add("上がり差 <=0, 0.3, 0.6, 0.9, **")
-                ListBox2.Items.Add("1走前 " & intAry2str(cnt9))
-                ListBox2.Items.Add("2走前 " & intAry2str(cnt10))
-                ListBox2.Items.Add("3走前 " & intAry2str(cnt11))
-                ListBox2.Items.Add("4走前 " & intAry2str(cnt12))
-                ListBox2.Items.Add("直近４走の上がり差 <=" & sikii.ToString("F1") & "の回数")
-                ListBox2.Items.Add("0回 " & cnt13(0).ToString & " 1回 " & cnt13(1).ToString & " 2回 " & cnt13(2).ToString & " 3回 " & cnt13(3).ToString & " 4回 " & cnt13(4).ToString)
-
-                ListBox2.Items.Add("*** SpanScore ***")
-                If chkDosu.Checked Then
-                    For Each kvp As KeyValuePair(Of Integer, Integer) In sortedDistribution
-                        ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {AnaValClass.Score2String(kvp.Value)}")
-                    Next
-                Else
-                    ListBox2.Items.Add("－：" & cnt.ToString)
-                    ListBox2.Items.Add("2-0-0-0：" & cnt2.ToString)
-                    ListBox2.Items.Add("1-0-0-0：" & cnt3.ToString)
-                    ListBox2.Items.Add("0-1-0-0：" & cnt4.ToString)
-                    ListBox2.Items.Add("0-0-1-0：" & cnt5.ToString)
-                    ListBox2.Items.Add("0-0-0-1：" & cnt6.ToString)
-                    ListBox2.Items.Add("0-0-1-1：" & cnt7.ToString)
-                    ListBox2.Items.Add("0-0-0-2～10：" & cnt8.ToString)
-                End If
-
             Catch ex As Exception
                 errmsg = ex.Message
             End Try
-
-            If errmsg.Length > 0 Then
-                MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
-            End If
         End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
     End Sub
 
     Private Sub old_logic()
-        ListBox2.Items.Clear()
         spanScore.Clear()
         cyakujun.Clear()
         agarisa1.Clear()
@@ -705,153 +560,6 @@ Public Class AnaForm
                     cyakusa4.Add(r("cyakusa4"))
                 End While
                 r.Close()
-                ListBox2.Items.Add("COUNT=" & (cyakujun.Count).ToString)
-                Dim cnt As Integer = 0
-                Dim cnt2 As Integer = 0
-                Dim cnt3 As Integer = 0
-                Dim cnt4 As Integer = 0
-                Dim cnt5 As Integer = 0
-                Dim cnt6 As Integer = 0
-                Dim cnt7 As Integer = 0
-                Dim cnt8 As Integer = 0
-                Dim cnt9(4) As Integer
-                Dim cnt10(4) As Integer
-                Dim cnt11(4) As Integer
-                Dim cnt12(4) As Integer
-                Dim cnt13(4) As Integer
-                For j As Integer = 0 To 4
-                    cnt9(j) = 0
-                    cnt10(j) = 0
-                    cnt11(j) = 0
-                    cnt12(j) = 0
-                    cnt13(j) = 0
-                Next
-                Dim tmpcnt As Integer
-                Dim sikii As Single = NumericUpDown1.Value
-
-                ' 度数分布を格納する辞書
-                Dim frequencyDistribution As New Dictionary(Of Integer, Integer)
-
-                'spanScoreに対する着順のカウント
-                For j As Integer = 0 To spanScore.Count - 1
-                    Dim Number As Integer = spanScore(j)
-                    If frequencyDistribution.ContainsKey(Number) Then
-                        frequencyDistribution(Number) += cyakujun2score(cyakujun(j))
-                    Else
-                        frequencyDistribution(Number) = cyakujun2score(cyakujun(j))
-                    End If
-                Next
-                ' 度数分布を度数の多い順にソート
-                Dim sortedDistribution = frequencyDistribution.OrderByDescending(Function(kvp) kvp.Value)
-
-
-                For j As Integer = 0 To spanScore.Count - 1
-                    tmpcnt = 0
-                    If spanScore(j) = 0 Then
-                        cnt += 1
-                    ElseIf spanScore(j) = 2000000 Then
-                        cnt2 += 1
-                    ElseIf spanScore(j) = 1000000 Then
-                        cnt3 += 1
-                    ElseIf spanScore(j) = 10000 Then
-                        cnt4 += 1
-                    ElseIf spanScore(j) = 100 Then
-                        cnt5 += 1
-                    ElseIf spanScore(j) = 1 Then
-                        cnt6 += 1
-                    ElseIf spanScore(j) = 101 Then
-                        cnt7 += 1
-                    ElseIf spanScore(j) <= 10 Then
-                        cnt8 += 1
-                    End If
-
-                    If agarisa1(j) <= 0 Then
-                        cnt9(0) += 1
-                    ElseIf agarisa1(j) <= 0.3 Then
-                        cnt9(1) += 1
-                    ElseIf agarisa1(j) <= 0.6 Then
-                        cnt9(2) += 1
-                    ElseIf agarisa1(j) <= 0.9 Then
-                        cnt9(3) += 1
-                    Else
-                        cnt9(4) += 1
-                    End If
-
-                    If agarisa2(j) <= 0 Then
-                        cnt10(0) += 1
-                    ElseIf agarisa2(j) <= 0.3 Then
-                        cnt10(1) += 1
-                    ElseIf agarisa2(j) <= 0.6 Then
-                        cnt10(2) += 1
-                    ElseIf agarisa2(j) <= 0.9 Then
-                        cnt10(3) += 1
-                    Else
-                        cnt10(4) += 1
-                    End If
-
-                    If agarisa3(j) <= 0 Then
-                        cnt11(0) += 1
-                    ElseIf agarisa3(j) <= 0.3 Then
-                        cnt11(1) += 1
-                    ElseIf agarisa3(j) <= 0.6 Then
-                        cnt11(2) += 1
-                    ElseIf agarisa3(j) <= 0.9 Then
-                        cnt11(3) += 1
-                    Else
-                        cnt11(4) += 1
-                    End If
-
-                    If agarisa4(j) <= 0 Then
-                        cnt12(0) += 1
-                    ElseIf agarisa4(j) <= 0.3 Then
-                        cnt12(1) += 1
-                    ElseIf agarisa4(j) <= 0.6 Then
-                        cnt12(2) += 1
-                    ElseIf agarisa4(j) <= 0.9 Then
-                        cnt12(3) += 1
-                    Else
-                        cnt12(4) += 1
-                    End If
-
-                    If agarisa1(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-                    If agarisa2(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-                    If agarisa3(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-                    If agarisa4(j) <= sikii Then
-                        tmpcnt += 1
-                    End If
-
-                    cnt13(tmpcnt) += 1
-                Next
-                ListBox2.Items.Add("上がり差 <=0, 0.3, 0.6, 0.9, **")
-                ListBox2.Items.Add("1走前 " & intAry2str(cnt9))
-                ListBox2.Items.Add("2走前 " & intAry2str(cnt10))
-                ListBox2.Items.Add("3走前 " & intAry2str(cnt11))
-                ListBox2.Items.Add("4走前 " & intAry2str(cnt12))
-                ListBox2.Items.Add("直近４走の上がり差 <=" & sikii.ToString("F1") & "の回数")
-                ListBox2.Items.Add("0回 " & cnt13(0).ToString & " 1回 " & cnt13(1).ToString & " 2回 " & cnt13(2).ToString & " 3回 " & cnt13(3).ToString & " 4回 " & cnt13(4).ToString)
-
-                ListBox2.Items.Add("*** SpanScore ***")
-                If chkDosu.Checked Then
-                    For Each kvp As KeyValuePair(Of Integer, Integer) In sortedDistribution
-                        ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {AnaValClass.Score2String(kvp.Value)}")
-                    Next
-                Else
-                    ListBox2.Items.Add("－：" & cnt.ToString)
-                    ListBox2.Items.Add("2-0-0-0：" & cnt2.ToString)
-                    ListBox2.Items.Add("1-0-0-0：" & cnt3.ToString)
-                    ListBox2.Items.Add("0-1-0-0：" & cnt4.ToString)
-                    ListBox2.Items.Add("0-0-1-0：" & cnt5.ToString)
-                    ListBox2.Items.Add("0-0-0-1：" & cnt6.ToString)
-                    ListBox2.Items.Add("0-0-1-1：" & cnt7.ToString)
-                    ListBox2.Items.Add("0-0-0-2～10：" & cnt8.ToString)
-                End If
-
             Catch ex As Exception
                 errmsg = ex.Message
             End Try
@@ -866,6 +574,7 @@ Public Class AnaForm
     '
     Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand, ByVal arg_bamei As String, ByVal arg_cyakujun As Integer, ByVal dt_max As Date) As String
         Dim oUmaHeader As New UmaHeaderClass
+        Dim fm1 As New Form1 '結果
         Try
             Dim errmsg As String = oUmaHeader.load(cmd, arg_bamei)
             If errmsg.Length = 0 Then
@@ -879,25 +588,56 @@ Public Class AnaForm
                     Dim cyakusa(3) As Single
                     Dim cnt As Integer = 0
                     For j As Integer = 0 To oUmaHist.cnt - 1
-                        kekkaList.init()
-                        Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
-                        errmsg = oRaceHead.loadByUmaHist(cmd, oUmaHist.GetBodyRef(j))
-                        If errmsg.Length > 0 Then
-                            Return errmsg
-                        End If
-                        If oRaceHead.id > 0 AndAlso DateDiff(DateInterval.Day, oRaceHead.dt, oHead.dt) > 1 Then
-                            errmsg = kekkaList.load(cmd, oRaceHead.id)
+                        Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
+                        Dim shortname As String = oS.racename
+                        If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Length > 0 Then
+                            kekkaList.init()
+                            Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
+                            oS.racename = oShortRaceName.GetLongName(oS.racename)
+                            errmsg = oRaceHead.loadByUmaHist(cmd, oS)
                             If errmsg.Length > 0 Then
                                 Return errmsg
-                            Else
-                                kekkaList.setAgarisa(oRaceHead)
-                                Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
-                                agarisa(cnt) = oK.agarisa
-                                cyakusa(cnt) = oK.cyakusa
-                                cnt += 1
-                                If cnt > 3 Then
-                                    Exit For
+                            End If
+                            If oRaceHead.id < 0 Then
+                                Dim contents As String = GetWebPageText(makeJRAurl(oS.href))
+                                GetKekka(contents, kekkaList)
+                                oRaceHead.keibajo = GetWhenWhere(contents, oRaceHead.dt)
+                                oRaceHead.race_no = GetRaceNo(contents)
+                                oRaceHead.race_name = GetRaceName(contents, oRaceHead.grade)
+                                oRaceHead.class_name = GetClassCource(contents, oRaceHead.kyori, oRaceHead.syubetu)
+                                oRaceHead.class_code = oRaceHead.GetClassCode()
+                                oRaceHead.tosu = kekkaList.cnt
+                                oS.racename = oRaceHead.race_name
+                                errmsg = oRaceHead.loadByUmaHist(cmd, oS)
+                                If errmsg.Length > 0 Then
+                                    Return errmsg
                                 End If
+                                If shortname <> oRaceHead.race_name Then
+                                    errmsg = oShortRaceName.addNew(cmd, shortname, oRaceHead.race_name)
+                                    If errmsg.Length > 0 Then
+                                        Return errmsg
+                                    End If
+                                End If
+                            End If
+                            If oRaceHead.id < 0 Then
+                                kekkaList.setCyakusa()
+                                errmsg = SaveRaceKekka(cmd, kekkaList)
+                                If errmsg.Length > 0 Then
+                                    Return errmsg
+                                End If
+                            Else
+                                errmsg = kekkaList.load(cmd, oRaceHead.id)
+                                If errmsg.Length > 0 Then
+                                    Return errmsg
+                                End If
+                            End If
+                            kekkaList.setAgarisa(oRaceHead)
+                            Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
+                            agarisa(cnt) = oK.agarisa
+                            cyakusa(cnt) = oK.cyakusa
+                            cnt += 1
+                            If cnt > 3 Then
+                                Exit For
                             End If
                         End If
                     Next
@@ -918,6 +658,166 @@ Public Class AnaForm
             Return "GetAgarisaCyakusa() " & ex.Message
         End Try
     End Function
+
+    Private Function SaveRaceKekka(ByVal cmd As SQLiteCommand, ByVal kekkaList As KekkaListClass) As String
+        Dim oK As RaceHeaderClass = kekkaList.raceHeader
+        Dim errmsg As String = oK.addNew(cmd)
+        If errmsg.Length = 0 Then
+            errmsg = kekkaList.save(cmd)
+        End If
+        Return errmsg
+    End Function
+
+    '比較するレース群の度数カウント＆表示
+    Private Sub makeDosu()
+        ListBox2.Items.Clear()
+        ListBox2.Items.Add("COUNT=" & (cyakujun.Count).ToString)
+        Dim cnt As Integer = 0
+        Dim cnt2 As Integer = 0
+        Dim cnt3 As Integer = 0
+        Dim cnt4 As Integer = 0
+        Dim cnt5 As Integer = 0
+        Dim cnt6 As Integer = 0
+        Dim cnt7 As Integer = 0
+        Dim cnt8 As Integer = 0
+        Dim cnt9(4) As Integer
+        Dim cnt10(4) As Integer
+        Dim cnt11(4) As Integer
+        Dim cnt12(4) As Integer
+        Dim cnt13(4) As Integer
+        For j As Integer = 0 To 4
+            cnt9(j) = 0
+            cnt10(j) = 0
+            cnt11(j) = 0
+            cnt12(j) = 0
+            cnt13(j) = 0
+        Next
+        Dim tmpcnt As Integer
+        Dim sikii As Single = NumericUpDown1.Value
+
+        ' 度数分布を格納する辞書
+        Dim frequencyDistribution As New Dictionary(Of Integer, Integer)
+
+        'spanScoreに対する着順のカウント
+        For j As Integer = 0 To spanScore.Count - 1
+            Dim Number As Integer = spanScore(j)
+            If frequencyDistribution.ContainsKey(Number) Then
+                frequencyDistribution(Number) += cyakujun2score(cyakujun(j))
+            Else
+                frequencyDistribution(Number) = cyakujun2score(cyakujun(j))
+            End If
+        Next
+        ' 度数分布を度数の多い順にソート
+        Dim sortedDistribution = frequencyDistribution.OrderByDescending(Function(kvp) kvp.Value)
+
+
+        For j As Integer = 0 To spanScore.Count - 1
+            tmpcnt = 0
+            If spanScore(j) = 0 Then
+                cnt += 1
+            ElseIf spanScore(j) = 2000000 Then
+                cnt2 += 1
+            ElseIf spanScore(j) = 1000000 Then
+                cnt3 += 1
+            ElseIf spanScore(j) = 10000 Then
+                cnt4 += 1
+            ElseIf spanScore(j) = 100 Then
+                cnt5 += 1
+            ElseIf spanScore(j) = 1 Then
+                cnt6 += 1
+            ElseIf spanScore(j) = 101 Then
+                cnt7 += 1
+            ElseIf spanScore(j) <= 10 Then
+                cnt8 += 1
+            End If
+
+            If agarisa1(j) <= 0 Then
+                cnt9(0) += 1
+            ElseIf agarisa1(j) <= 0.3 Then
+                cnt9(1) += 1
+            ElseIf agarisa1(j) <= 0.6 Then
+                cnt9(2) += 1
+            ElseIf agarisa1(j) <= 0.9 Then
+                cnt9(3) += 1
+            Else
+                cnt9(4) += 1
+            End If
+
+            If agarisa2(j) <= 0 Then
+                cnt10(0) += 1
+            ElseIf agarisa2(j) <= 0.3 Then
+                cnt10(1) += 1
+            ElseIf agarisa2(j) <= 0.6 Then
+                cnt10(2) += 1
+            ElseIf agarisa2(j) <= 0.9 Then
+                cnt10(3) += 1
+            Else
+                cnt10(4) += 1
+            End If
+
+            If agarisa3(j) <= 0 Then
+                cnt11(0) += 1
+            ElseIf agarisa3(j) <= 0.3 Then
+                cnt11(1) += 1
+            ElseIf agarisa3(j) <= 0.6 Then
+                cnt11(2) += 1
+            ElseIf agarisa3(j) <= 0.9 Then
+                cnt11(3) += 1
+            Else
+                cnt11(4) += 1
+            End If
+
+            If agarisa4(j) <= 0 Then
+                cnt12(0) += 1
+            ElseIf agarisa4(j) <= 0.3 Then
+                cnt12(1) += 1
+            ElseIf agarisa4(j) <= 0.6 Then
+                cnt12(2) += 1
+            ElseIf agarisa4(j) <= 0.9 Then
+                cnt12(3) += 1
+            Else
+                cnt12(4) += 1
+            End If
+
+            If agarisa1(j) <= sikii Then
+                tmpcnt += 1
+            End If
+            If agarisa2(j) <= sikii Then
+                tmpcnt += 1
+            End If
+            If agarisa3(j) <= sikii Then
+                tmpcnt += 1
+            End If
+            If agarisa4(j) <= sikii Then
+                tmpcnt += 1
+            End If
+
+            cnt13(tmpcnt) += 1
+        Next
+        ListBox2.Items.Add("上がり差 <=0, 0.3, 0.6, 0.9, **")
+        ListBox2.Items.Add("1走前 " & intAry2str(cnt9))
+        ListBox2.Items.Add("2走前 " & intAry2str(cnt10))
+        ListBox2.Items.Add("3走前 " & intAry2str(cnt11))
+        ListBox2.Items.Add("4走前 " & intAry2str(cnt12))
+        ListBox2.Items.Add("直近４走の上がり差 <=" & sikii.ToString("F1") & "の回数")
+        ListBox2.Items.Add("0回 " & cnt13(0).ToString & " 1回 " & cnt13(1).ToString & " 2回 " & cnt13(2).ToString & " 3回 " & cnt13(3).ToString & " 4回 " & cnt13(4).ToString)
+
+        ListBox2.Items.Add("*** SpanScore ***")
+        If chkDosu.Checked Then
+            For Each kvp As KeyValuePair(Of Integer, Integer) In sortedDistribution
+                ListBox2.Items.Add($"{AnaValClass.Score2String(kvp.Key)}  | {AnaValClass.Score2String(kvp.Value)}")
+            Next
+        Else
+            ListBox2.Items.Add("－：" & cnt.ToString)
+            ListBox2.Items.Add("2-0-0-0：" & cnt2.ToString)
+            ListBox2.Items.Add("1-0-0-0：" & cnt3.ToString)
+            ListBox2.Items.Add("0-1-0-0：" & cnt4.ToString)
+            ListBox2.Items.Add("0-0-1-0：" & cnt5.ToString)
+            ListBox2.Items.Add("0-0-0-1：" & cnt6.ToString)
+            ListBox2.Items.Add("0-0-1-1：" & cnt7.ToString)
+            ListBox2.Items.Add("0-0-0-2～10：" & cnt8.ToString)
+        End If
+    End Sub
 
     Private Function intAry2str(ByVal ary() As Integer) As String
         Dim ss As String = ""

@@ -19,6 +19,13 @@ Module WebMod
         Return result
     End Function
 
+    Public Function makeJRAurl(ByVal url As String) As String
+        If url.Length > 0 AndAlso InStr(url, "https://www.jra.go.jp") = 0 Then
+            url = "https://www.jra.go.jp" & url
+        End If
+        Return url
+    End Function
+
     Public Sub test(ByVal url As String)
         ' HttpClientのインスタンスを作成
         Dim client As New HttpClient()
