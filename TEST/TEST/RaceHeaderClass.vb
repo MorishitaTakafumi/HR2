@@ -241,6 +241,9 @@ Public Class RaceHeaderClass
 
     'レース名の照合
     Private Function IsRaceNameMatch(ByVal fullName As String, ByVal shortname As String) As Boolean
+        If shortname.Trim.Length = 0 Then
+            Return False
+        End If
         If fullName = shortname Then
             Return True
         End If

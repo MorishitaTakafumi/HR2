@@ -633,11 +633,15 @@ Public Class AnaForm
                             End If
                             kekkaList.setAgarisa(oRaceHead)
                             Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
-                            agarisa(cnt) = oK.agarisa
-                            cyakusa(cnt) = oK.cyakusa
-                            cnt += 1
-                            If cnt > 3 Then
-                                Exit For
+                            If oK IsNot Nothing Then
+                                agarisa(cnt) = oK.agarisa
+                                cyakusa(cnt) = oK.cyakusa
+                                cnt += 1
+                                If cnt > 3 Then
+                                    Exit For
+                                End If
+                            Else
+                                Dim dmy As Integer = 0
                             End If
                         End If
                     Next
