@@ -164,6 +164,7 @@ Public Class umaHistListClass
                 cmd.CommandText &= " AND dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", dt_max)
             End If
+            cmd.CommandText &= " ORDER BY dt DESC"
 
             Dim r As SQLiteDataReader = cmd.ExecuteReader
             While r.Read

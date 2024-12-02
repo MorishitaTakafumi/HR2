@@ -352,12 +352,4 @@ Public Class RaceHeaderClass
         End Using
     End Function
 
-    '登録
-    Public Function save() As String
-        Using conn As New SQLiteConnection(GetDbConnectionString)
-            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
-            conn.Open()
-            Return addNew(cmd)
-        End Using
-    End Function
 End Class

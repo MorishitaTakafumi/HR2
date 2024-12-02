@@ -270,6 +270,7 @@ Public Class AnaForm
 
     '解析実行
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
+        ClearWebPageAccessCounter()
         Dim form3argStr As String = ""
         If RbURL.Checked Then
             form3argStr = txtURL.Text.Trim
@@ -343,6 +344,7 @@ Public Class AnaForm
         If RbFile.Checked Then
             ShowCyakujun()
         End If
+        showWebPageAccessCounter()
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
@@ -375,7 +377,7 @@ Public Class AnaForm
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
             Try
-                cmd.CommandText = "SELECT A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id 
+                cmd.CommandText = "SELECT A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id 
                                     WHERE R.dt=@dt AND R.race_name=@race_name"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
@@ -401,8 +403,10 @@ Public Class AnaForm
     End Sub
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
+        ClearWebPageAccessCounter()
         new_logic()
         makeDosu()
+        showWebPageAccessCounter()
     End Sub
 
     Private Sub new_logic()
@@ -590,7 +594,7 @@ Public Class AnaForm
                     For j As Integer = 0 To oUmaHist.cnt - 1
                         Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
                         Dim shortname As String = oS.racename
-                        If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Length > 0 Then
+                        If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                             kekkaList.init()
                             Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
                             oS.racename = oShortRaceName.GetLongName(oS.racename)
@@ -612,36 +616,40 @@ Public Class AnaForm
                                 If errmsg.Length > 0 Then
                                     Return errmsg
                                 End If
-                                If shortname <> oRaceHead.race_name Then
-                                    errmsg = oShortRaceName.addNew(cmd, shortname, oRaceHead.race_name)
+                                If oRaceHead.race_name.Trim.Length > 0 Then
+                                    If shortname <> oRaceHead.race_name Then
+                                        errmsg = oShortRaceName.addNew(cmd, shortname, oRaceHead.race_name)
+                                        If errmsg.Length > 0 Then
+                                            Return errmsg
+                                        End If
+                                    End If
+                                End If
+                            End If
+                            If oRaceHead.race_name.Trim.Length > 0 Then
+                                If oRaceHead.id < 0 Then
+                                    kekkaList.setCyakusa()
+                                    errmsg = SaveRaceKekka(cmd, kekkaList)
+                                    If errmsg.Length > 0 Then
+                                        Return errmsg
+                                    End If
+                                Else
+                                    errmsg = kekkaList.load(cmd, oRaceHead.id)
                                     If errmsg.Length > 0 Then
                                         Return errmsg
                                     End If
                                 End If
-                            End If
-                            If oRaceHead.id < 0 Then
-                                kekkaList.setCyakusa()
-                                errmsg = SaveRaceKekka(cmd, kekkaList)
-                                If errmsg.Length > 0 Then
-                                    Return errmsg
+                                kekkaList.setAgarisa(oRaceHead)
+                                Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
+                                If oK IsNot Nothing Then
+                                    agarisa(cnt) = oK.agarisa
+                                    cyakusa(cnt) = oK.cyakusa
+                                    cnt += 1
+                                    If cnt > 3 Then
+                                        Exit For
+                                    End If
+                                Else
+                                    Dim dmy As Integer = 0
                                 End If
-                            Else
-                                errmsg = kekkaList.load(cmd, oRaceHead.id)
-                                If errmsg.Length > 0 Then
-                                    Return errmsg
-                                End If
-                            End If
-                            kekkaList.setAgarisa(oRaceHead)
-                            Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
-                            If oK IsNot Nothing Then
-                                agarisa(cnt) = oK.agarisa
-                                cyakusa(cnt) = oK.cyakusa
-                                cnt += 1
-                                If cnt > 3 Then
-                                    Exit For
-                                End If
-                            Else
-                                Dim dmy As Integer = 0
                             End If
                         End If
                     Next

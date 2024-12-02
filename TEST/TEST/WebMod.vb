@@ -4,6 +4,16 @@ Imports System.IO
 
 Module WebMod
 
+    Private WebPageAccessCount As Integer
+
+    Public Sub ClearWebPageAccessCounter()
+        WebPageAccessCount = 0
+    End Sub
+
+    Public Sub showWebPageAccessCounter()
+        MsgBox($"WebPageアクセス回数は{WebPageAccessCount }です")
+    End Sub
+
     Public Function GetWebPageText(ByVal url As String) As String
         Dim client As New HttpClient()
 
@@ -16,6 +26,7 @@ Module WebMod
 
         ' Shift-JISでデコード
         Dim result As String = Encoding.GetEncoding("Shift_JIS").GetString(byteArray)
+        WebPageAccessCount += 1
         Return result
     End Function
 

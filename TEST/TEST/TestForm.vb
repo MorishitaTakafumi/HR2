@@ -273,4 +273,51 @@ Public Class TestForm
             End Try
         End Using
     End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        ListBox1.Items.Clear()
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT * FROM ShortRaceNameTable WHERE longname=''"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    ListBox1.Items.Add(r("shortname"))
+                End While
+                r.Close()
+                '
+                cmd.CommandText = "DELETE FROM ShortRaceNameTable WHERE longname=''"
+                cmd.ExecuteNonQuery()
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        ListBox1.Items.Clear()
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT A.id, A.dt, A.race_name, A.tosu, B.cnt FROM RaceHeader A INNER JOIN
+                                  (SELECT race_header_id, COUNT(*) AS cnt FROM Kekka Group By race_header_id) AS B
+                                   ON A.id=B.race_header_id WHERE A.tosu<>B.cnt"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                Dim ss As String
+                While r.Read
+                    ss = "ID:" & CInt(r("id")).ToString & " dt=" & CDate(r("dt")).ToString("yyyy/M/d") &
+                        "  レース名=" & CStr(r("race_name")) & " 頭数1=" &
+                        CInt(r("tosu")).ToString & " 頭数2=" & CInt(r("cnt")).ToString
+                    ListBox1.Items.Add(ss)
+                End While
+                r.Close()
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
 End Class

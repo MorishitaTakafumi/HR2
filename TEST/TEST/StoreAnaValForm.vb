@@ -281,10 +281,11 @@ Public Class StoreAnaValForm
                         If hist_idx >= HIS_CNT Then
                             Exit For
                         End If
-                        If oRaceHeader.dt > fm2.umaHistList.GetBodyRef(i).dt Then
-                            raceURLque.Enqueue(fm2.umaHistList.GetBodyRef(i).href)
-                            raceNameque.Enqueue(fm2.umaHistList.GetBodyRef(i).racename)
-                            fm1sub.entry(fm2.umaHistList.GetBodyRef(i).href)
+                        Dim oUmaHist As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
+                        If oRaceHeader.dt > oUmaHist.dt AndAlso oUmaHist.href.Trim.Length > 0 Then
+                            raceURLque.Enqueue(oUmaHist.href)
+                            raceNameque.Enqueue(oUmaHist.racename)
+                            fm1sub.entry(oUmaHist.href)
                             errmsg = SaveData_NEW(fm1sub.kekkaList)
                             If errmsg.Length > 0 Then
                                 Return False
@@ -326,12 +327,16 @@ Public Class StoreAnaValForm
     End Function
 
     Private Function SaveData_NEW(ByVal kekkalist As KekkaListClass) As String
+        If kekkalist.raceHeader.race_name.Trim.Length = 0 Then
+            Return ""
+        End If
+
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim errmsg As String = ""
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
             If kekkalist.raceHeader.id < 0 Then
-                errmsg = kekkalist.raceHeader.save()
+                errmsg = kekkalist.raceHeader.addNew(cmd)
             End If
             If errmsg.Length = 0 Then
                 errmsg = kekkalist.save(cmd)

@@ -51,7 +51,6 @@ C:\学習\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.Linq.dll
 C:\学習\HR2\TEST\TEST\bin\Debug\C1.Win.C1FlexGrid.4.xml
 C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.SqlServer.xml
 C:\学習\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.xml
-C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.CoefReviewForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.raceReviewForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.AnaForm.resources
@@ -74,3 +73,4 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.exe
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.xml
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.pdb
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.TestForm.resources
+C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache

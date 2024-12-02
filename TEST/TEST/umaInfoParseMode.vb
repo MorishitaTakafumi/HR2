@@ -181,7 +181,7 @@
                             End If
                         End If
                         If a.dt < dt_max OrElse dt_max = DMY_DATE Then
-                            hlist.add1(a)
+                            hlist.add1(a) 'add1はaが登録済みならば追加はしない
                         End If
                     Else
                         Exit While

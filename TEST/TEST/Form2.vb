@@ -124,6 +124,19 @@ Public Class Form2
     End Function
 
     Private Sub GetData(ByVal dt_max As Date)
+        'URLから馬情報取得
+        Dim oTmpHeader As UmaHeaderClass = Nothing
+        Dim url As String = txtURL.Text.Trim
+        If url.Length > 0 Then
+            txtResult.Text = GetWebPageText(url)
+            oTmpHeader = GetUmaHeader(txtResult.Text)
+        End If
+        'DBから馬情報取得
+        If oTmpHeader IsNot Nothing Then
+            If txtBamei.Text.Trim.Length = 0 Then
+                txtBamei.Text = oTmpHeader.bamei
+            End If
+        End If
         oUmaHeader = Nothing
         umaHistList.init()
         Dim errmsg As String = DB_GetDataByName(dt_max)
@@ -132,29 +145,27 @@ Public Class Form2
             Return
         End If
 
-        Dim url As String = txtURL.Text.Trim
-        If url.Length > 0 Then
-            Dim contents As String = GetWebPageText(txtURL.Text.Trim)
-            txtResult.Text = contents
-            Dim oTmpHeader As UmaHeaderClass = GetUmaHeader(contents)
-            If oUmaHeader Is Nothing Then
-                oUmaHeader = oTmpHeader
+        If oUmaHeader Is Nothing Then
+            If oTmpHeader Is Nothing Then
+                Return
             Else
-                If oUmaHeader.father <> oTmpHeader.father Then
-                    oUmaHeader.father = oTmpHeader.father
-                    oUmaHeader.dirtyFlag = True
-                End If
-                If oUmaHeader.mother <> oTmpHeader.mother Then
-                    oUmaHeader.mother = oTmpHeader.mother
-                    oUmaHeader.dirtyFlag = True
-                End If
-                If oUmaHeader.seibetu <> oTmpHeader.seibetu Then
-                    oUmaHeader.seibetu = oTmpHeader.seibetu
-                    oUmaHeader.dirtyFlag = True
-                End If
+                oUmaHeader = oTmpHeader
             End If
-            GetUmaHist(contents, umaHistList, dt_max)
+        Else
+            If oUmaHeader.father <> oTmpHeader.father Then
+                oUmaHeader.father = oTmpHeader.father
+                oUmaHeader.dirtyFlag = True
+            End If
+            If oUmaHeader.mother <> oTmpHeader.mother Then
+                oUmaHeader.mother = oTmpHeader.mother
+                oUmaHeader.dirtyFlag = True
+            End If
+            If oUmaHeader.seibetu <> oTmpHeader.seibetu Then
+                oUmaHeader.seibetu = oTmpHeader.seibetu
+                oUmaHeader.dirtyFlag = True
+            End If
         End If
+        GetUmaHist(txtResult.Text, umaHistList, dt_max)
 
         If (oUmaHeader IsNot Nothing) AndAlso oUmaHeader.bamei.Length > 0 Then
             ListBox1.Items.Clear()
