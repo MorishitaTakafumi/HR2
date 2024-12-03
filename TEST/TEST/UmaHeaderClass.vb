@@ -139,4 +139,13 @@ Public Class UmaHeaderClass
         End Using
     End Function
 
+    '登録
+    Public Function save(ByVal cmd As SQLiteCommand) As String
+        If rec_id > 0 Then
+            Return update(cmd)
+        Else
+            Return addNew(cmd)
+        End If
+    End Function
+
 End Class

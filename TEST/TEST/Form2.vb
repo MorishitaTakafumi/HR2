@@ -98,75 +98,18 @@ Public Class Form2
         flx.AutoSizeRows()
     End Sub
 
-    Private Sub BtnTest_Click(sender As Object, e As EventArgs) Handles BtnTest.Click
+    Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
         GetData(DMY_DATE)
     End Sub
 
-    'DBからデータ取得
-    'Return True=成功、False=ない/失敗
-    Private Function DB_GetDataByName(ByVal dt_max As Date) As String
-        If txtBamei.Text.Length > 0 Then
-            Using conn As New SQLiteConnection(GetDbConnectionString)
-                Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
-                conn.Open()
-                Dim a As New UmaHeaderClass
-                Dim errmsg As String = a.load(cmd, txtBamei.Text.Trim)
-                If errmsg.Length = 0 AndAlso a.rec_id > 0 Then
-                    errmsg = umaHistList.load(cmd, a.rec_id, dt_max)
-                    If errmsg.Length = 0 Then
-                        oUmaHeader = a
-                    End If
-                End If
-                Return errmsg
-            End Using
-        End If
-        Return ""
-    End Function
-
     Private Sub GetData(ByVal dt_max As Date)
-        'URLから馬情報取得
-        Dim oTmpHeader As UmaHeaderClass = Nothing
-        Dim url As String = txtURL.Text.Trim
-        If url.Length > 0 Then
-            txtResult.Text = GetWebPageText(url)
-            oTmpHeader = GetUmaHeader(txtResult.Text)
-        End If
-        'DBから馬情報取得
-        If oTmpHeader IsNot Nothing Then
-            If txtBamei.Text.Trim.Length = 0 Then
-                txtBamei.Text = oTmpHeader.bamei
-            End If
-        End If
-        oUmaHeader = Nothing
         umaHistList.init()
-        Dim errmsg As String = DB_GetDataByName(dt_max)
+        Dim errmsg As String = umaHistList.GetUmaInfo(txtURL.Text.Trim, txtBamei.Text.Trim, dt_max, True)
         If errmsg.Length > 0 Then
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
             Return
         End If
-
-        If oUmaHeader Is Nothing Then
-            If oTmpHeader Is Nothing Then
-                Return
-            Else
-                oUmaHeader = oTmpHeader
-            End If
-        Else
-            If oUmaHeader.father <> oTmpHeader.father Then
-                oUmaHeader.father = oTmpHeader.father
-                oUmaHeader.dirtyFlag = True
-            End If
-            If oUmaHeader.mother <> oTmpHeader.mother Then
-                oUmaHeader.mother = oTmpHeader.mother
-                oUmaHeader.dirtyFlag = True
-            End If
-            If oUmaHeader.seibetu <> oTmpHeader.seibetu Then
-                oUmaHeader.seibetu = oTmpHeader.seibetu
-                oUmaHeader.dirtyFlag = True
-            End If
-        End If
-        GetUmaHist(txtResult.Text, umaHistList, dt_max)
-
+        oUmaHeader = umaHistList.umaHeader
         If (oUmaHeader IsNot Nothing) AndAlso oUmaHeader.bamei.Length > 0 Then
             ListBox1.Items.Clear()
             ListBox1.Items.Add("馬名：" & oUmaHeader.bamei)
@@ -175,20 +118,11 @@ Public Class Form2
             ListBox1.Items.Add("性別：" & oUmaHeader.seibetu)
             ListBox1.Items.Add("誕生日：" & oUmaHeader.birthday.ToString("yyyy年MM月dd日"))
             ShowTable(umaHistList)
-            If oUmaHeader.dt_update < Today OrElse oUmaHeader.dirtyFlag = True Then
-                errmsg = oUmaHeader.save(umaHistList)
-                If errmsg.Length > 0 Then
-                    MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
-                End If
-            End If
         End If
     End Sub
 
     Public Sub entry(ByVal url As String, Optional ByVal bamei As String = "", Optional ByVal dt_max As Date = DMY_DATE)
-        If url.Length > 0 AndAlso InStr(url, "https://www.jra.go.jp") = 0 Then
-            url = "https://www.jra.go.jp" & url
-        End If
-        txtURL.Text = url
+        txtURL.Text = makeJRAurl(url)
         txtBamei.Text = bamei
         Me.WindowState = FormWindowState.Minimized
         Show()
@@ -202,8 +136,6 @@ Public Class Form2
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
-        If Clipboard.ContainsText Then
-            txtURL.Text = Clipboard.GetText()
-        End If
+        Clipboard2URL(txtURL)
     End Sub
 End Class

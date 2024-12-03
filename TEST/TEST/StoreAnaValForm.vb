@@ -22,18 +22,12 @@ Public Class StoreAnaValForm
     Private fm1sub As New Form1
     Private fm2 As New Form2 '馬情報
     Private CancelFlag As Boolean
-    Private TopRaceName As String = ""
+    Private TopRaceName As String
 
     Public Sub New()
         InitializeComponent()
-        If Clipboard.ContainsText Then
-            Dim tmp As String = Clipboard.GetText
-            If InStr(tmp, "https") Then
-                txtURL.Text = tmp
-            End If
-        End If
+        Clipboard2URL(txtURL)
     End Sub
-
 
     '一覧グリッド書式設定
     Private Sub SetUpFlx()
@@ -118,10 +112,12 @@ Public Class StoreAnaValForm
         BtnStop.Visible = True
         CancelFlag = False
         saveCount = 0
+        TopRaceName = ""
+        ClearWebPageAccessCounter()
         While raceURLque.Count > 0 AndAlso saveCount < NumericUpDown1.Value AndAlso (Not CancelFlag)
             Dim url As String = raceURLque.Dequeue()
             Dim racename As String = raceNameque.Dequeue()
-            If analysis1_NEW(url, racename) Then
+            If analysis1_NEW2(url, racename) Then
                 lb_cnt.Text = "今回登録数：" & saveCount.ToString & " Stack残数：" & raceURLque.Count.ToString
                 lb_cnt.Refresh()
                 Application.DoEvents()
@@ -129,6 +125,7 @@ Public Class StoreAnaValForm
                 Exit While
             End If
         End While
+        Me.Cursor = Cursors.Default
         fm1.Close()
         fm1sub.Close()
         fm2.Close()
@@ -138,6 +135,7 @@ Public Class StoreAnaValForm
             lb_msg.Text = "完了"
         End If
         BtnStop.Visible = False
+        showWebPageAccessCounter()
     End Sub
 
     'URLを指定して１レース分を解析・登録する
@@ -240,7 +238,6 @@ Public Class StoreAnaValForm
             lb_msg.Text = "別名レース！"
             Return True
         End If
-
         Me.Cursor = Cursors.WaitCursor
         Me.Refresh()
         lb_msg.Text = "レース結果ページの取り込み"
@@ -311,6 +308,80 @@ Public Class StoreAnaValForm
         End If
     End Function
 
+    'URLを指定して１レース分を解析・登録する
+    '戻り値：True=成功、False=失敗
+    Private Function analysis1_NEW2(ByVal url As String, ByVal racename As String) As Boolean
+
+        If chkSameNameOnly.Checked AndAlso TopRaceName.Length > 0 AndAlso TopRaceName <> racename Then
+            lb_msg.Text = "別名レース！"
+            Return True
+        End If
+        Me.Cursor = Cursors.WaitCursor
+        Me.Refresh()
+        lb_msg.Text = "レース結果ページの取り込み"
+        Dim kekkaList As New KekkaListClass
+        Dim kekkaListSub As New KekkaListClass
+        Dim existFlag As Boolean
+        Dim errmsg As String = kekkaList.GetRaceKekka(url, existFlag, "", "", True)
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return False
+        End If
+        Dim oRaceHeader As RaceHeaderClass = kekkaList.raceHeader
+        ShowRaceHeader(oRaceHeader)
+        If TopRaceName.Length = 0 Then
+            TopRaceName = oRaceHeader.race_name
+        Else
+            If chkSameNameOnly.Checked AndAlso TopRaceName <> oRaceHeader.race_name Then
+                lb_msg.Text = "別名レース！"
+                Return True
+            End If
+        End If
+        If existFlag Then
+            Return True
+        End If
+
+        If oRaceHeader.class_code >= 0 Then
+            Dim umaHistList As New umaHistListClass
+            lb_msg.Text = "全馬の情報登録"
+            For j As Short = 0 To oRaceHeader.tosu - 1
+                Application.DoEvents()
+                lb_msg.Text = "情報処理中" & (j + 1).ToString
+                Dim oKekka As KekkaClass = kekkaList.GetBodyRef(j)
+                If oKekka IsNot Nothing Then '同着のときNothingとなる
+                    Dim uma_url As String = makeJRAurl(oKekka.uma_href)
+                    errmsg = umaHistList.GetUmaInfo(uma_url, "", DMY_DATE, True)
+                    Dim hist_idx As Integer = 0
+                    For i As Integer = 0 To umaHistList.cnt - 1
+                        lb_msg.Text = "情報処理中 " & (j + 1).ToString & " " & hist_idx.ToString & "/4"
+                        Application.DoEvents()
+                        If hist_idx >= HIS_CNT Then
+                            Exit For
+                        End If
+                        Dim oUmaHist As UmaHistClass = umaHistList.GetBodyRef(i)
+                        If oRaceHeader.dt > oUmaHist.dt AndAlso oUmaHist.href.Trim.Length > 0 Then
+                            raceURLque.Enqueue(makeJRAurl(oUmaHist.href))
+                            raceNameque.Enqueue(oUmaHist.racename)
+                            errmsg = kekkaListSub.GetRaceKekka(oUmaHist.href, existFlag, "", "", True)
+                            If errmsg.Length > 0 Then
+                                Return False
+                            End If
+                            hist_idx += 1
+                        End If
+                    Next
+                End If
+            Next
+        End If
+        Me.Cursor = Cursors.Default
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return False
+        Else
+            saveCount += 1
+            Return True
+        End If
+    End Function
+
     Private Function SaveData_OLD(ByVal kekkalist As KekkaListClass, ByVal anavalary() As AnaValClass) As String
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim errmsg As String = ""
@@ -346,9 +417,7 @@ Public Class StoreAnaValForm
     End Function
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
-        If Clipboard.ContainsText Then
-            txtURL.Text = Clipboard.GetText()
-        End If
+        Clipboard2URL(txtURL)
     End Sub
 
     Private Sub flx_MouseDown(sender As Object, e As MouseEventArgs) Handles flx.MouseDown

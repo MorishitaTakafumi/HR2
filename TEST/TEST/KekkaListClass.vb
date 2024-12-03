@@ -204,4 +204,112 @@ Public Class KekkaListClass
         Return ""
     End Function
 
+    'DBからデータ取得
+    'Return True=成功、False=ない/失敗
+    Private Function DB_GetDataByName(ByVal cmd As SQLiteCommand, ByVal dt_race As Date, ByVal racename As String) As String
+        Try
+            cmd.Parameters.Clear()
+            Dim errmsg As String = raceHeader.loadByDateAndName(cmd, dt_race, racename)
+            If errmsg.Length = 0 AndAlso raceHeader.id > 0 Then
+                errmsg = load(cmd, raceHeader.id)
+                setAgarisa(raceHeader)
+            End If
+            Return errmsg
+        Catch ex As Exception
+            Return "KekkaListClass.DB_GetDataByName() " & ex.Message
+        End Try
+    End Function
+
+    'Return ""=成功、エラーメッセージ=失敗
+    Private Function SaveData(ByVal cmd As SQLiteCommand) As String
+        Dim errmsg As String = ""
+        Dim oK As RaceHeaderClass = raceHeader
+        If oK.id < 0 Then
+            errmsg = oK.loadByDateAndName(cmd, oK.dt, oK.race_name)
+            If errmsg.Length > 0 Then
+                Return errmsg
+            End If
+            If oK.id < 0 Then
+                errmsg = oK.addNew(cmd)
+            End If
+        End If
+        If errmsg.Length = 0 Then
+            errmsg = save(cmd)
+        End If
+        Return errmsg
+    End Function
+
+    'レース結果を取得して登録する
+    'Return ""=成功、エラーメッセージ=失敗
+    Private Function _GetRaceKekka(ByVal cmd As SQLiteCommand,
+                                   ByVal url As String,
+                                   ByRef existFlag As Boolean,
+                                   ByVal dt_race As String,
+                                   ByVal racename As String,
+                                   ByVal autosave As Boolean) As String
+        Dim errmsg As String = ""
+        existFlag = False
+        init()
+        'Case 1:レース日とレース名が既知でDBに登録済み 
+        If IsDate(dt_race) AndAlso racename.Trim.Length > 0 Then
+            errmsg = DB_GetDataByName(cmd, CDate(dt_race), racename)
+            If errmsg.Length > 0 Then
+                Return errmsg
+            Else
+                If raceHeader.id > 0 AndAlso cnt > 0 Then
+                    existFlag = True
+                    Return ""
+                End If
+            End If
+        End If
+
+        'Case 2:URLから情報取得 
+        If url.Trim.Length = 0 Then
+            Return ""
+        End If
+        Dim contents As String = GetWebPageText(url.Trim)
+        If contents.Length = 0 Then
+            Return ""
+        End If
+        raceHeader.keibajo = GetWhenWhere(contents, raceHeader.dt)
+        raceHeader.race_no = GetRaceNo(contents)
+        raceHeader.race_name = GetRaceName(contents, raceHeader.grade)
+        raceHeader.class_name = GetClassCource(contents, raceHeader.kyori, raceHeader.syubetu)
+        raceHeader.class_code = raceHeader.GetClassCode()
+        'Case 1でDB_GetDataByNameやっていてもレース名のテキストが"ジャパンC"のように簡略表記されているケースがあるので正式名で再度トライする
+        errmsg = DB_GetDataByName(cmd, raceHeader.dt, raceHeader.race_name)
+        If errmsg.Length > 0 Then
+            Return errmsg
+        Else
+            If raceHeader.id > 0 AndAlso cnt > 0 Then 'DBに登録済み
+                existFlag = True
+                Return ""
+            End If
+        End If
+        'Case 3:DB未登録（Headerのみ登録済みのケースがあり得る）
+        GetKekka(contents, Me)
+        raceHeader.tosu = cnt
+        setCyakusa()
+        setAgarisa(raceHeader)
+        If autosave Then
+            Return SaveData(cmd)
+        Else
+            Return ""
+        End If
+    End Function
+
+    'レース結果を取得して登録する
+    'Return ""=成功、エラーメッセージ=失敗
+    Public Function GetRaceKekka(ByVal url As String,
+                                 ByRef existFlag As Boolean,
+                                 Optional ByVal dt_race As String = "",
+                                 Optional ByVal racename As String = "",
+                                 Optional ByVal autosave As Boolean = False) As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Return _GetRaceKekka(cmd, url, existFlag, dt_race, racename, autosave)
+        End Using
+    End Function
+
 End Class

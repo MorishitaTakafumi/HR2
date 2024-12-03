@@ -4,6 +4,7 @@ Public Class umaHistListClass
     '競走馬レース履歴
 
     Private m_bf As New List(Of UmaHistClass)
+    Public umaHeader As New UmaHeaderClass
 
     Public ReadOnly Property cnt As Integer
         Get
@@ -13,6 +14,7 @@ Public Class umaHistListClass
 
     Public Sub init()
         m_bf.Clear()
+        umaHeader.init()
     End Sub
 
     Public Sub add1(ByVal o As UmaHistClass)
@@ -210,6 +212,95 @@ Public Class umaHistListClass
             End If
         Next
         Return ""
+    End Function
+
+    'DBからデータ取得
+    'Return True=成功、False=ない/失敗
+    Private Function DB_GetDataByName(ByVal cmd As SQLiteCommand, ByVal bamei As String, ByVal dt_max As Date) As String
+        If bamei.Trim.Length > 0 Then
+            Dim a As New UmaHeaderClass
+            Dim errmsg As String = a.load(cmd, bamei.Trim)
+            If errmsg.Length = 0 AndAlso a.rec_id > 0 Then
+                errmsg = load(cmd, a.rec_id, dt_max)
+                If errmsg.Length = 0 Then
+                    umaHeader = a
+                End If
+            End If
+            Return errmsg
+        End If
+        Return ""
+    End Function
+
+    '馬情報を取得して登録する
+    'Return ""=成功、エラーメッセージ=失敗
+    Private Function _GetUmaInfo(ByVal cmd As SQLiteCommand,
+                                 ByVal url As String,
+                                 ByVal bamei As String,
+                                 ByVal dt_max As Date,
+                                 ByVal autosave As Boolean) As String
+
+        'URLから馬情報取得
+        Dim oTmpHeader As UmaHeaderClass = Nothing
+        Dim contents As String = ""
+        If url.Length > 0 Then
+            contents = GetWebPageText(url)
+            oTmpHeader = GetUmaHeader(contents)
+        End If
+        'DBから馬情報取得
+        If oTmpHeader IsNot Nothing Then
+            If bamei.Trim.Length = 0 Then
+                bamei = oTmpHeader.bamei
+            End If
+        End If
+        init()
+        Dim errmsg As String = DB_GetDataByName(cmd, bamei, dt_max)
+        If errmsg.Length > 0 Then
+            Return errmsg
+        End If
+        If umaHeader.rec_id < 0 Then
+            If oTmpHeader Is Nothing Then
+                Return ""
+            Else
+                umaHeader = oTmpHeader
+            End If
+        Else
+            If umaHeader.father <> oTmpHeader.father Then
+                umaHeader.father = oTmpHeader.father
+                umaHeader.dirtyFlag = True
+            End If
+            If umaHeader.mother <> oTmpHeader.mother Then
+                umaHeader.mother = oTmpHeader.mother
+                umaHeader.dirtyFlag = True
+            End If
+            If umaHeader.seibetu <> oTmpHeader.seibetu Then
+                umaHeader.seibetu = oTmpHeader.seibetu
+                umaHeader.dirtyFlag = True
+            End If
+        End If
+        GetUmaHist(contents, Me, dt_max)
+        If umaHeader.bamei.Length > 0 Then
+            If umaHeader.dt_update < Today OrElse umaHeader.dirtyFlag Then
+                errmsg = umaHeader.save(cmd)
+                If errmsg.Length = 0 Then
+                    errmsg = save(cmd, umaHeader.rec_id)
+                End If
+                Return errmsg
+            End If
+        End If
+        Return ""
+    End Function
+
+    '馬情報を取得して登録する
+    'Return ""=成功、エラーメッセージ=失敗
+    Public Function GetUmaInfo(ByVal url As String,
+                                 Optional ByVal bamei As String = "",
+                                 Optional ByVal dt_max As Date = DMY_DATE,
+                                 Optional ByVal autosave As Boolean = False) As String
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            conn.Open()
+            Return _GetUmaInfo(cmd, url, bamei, dt_max, autosave)
+        End Using
     End Function
 
 End Class

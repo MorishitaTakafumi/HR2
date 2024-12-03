@@ -23,7 +23,7 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form2))
-        Me.BtnTest = New System.Windows.Forms.Button()
+        Me.BtnGo = New System.Windows.Forms.Button()
         Me.txtURL = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtResult = New System.Windows.Forms.TextBox()
@@ -35,15 +35,15 @@ Partial Class Form2
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'BtnTest
+        'BtnGo
         '
-        Me.BtnTest.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnTest.Location = New System.Drawing.Point(16, 81)
-        Me.BtnTest.Name = "BtnTest"
-        Me.BtnTest.Size = New System.Drawing.Size(139, 44)
-        Me.BtnTest.TabIndex = 0
-        Me.BtnTest.Text = "競走馬情報" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "の取り込み"
-        Me.BtnTest.UseVisualStyleBackColor = True
+        Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGo.Location = New System.Drawing.Point(16, 81)
+        Me.BtnGo.Name = "BtnGo"
+        Me.BtnGo.Size = New System.Drawing.Size(139, 44)
+        Me.BtnGo.TabIndex = 0
+        Me.BtnGo.Text = "競走馬情報" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "の取り込み"
+        Me.BtnGo.UseVisualStyleBackColor = True
         '
         'txtURL
         '
@@ -137,7 +137,7 @@ Partial Class Form2
         Me.Controls.Add(Me.txtResult)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
-        Me.Controls.Add(Me.BtnTest)
+        Me.Controls.Add(Me.BtnGo)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form2"
         Me.Text = "競走馬情報の取り込み"
@@ -147,7 +147,7 @@ Partial Class Form2
 
     End Sub
 
-    Friend WithEvents BtnTest As Button
+    Friend WithEvents BtnGo As Button
     Friend WithEvents txtURL As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtResult As TextBox

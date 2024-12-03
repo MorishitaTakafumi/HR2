@@ -23,7 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.BtnTest = New System.Windows.Forms.Button()
+        Me.BtnGo = New System.Windows.Forms.Button()
         Me.txtURL = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtResult = New System.Windows.Forms.TextBox()
@@ -38,15 +38,15 @@ Partial Class Form1
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'BtnTest
+        'BtnGo
         '
-        Me.BtnTest.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnTest.Location = New System.Drawing.Point(18, 80)
-        Me.BtnTest.Name = "BtnTest"
-        Me.BtnTest.Size = New System.Drawing.Size(139, 44)
-        Me.BtnTest.TabIndex = 0
-        Me.BtnTest.Text = "レース結果の取り込み"
-        Me.BtnTest.UseVisualStyleBackColor = True
+        Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGo.Location = New System.Drawing.Point(18, 80)
+        Me.BtnGo.Name = "BtnGo"
+        Me.BtnGo.Size = New System.Drawing.Size(139, 44)
+        Me.BtnGo.TabIndex = 0
+        Me.BtnGo.Text = "レース結果の取り込み"
+        Me.BtnGo.UseVisualStyleBackColor = True
         '
         'txtURL
         '
@@ -172,7 +172,7 @@ Partial Class Form1
         Me.Controls.Add(Me.txtResult)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.txtURL)
-        Me.Controls.Add(Me.BtnTest)
+        Me.Controls.Add(Me.BtnGo)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form1"
         Me.Text = "レース結果のとりこみ"
@@ -182,7 +182,7 @@ Partial Class Form1
 
     End Sub
 
-    Friend WithEvents BtnTest As Button
+    Friend WithEvents BtnGo As Button
     Friend WithEvents txtURL As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents txtResult As TextBox

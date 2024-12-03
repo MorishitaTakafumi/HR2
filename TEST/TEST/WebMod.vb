@@ -16,7 +16,7 @@ Module WebMod
 
     Public Function GetWebPageText(ByVal url As String) As String
         Dim client As New HttpClient()
-
+        url = makeJRAurl(url)
         ' 非同期でデータを取得するタスクを実行
         Dim task As Task(Of Byte()) = client.GetByteArrayAsync(url)
         task.Wait() ' タスクが完了するまで待機
@@ -36,6 +36,15 @@ Module WebMod
         End If
         Return url
     End Function
+
+    Public Sub Clipboard2URL(ByVal txtbox As TextBox)
+        If Clipboard.ContainsText Then
+            Dim tmp As String = makeJRAurl(Clipboard.GetText)
+            If InStr(tmp, "https") Then
+                txtbox.Text = tmp
+            End If
+        End If
+    End Sub
 
     Public Sub test(ByVal url As String)
         ' HttpClientのインスタンスを作成
