@@ -98,7 +98,7 @@ Public Class Form3
         flx.AutoSizeRows()
     End Sub
 
-    Private Sub BtnTest_Click(sender As Object, e As EventArgs) Handles BtnTest.Click
+    Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
         Dim contents As String = ""
         If RbURL.Checked Then
             Dim url As String = txtURL.Text.Trim
@@ -157,7 +157,7 @@ Public Class Form3
         RbURL.Checked = True
         Me.WindowState = FormWindowState.Minimized
         Show()
-        BtnTest.PerformClick()
+        BtnGo.PerformClick()
     End Sub
 
     Public Sub entry2(ByVal txtFnm As String)
@@ -165,7 +165,7 @@ Public Class Form3
         RbFile.Checked = True
         Me.WindowState = FormWindowState.Minimized
         Show()
-        BtnTest.PerformClick()
+        BtnGo.PerformClick()
     End Sub
 
     Private Sub flx_Click(sender As Object, e As EventArgs) Handles flx.Click
