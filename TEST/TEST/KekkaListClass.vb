@@ -300,6 +300,17 @@ Public Class KekkaListClass
 
     'レース結果を取得して登録する
     'Return ""=成功、エラーメッセージ=失敗
+    Public Function GetRaceKekka(ByVal cmd As SQLiteCommand,
+                                 ByVal url As String,
+                                 ByRef existFlag As Boolean,
+                                 Optional ByVal dt_race As String = "",
+                                 Optional ByVal racename As String = "",
+                                 Optional ByVal autosave As Boolean = False) As String
+        Return _GetRaceKekka(cmd, url, existFlag, dt_race, racename, autosave)
+    End Function
+
+    'レース結果を取得して登録する
+    'Return ""=成功、エラーメッセージ=失敗
     Public Function GetRaceKekka(ByVal url As String,
                                  ByRef existFlag As Boolean,
                                  Optional ByVal dt_race As String = "",

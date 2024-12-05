@@ -288,8 +288,9 @@ Public Class AnaForm
         ElseIf RbFile.Checked Then
             fm3.entry2(form3argStr)
         End If
-        Dim fm1 As New Form1 '結果
-        Dim fm2 As New Form2 '馬情報
+        Dim kekkaList As New KekkaListClass
+        Dim umaHistList As New umaHistListClass
+        Dim oUmaHeader As UmaHeaderClass
 
         ListBox1.Items.Clear()
         oHead = fm3.oRaceHeader
@@ -305,41 +306,89 @@ Public Class AnaForm
         ListBox1.Items.Add("クラス：" & oHead.class_name)
         oHead.class_code = oHead.GetClassCode()
         anaList.init()
-        For j As Integer = 0 To fm3.syutubaList.cnt - 1
-            lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString
-            Dim rA As New raceAnanClass
-            Dim o As SyutubaClass = fm3.syutubaList.GetBodyRef(j)
-            rA.waku = o.waku
-            rA.umaban = o.umaban
-            rA.bamei = o.bamei
-            rA.ninki = o.ninki
-            fm2.entry(o.href, o.bamei, oHead.dt)
-            rA.spanScore = fm2.umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
-            rA.dateScore = fm2.umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
-            For i As Integer = 0 To fm2.umaHistList.cnt - 1
-                If i > 5 Then
-                    Exit For
+        Dim errmsg As String = ""
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                errmsg = oShortRaceName.load(cmd)
+                If errmsg.Length > 0 Then
+                    Exit Try
                 End If
+                For j As Integer = 0 To fm3.syutubaList.cnt - 1
+                    lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString
+                    Dim rA As New raceAnanClass
+                    Dim o As SyutubaClass = fm3.syutubaList.GetBodyRef(j)
+                    rA.waku = o.waku
+                    rA.umaban = o.umaban
+                    rA.bamei = o.bamei
+                    rA.ninki = o.ninki
+                    umaHistList.init()
+                    errmsg = umaHistList.GetUmaInfo(cmd, makeJRAurl(o.href), o.bamei, oHead.dt, True)
+                    If errmsg.Length > 0 Then
+                        Exit Try
+                    End If
+                    oUmaHeader = umaHistList.umaHeader
+                    rA.spanScore = umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
+                    rA.dateScore = umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
+                    For i As Integer = 0 To umaHistList.cnt - 1
+                        If i > 5 Then
+                            Exit For
+                        End If
 
-                lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString & " | " & (i + 1).ToString & "/6"
-                Me.Refresh()
+                        lb_msg.Text = (j + 1).ToString & "/" & (fm3.syutubaList.cnt).ToString & " | " & (i + 1).ToString & "/6"
+                        Me.Refresh()
 
-                Dim oS As UmaHistClass = fm2.umaHistList.GetBodyRef(i)
+                        Dim oS As UmaHistClass = umaHistList.GetBodyRef(i)
+                        Dim shortname As String = oS.racename
+                        kekkaList.init()
+                        Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
+                        oS.racename = oShortRaceName.GetLongName(oS.racename)
+                        errmsg = oRaceHead.loadByUmaHist(cmd, oS)
+                        If errmsg.Length > 0 Then
+                            Exit Try
+                        End If
+                        If oRaceHead.id < 0 Then
+                            Dim existFlag As Boolean
+                            errmsg = kekkaList.GetRaceKekka(cmd, makeJRAurl(oS.href), existFlag, oS.dt.ToString("yyyy/MM/dd"), oS.racename, True)
+                            If errmsg.Length > 0 Then
+                                Exit Try
+                            End If
+                            If oRaceHead.race_name.Trim.Length > 0 Then
+                                If shortname <> oRaceHead.race_name Then
+                                    errmsg = oShortRaceName.addNew(cmd, shortname, oRaceHead.race_name)
+                                    If errmsg.Length > 0 Then
+                                        Exit Try
+                                    End If
+                                End If
+                            End If
+                        End If
 
-                'If j = 11 AndAlso i = 0 Then
-                '    MsgBox(o.bamei & " " & oS.racename)
-                'End If
+                        If oRaceHead.race_name.Trim.Length > 0 Then
+                            If oRaceHead.id > 0 AndAlso kekkaList.cnt = 0 Then
+                                errmsg = kekkaList.load(cmd, oRaceHead.id)
+                                If errmsg.Length > 0 Then
+                                    Exit Try
+                                End If
+                            End If
+                            kekkaList.setAgarisa(oRaceHead)
+                        End If
 
-                fm1.entry(oS.href, oS.dt.ToString("yyyy/MM/dd"), oS.racename, True)
-                rA.hist(i) = fm1.kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
-            Next
-
-            anaList.add1(rA)
-        Next
+                        If oRaceHead.id > 0 AndAlso kekkaList.cnt > 0 Then
+                            rA.hist(i) = kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
+                        End If
+                    Next
+                    anaList.add1(rA)
+                Next
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
         ShowTable(anaList)
         PaintTable(anaList)
-        fm1.Close()
-        fm2.Close()
         fm3.Close()
         If RbFile.Checked Then
             ShowCyakujun()
@@ -426,14 +475,14 @@ Public Class AnaForm
 
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             Dim cmd2 As SQLite.SQLiteCommand = conn.CreateCommand
-            conn.Open()
             Try
+                conn.Open()
                 errmsg = oShortRaceName.load(cmd)
                 If errmsg.Length > 0 Then
                     Exit Try
                 End If
 
-                cmd.CommandText = "SELECT R.id, R.dt, A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
+                cmd.CommandText = "SELECT R.dt, A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
                 If chkJo.Checked Then
@@ -576,9 +625,9 @@ Public Class AnaForm
 
     '馬名を指定して直近４走の上り差と着差をagarisa1-4, cyakusa1-4にセットする
     '
-    Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand, ByVal arg_bamei As String, ByVal arg_cyakujun As Integer, ByVal dt_max As Date) As String
+    Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand,
+                                       ByVal arg_bamei As String, ByVal arg_cyakujun As Integer, ByVal dt_max As Date) As String
         Dim oUmaHeader As New UmaHeaderClass
-        Dim fm1 As New Form1 '結果
         Try
             Dim errmsg As String = oUmaHeader.load(cmd, arg_bamei)
             If errmsg.Length = 0 Then
@@ -594,6 +643,11 @@ Public Class AnaForm
                     For j As Integer = 0 To oUmaHist.cnt - 1
                         Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
                         Dim shortname As String = oS.racename
+
+                        '春麗ジャンプで日付が違うのはなぜか？
+                        XAttribute = 999
+
+
                         If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                             kekkaList.init()
                             Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
@@ -606,16 +660,12 @@ Public Class AnaForm
                                 Dim contents As String = GetWebPageText(makeJRAurl(oS.href))
                                 GetKekka(contents, kekkaList)
                                 oRaceHead.keibajo = GetWhenWhere(contents, oRaceHead.dt)
+                                oRaceHead.jo_code = GetKeibajoCode(oRaceHead.keibajo)
                                 oRaceHead.race_no = GetRaceNo(contents)
                                 oRaceHead.race_name = GetRaceName(contents, oRaceHead.grade)
                                 oRaceHead.class_name = GetClassCource(contents, oRaceHead.kyori, oRaceHead.syubetu)
                                 oRaceHead.class_code = oRaceHead.GetClassCode()
                                 oRaceHead.tosu = kekkaList.cnt
-                                oS.racename = oRaceHead.race_name
-                                errmsg = oRaceHead.loadByUmaHist(cmd, oS)
-                                If errmsg.Length > 0 Then
-                                    Return errmsg
-                                End If
                                 If oRaceHead.race_name.Trim.Length > 0 Then
                                     If shortname <> oRaceHead.race_name Then
                                         errmsg = oShortRaceName.addNew(cmd, shortname, oRaceHead.race_name)
@@ -623,6 +673,17 @@ Public Class AnaForm
                                             Return errmsg
                                         End If
                                     End If
+                                End If
+                                oS.racename = oRaceHead.race_name
+                                If oS.jo_code < 0 Then
+                                    oS.jo_code = oRaceHead.jo_code
+                                End If
+                                oRaceHead.push()
+                                errmsg = oRaceHead.loadByUmaHist(cmd, oS)
+                                If errmsg.Length > 0 Then
+                                    Return errmsg
+                                ElseIf oRaceHead.id < 0 Then
+                                    oRaceHead.pop()
                                 End If
                             End If
                             If oRaceHead.race_name.Trim.Length > 0 Then

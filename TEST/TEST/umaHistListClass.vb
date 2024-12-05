@@ -239,31 +239,49 @@ Public Class umaHistListClass
                                  ByVal dt_max As Date,
                                  ByVal autosave As Boolean) As String
 
-        'URLから馬情報取得
+        init()
+        If url.Length = 0 AndAlso bamei.Length = 0 Then
+            Return ""
+        End If
+        Dim WebGet As Boolean = False
+        Dim errmsg As String = ""
         Dim oTmpHeader As UmaHeaderClass = Nothing
         Dim contents As String = ""
-        If url.Length > 0 Then
-            contents = GetWebPageText(url)
-            oTmpHeader = GetUmaHeader(contents)
-        End If
-        'DBから馬情報取得
-        If oTmpHeader IsNot Nothing Then
-            If bamei.Trim.Length = 0 Then
-                bamei = oTmpHeader.bamei
+        While 1
+            If bamei.Length > 0 Then
+                errmsg = DB_GetDataByName(cmd, bamei, dt_max)
+                If errmsg.Length > 0 Then
+                    Return errmsg
+                End If
+                If umaHeader.rec_id > 0 AndAlso umaHeader.dt_update > dt_max Then
+                    Exit While
+                End If
             End If
-        End If
-        init()
-        Dim errmsg As String = DB_GetDataByName(cmd, bamei, dt_max)
-        If errmsg.Length > 0 Then
-            Return errmsg
-        End If
+            'URLから馬情報取得
+            If Not WebGet Then
+                If url.Length > 0 Then
+                    contents = GetWebPageText(url)
+                    oTmpHeader = GetUmaHeader(contents)
+                    WebGet = True
+                    'DBから馬情報取得
+                    If oTmpHeader IsNot Nothing Then
+                        If bamei.Trim.Length = 0 OrElse InStr(oTmpHeader.bamei, bamei, CompareMethod.Text) > 0 Then '長い馬名は出馬表で短縮されることあり
+                            bamei = oTmpHeader.bamei
+                        End If
+                    End If
+                End If
+            Else
+                Exit While
+            End If
+        End While
+
         If umaHeader.rec_id < 0 Then
             If oTmpHeader Is Nothing Then
                 Return ""
             Else
                 umaHeader = oTmpHeader
             End If
-        Else
+        ElseIf oTmpHeader IsNot Nothing Then
             If umaHeader.father <> oTmpHeader.father Then
                 umaHeader.father = oTmpHeader.father
                 umaHeader.dirtyFlag = True
@@ -292,6 +310,16 @@ Public Class umaHistListClass
 
     '馬情報を取得して登録する
     'Return ""=成功、エラーメッセージ=失敗
+    Public Function GetUmaInfo(ByVal cmd As SQLiteCommand,
+                                 ByVal url As String,
+                                 Optional ByVal bamei As String = "",
+                                 Optional ByVal dt_max As Date = DMY_DATE,
+                                 Optional ByVal autosave As Boolean = False) As String
+        Return _GetUmaInfo(cmd, url, bamei, dt_max, autosave)
+    End Function
+
+    '馬情報を取得して登録する
+    'Return ""=成功、エラーメッセージ=失敗
     Public Function GetUmaInfo(ByVal url As String,
                                  Optional ByVal bamei As String = "",
                                  Optional ByVal dt_max As Date = DMY_DATE,
@@ -302,5 +330,4 @@ Public Class umaHistListClass
             Return _GetUmaInfo(cmd, url, bamei, dt_max, autosave)
         End Using
     End Function
-
 End Class

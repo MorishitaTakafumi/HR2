@@ -73,4 +73,3 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.exe
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.xml
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.pdb
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.TestForm.resources
-C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache

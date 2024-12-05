@@ -46,6 +46,21 @@ Public Class RaceHeaderClass
     Public Property tosu As Short
     Public Property grade As String
 
+    'データ一時退避用
+    Private org_id As Integer
+    Private org_dt As Date
+    Private org_class_code As Short
+    Private org_class_name As String
+    Private org_type_code As Short '1=芝,2=ダート,3=障害
+    Private org_syubetu As String
+    Private org_kyori As Integer
+    Private org_jo_code As Short
+    Private org_keibajo As String
+    Private org_race_name As String
+    Private org_race_no As Short
+    Private org_tosu As Short
+    Private org_grade As String
+
     Public Sub init()
         id = -1
         dt = DMY_DATE
@@ -64,6 +79,38 @@ Public Class RaceHeaderClass
 
     Public Sub New()
         init()
+    End Sub
+
+    Public Sub push()
+        org_id = id
+        org_dt = dt
+        org_class_code = class_code
+        org_class_name = class_name
+        org_type_code = type_code
+        org_syubetu = syubetu
+        org_kyori = kyori
+        org_jo_code = jo_code
+        org_keibajo = keibajo
+        org_race_name = race_name
+        org_race_no = race_no
+        org_tosu = tosu
+        org_grade = grade
+    End Sub
+
+    Public Sub pop()
+        id = org_id
+        dt = org_dt
+        class_code = org_class_code
+        class_name = org_class_name
+        type_code = org_type_code
+        syubetu = org_syubetu
+        kyori = org_kyori
+        jo_code = org_jo_code
+        keibajo = org_keibajo
+        race_name = org_race_name
+        race_no = org_race_no
+        tosu = org_tosu
+        grade = org_grade
     End Sub
 
     'クラス名をクラスコードに変換

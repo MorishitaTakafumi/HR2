@@ -18,12 +18,17 @@ Public Class raceReviewForm
         cols = dateScore + 1
     End Enum
 
+    Private oShortRaceName As New ShortRaceNameClass
     Private spanScore As New List(Of Integer)
     Private cyakujun As New List(Of Integer)
     Private agarisa1 As New List(Of Single)
     Private agarisa2 As New List(Of Single)
     Private agarisa3 As New List(Of Single)
     Private agarisa4 As New List(Of Single)
+    Private cyakusa1 As New List(Of Single)
+    Private cyakusa2 As New List(Of Single)
+    Private cyakusa3 As New List(Of Single)
+    Private cyakusa4 As New List(Of Single)
 
     Public Sub New()
         InitializeComponent()
@@ -126,7 +131,8 @@ Public Class raceReviewForm
             .Cols.Count = FlxCol.cols
             .Rows.Count = 2
             .Rows.Fixed = 2
-            .Cols.Fixed = 2
+            .Cols.Fixed = 0
+            .Cols.Frozen = 2
             .Item(0, FlxCol.dt) = "日付"
             .Item(0, FlxCol.racename) = "レース名"
             .Item(0, FlxCol.bamei) = "馬名"
@@ -260,6 +266,7 @@ Public Class raceReviewForm
     End Sub
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
+        ClearWebPageAccessCounter()
         SetUpFlx()
         ListBox2.Items.Clear()
         spanScore.Clear()
@@ -268,14 +275,23 @@ Public Class raceReviewForm
         agarisa2.Clear()
         agarisa3.Clear()
         agarisa4.Clear()
+        cyakusa1.Clear()
+        cyakusa2.Clear()
+        cyakusa3.Clear()
+        cyakusa4.Clear()
 
         Dim errmsg As String = ""
 
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = conn.CreateCommand
-            conn.Open()
+            Dim cmd2 As SQLiteCommand = conn.CreateCommand
             Try
-                cmd.CommandText = "SELECT A.*, R.dt, R.race_name FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
+                conn.Open()
+                errmsg = oShortRaceName.load(cmd)
+                If errmsg.Length > 0 Then
+                    Exit Try
+                End If
+                cmd.CommandText = "SELECT R.dt, R.kyori, R.type_code, R.race_name, K.cyakujun, K.bamei, K.ninki FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id WHERE K.cyakujun>0"
                 Dim sql As String = ""
                 If CbJo.SelectedIndex > 0 Then
                     sql &= " AND R.jo_code=@jo_code"
@@ -299,9 +315,9 @@ Public Class raceReviewForm
                 End If
                 If CbCyakujun.SelectedIndex > 0 Then
                     If RbInai.Checked Then
-                        sql &= " AND A.cyakujun<=@cyakujun"
+                        sql &= " AND K.cyakujun<=@cyakujun"
                     Else
-                        sql &= " AND A.cyakujun>=@cyakujun"
+                        sql &= " AND K.cyakujun>=@cyakujun"
                     End If
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
                 End If
@@ -312,39 +328,16 @@ Public Class raceReviewForm
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
+                flx.Redraw = False
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
-                Dim xx(FlxCol.cols - 1) As String
                 While r.Read
-                    xx(FlxCol.dt) = CDate(r("dt")).ToString("yyyy.MM.dd")
-                    xx(FlxCol.racename) = r("race_name")
-                    xx(FlxCol.bamei) = r("bamei")
-                    xx(FlxCol.cyakujun) = CInt(r("cyakujun")).ToString("D2")
-                    xx(FlxCol.ninki) = r("ninki")
-                    Dim sa As Integer = CInt(r("ninki")) - CInt(r("cyakujun"))
-                    If sa >= 0 Then
-                        xx(FlxCol.sa) = "+" & sa.ToString("D2")
-                    Else
-                        xx(FlxCol.sa) = sa.ToString("D2")
+                    errmsg = GetAgarisaCyakusa(cmd2, r("bamei"), r("cyakujun"), r("ninki"), r("dt"), r("race_name"), r("kyori"), GetRaceTypeName(r("type_code")))
+                    If errmsg.Length > 0 Then
+                        Exit While
                     End If
-                    xx(FlxCol.spanVal) = AnaValClass.Score2String(r("spanScore"))
-                    For i As Integer = 0 To HIS_CNT - 1
-                        xx(FlxCol.histStart + 2 * i + 0) = time2str(r.GetFloat(4 + 2 * i)) 'agarisa1～4
-                        xx(FlxCol.histStart + 2 * i + 1) = time2str(r.GetFloat(5 + 2 * i)) 'cyakusa1～4
-                    Next
-                    xx(FlxCol.kyoriScore) = AnaValClass.Score2String(r("kyoriScore"))
-                    xx(FlxCol.dateScore) = AnaValClass.Score2String(r("dateScore"))
-                    flx.AddItem(xx)
-                    '
-                    cyakujun.Add(r("cyakujun"))
-                    spanScore.Add(r("spanScore"))
-                    agarisa1.Add(r("agarisa1"))
-                    agarisa2.Add(r("agarisa2"))
-                    agarisa3.Add(r("agarisa3"))
-                    agarisa4.Add(r("agarisa4"))
                 End While
                 r.Close()
-                flx.AutoSizeCols()
-                flx.AutoSizeRows()
+                flx.Redraw = True
             Catch ex As Exception
                 errmsg = ex.Message
             End Try
@@ -472,8 +465,146 @@ Public Class raceReviewForm
                 ListBox2.Items.Add("0-0-0-2～10：" & cnt8.ToString)
             End If
             PaintTable()
+            flx.AutoSizeCols()
+            flx.AutoSizeRows()
         End If
+        showWebPageAccessCounter()
     End Sub
+
+    '馬名を指定して直近４走の上り差と着差をagarisa1-4, cyakusa1-4にセットする
+    '
+    Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand, ByVal arg_bamei As String, ByVal arg_cyakujun As Integer, ByVal arg_ninki As Integer,
+                                                                    ByVal arg_dt_race As Date, ByVal arg_racename As String, ByVal arg_kyori As Integer,
+                                                                    ByVal arg_syubetu As String) As String
+        Dim oUmaHist As New umaHistListClass
+        Dim oUmaHeader As UmaHeaderClass = oUmaHist.umaHeader
+        Try
+            Dim errmsg As String = oUmaHeader.load(cmd, arg_bamei)
+            If errmsg.Length = 0 AndAlso oUmaHeader.rec_id > 0 Then
+                errmsg = oUmaHist.load(cmd, oUmaHeader.rec_id, arg_dt_race)
+                If errmsg.Length = 0 Then
+                    Dim kekkaList As New KekkaListClass
+                    Dim rA As New raceAnanClass
+                    rA.spanScore = oUmaHist.GetSpanScore(arg_dt_race, rA.spanVal)
+                    rA.dateScore = oUmaHist.GetSameDateSameKyoriScore(arg_dt_race, arg_kyori, arg_syubetu, rA.kyoriScore)
+
+                    Dim agarisa(3) As Single
+                    Dim cyakusa(3) As Single
+                    Dim cnt As Integer = 0
+                    For j As Integer = 0 To oUmaHist.cnt - 1
+                        Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
+                        Dim shortname As String = oS.racename
+                        If DateDiff(DateInterval.Day, oS.dt, arg_dt_race) > 1 AndAlso oS.href.Trim.Length > 0 Then
+                            kekkaList.init()
+                            Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
+                            oS.racename = oShortRaceName.GetLongName(shortname)
+                            errmsg = oRaceHead.loadByUmaHist(cmd, oS)
+                            If errmsg.Length > 0 Then
+                                Return errmsg
+                            End If
+                            'DB未登録レースはWebPageをロードして情報取得する
+                            If oRaceHead.id < 0 Then
+                                Dim contents As String = GetWebPageText(makeJRAurl(oS.href))
+                                GetKekka(contents, kekkaList)
+                                oRaceHead.keibajo = GetWhenWhere(contents, oRaceHead.dt)
+                                oRaceHead.race_no = GetRaceNo(contents)
+                                oRaceHead.race_name = GetRaceName(contents, oRaceHead.grade)
+                                oRaceHead.class_name = GetClassCource(contents, oRaceHead.kyori, oRaceHead.syubetu)
+                                oRaceHead.class_code = oRaceHead.GetClassCode()
+                                oRaceHead.tosu = kekkaList.cnt
+                                oS.racename = oRaceHead.race_name
+                                errmsg = oRaceHead.loadByUmaHist(cmd, oS)
+                                If errmsg.Length > 0 Then
+                                    Return errmsg
+                                End If
+                                '短縮レース名と正式レース名の対比表に登録する
+                                If oRaceHead.race_name.Trim.Length > 0 Then
+                                    If shortname <> oRaceHead.race_name Then
+                                        errmsg = oShortRaceName.addNew(cmd, shortname, oRaceHead.race_name)
+                                        If errmsg.Length > 0 Then
+                                            Return errmsg
+                                        End If
+                                    End If
+                                End If
+                            End If
+                            If oRaceHead.race_name.Trim.Length > 0 Then
+                                'DB未登録レースはここで登録する
+                                If oRaceHead.id < 0 Then
+                                    kekkaList.setCyakusa()
+                                    errmsg = SaveRaceKekka(cmd, kekkaList)
+                                    If errmsg.Length > 0 Then
+                                        Return errmsg
+                                    End If
+                                Else
+                                    errmsg = kekkaList.load(cmd, oRaceHead.id)
+                                    If errmsg.Length > 0 Then
+                                        Return errmsg
+                                    End If
+                                End If
+                                kekkaList.setAgarisa(oRaceHead)
+                                Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
+                                If oK IsNot Nothing Then
+                                    agarisa(cnt) = oK.agarisa
+                                    cyakusa(cnt) = oK.cyakusa
+                                    cnt += 1
+                                    If cnt > 3 Then
+                                        Exit For
+                                    End If
+                                Else
+                                    Dim dmy As Integer = 0
+                                End If
+                            End If
+                        End If
+                    Next
+                    If cnt > 0 Then
+                        Dim xx(FlxCol.cols - 1) As String
+                        xx(FlxCol.dt) = arg_dt_race.ToString("yyyy.MM.dd")
+                        xx(FlxCol.racename) = arg_racename
+                        xx(FlxCol.bamei) = arg_bamei
+                        xx(FlxCol.cyakujun) = arg_cyakujun.ToString("D2")
+                        xx(FlxCol.ninki) = arg_ninki
+                        Dim sa As Integer = arg_ninki - arg_cyakujun
+                        If sa >= 0 Then
+                            xx(FlxCol.sa) = "+" & sa.ToString("D2")
+                        Else
+                            xx(FlxCol.sa) = sa.ToString("D2")
+                        End If
+                        xx(FlxCol.spanVal) = AnaValClass.Score2String(rA.spanScore)
+                        For i As Integer = 0 To HIS_CNT - 1
+                            xx(FlxCol.histStart + 2 * i + 0) = time2str(agarisa(i)) 'agarisa1～4
+                            xx(FlxCol.histStart + 2 * i + 1) = time2str(cyakusa(i)) 'cyakusa1～4
+                        Next
+                        xx(FlxCol.kyoriScore) = AnaValClass.Score2String(rA.kyoriScore)
+                        xx(FlxCol.dateScore) = AnaValClass.Score2String(rA.dateScore)
+                        flx.AddItem(xx)
+                        '
+                        cyakujun.Add(arg_cyakujun)
+                        spanScore.Add(rA.spanScore)
+                        agarisa1.Add(agarisa(0))
+                        agarisa2.Add(agarisa(1))
+                        agarisa3.Add(agarisa(2))
+                        agarisa4.Add(agarisa(3))
+                        cyakusa1.Add(cyakusa(0))
+                        cyakusa2.Add(cyakusa(1))
+                        cyakusa3.Add(cyakusa(2))
+                        cyakusa4.Add(cyakusa(3))
+                    End If
+                End If
+            End If
+            Return ""
+        Catch ex As Exception
+            Return "GetAgarisaCyakusa() " & ex.Message
+        End Try
+    End Function
+
+    Private Function SaveRaceKekka(ByVal cmd As SQLiteCommand, ByVal kekkaList As KekkaListClass) As String
+        Dim oK As RaceHeaderClass = kekkaList.raceHeader
+        Dim errmsg As String = oK.addNew(cmd)
+        If errmsg.Length = 0 Then
+            errmsg = kekkaList.save(cmd)
+        End If
+        Return errmsg
+    End Function
 
     Private Function GetAgarisaIdx(ByVal agarisa As Single) As Integer
         If agarisa = DMY_VAL Then
