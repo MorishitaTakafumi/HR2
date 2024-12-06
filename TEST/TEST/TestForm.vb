@@ -206,11 +206,14 @@ Public Class TestForm
             Dim cmd As SQLiteCommand = con.CreateCommand
             Try
                 con.Open()
-                cmd.CommandText = "SELECT race_name, dt, COUNT(*) AS cnt FROM RaceHeader GROUP BY race_name, dt HAVING COUNT(*)>1"
+                cmd.CommandText = "SELECT race_name, dt, jo_code, type_code, kyori, COUNT(*) AS cnt FROM RaceHeader 
+                                    GROUP BY race_name, dt, jo_code, type_code, kyori HAVING COUNT(*)>1"
                 Dim r As SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
                     cnt += 1
-                    ListBox1.Items.Add(cnt.ToString & ":" & CStr(r("race_name")) & " " & CDate(r("dt")).ToString & " " & CInt(r("cnt")).ToString)
+                    ListBox1.Items.Add(cnt.ToString & ":" & CStr(r("race_name")) & " " & CDate(r("dt")).ToString("yyyy年M月d日") &
+                                       " " & GetKeibajoName(r("jo_code")) & " " &
+                                       GetRaceTypeName(r("type_code")) & " " & CInt(r("kyori")).ToString & " " & CInt(r("cnt")).ToString)
                 End While
                 r.Close()
                 If cnt > 0 Then
@@ -228,15 +231,22 @@ Public Class TestForm
         ListBox1.Items.Clear()
         Dim raceNameList As New List(Of String)
         Dim dtList As New List(Of Date)
+        Dim joList As New List(Of Integer)
+        Dim typeList As New List(Of Integer)
+        Dim kyoriList As New List(Of Integer)
         Using con As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = con.CreateCommand
             Try
                 con.Open()
-                cmd.CommandText = "SELECT race_name, dt FROM RaceHeader GROUP BY race_name, dt HAVING COUNT(*)>1"
+                cmd.CommandText = "SELECT race_name, dt, jo_code, type_code, kyori FROM RaceHeader 
+                                    GROUP BY race_name, dt, jo_code, type_code, kyori HAVING COUNT(*)>1"
                 Dim r As SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
                     raceNameList.Add(r("race_name"))
                     dtList.Add(r("dt"))
+                    joList.Add(r("jo_code"))
+                    typeList.Add(r("type_code"))
+                    kyoriList.Add(r("kyori"))
                 End While
                 r.Close()
                 '
@@ -247,10 +257,13 @@ Public Class TestForm
                     Me.Refresh()
                     cnt = 0
                     subsql = ""
-                    cmd.CommandText = "SELECT id FROM RaceHeader WHERE race_name=@race_name AND dt=@dt"
+                    cmd.CommandText = "SELECT id FROM RaceHeader WHERE race_name=@race_name AND dt=@dt AND jo_code=@jo_code AND type_code=@type_code AND kyori=@kyori"
                     cmd.Parameters.Clear()
                     cmd.Parameters.AddWithValue("@race_name", raceNameList(j))
                     cmd.Parameters.AddWithValue("@dt", dtList(j))
+                    cmd.Parameters.AddWithValue("@jo_code", joList(j))
+                    cmd.Parameters.AddWithValue("@type_code", typeList(j))
+                    cmd.Parameters.AddWithValue("@kyori", kyoriList(j))
                     r = cmd.ExecuteReader
                     While r.Read
                         If cnt > 0 Then
@@ -314,6 +327,35 @@ Public Class TestForm
                     ListBox1.Items.Add(ss)
                 End While
                 r.Close()
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End Using
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        ListBox1.Items.Clear()
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT A.id, A.dt, A.race_name, A.tosu, B.cnt FROM RaceHeader A INNER JOIN
+                                  (SELECT race_header_id, COUNT(*) AS cnt FROM Kekka Group By race_header_id) AS B
+                                   ON A.id=B.race_header_id WHERE A.tosu<>B.cnt"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                Dim ss As String = ""
+                While r.Read
+                    ss &= CInt(r("id")).ToString & ","
+                End While
+                r.Close()
+                ss = ss.Substring(0, ss.Length - 1)
+                cmd.Parameters.Clear()
+                cmd.CommandText = "DELETE FROM RaceHeader WHERE id IN(" & ss & ")"
+                cmd.ExecuteNonQuery()
+                cmd.Parameters.Clear()
+                cmd.CommandText = "DELETE FROM Kekka WHERE race_header_id IN(" & ss & ")"
+                cmd.ExecuteNonQuery()
                 lb_msg.Text = "処理完了！"
             Catch ex As Exception
                 MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)

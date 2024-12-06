@@ -33,6 +33,7 @@ Partial Class TestForm
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button10 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button1
@@ -134,11 +135,21 @@ Partial Class TestForm
         Me.Button9.Text = "レース情報の不整合チェック"
         Me.Button9.UseVisualStyleBackColor = True
         '
+        'Button10
+        '
+        Me.Button10.Location = New System.Drawing.Point(14, 470)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(179, 44)
+        Me.Button10.TabIndex = 11
+        Me.Button10.Text = "不整合レース削除"
+        Me.Button10.UseVisualStyleBackColor = True
+        '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1081, 608)
+        Me.Controls.Add(Me.Button10)
         Me.Controls.Add(Me.Button9)
         Me.Controls.Add(Me.Button8)
         Me.Controls.Add(Me.Button7)
@@ -168,4 +179,5 @@ Partial Class TestForm
     Friend WithEvents Button7 As Button
     Friend WithEvents Button8 As Button
     Friend WithEvents Button9 As Button
+    Friend WithEvents Button10 As Button
 End Class

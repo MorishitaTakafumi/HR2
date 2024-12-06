@@ -206,10 +206,15 @@ Public Class KekkaListClass
 
     'DBからデータ取得
     'Return True=成功、False=ない/失敗
-    Private Function DB_GetDataByName(ByVal cmd As SQLiteCommand, ByVal dt_race As Date, ByVal racename As String) As String
+    Private Function DB_GetDataByName(ByVal cmd As SQLiteCommand,
+                                      ByVal dt_race As Date,
+                                      ByVal racename As String,
+                                      Optional ByVal arg_jo_code As Integer = -1,
+                                      Optional ByVal arg_type_code As Integer = -1,
+                                      Optional ByVal arg_kyori As Integer = -1) As String
         Try
             cmd.Parameters.Clear()
-            Dim errmsg As String = raceHeader.loadByDateAndName(cmd, dt_race, racename)
+            Dim errmsg As String = raceHeader.loadByDateAndName(cmd, dt_race, racename, arg_jo_code, arg_type_code, arg_kyori)
             If errmsg.Length = 0 AndAlso raceHeader.id > 0 Then
                 errmsg = load(cmd, raceHeader.id)
                 setAgarisa(raceHeader)
@@ -225,7 +230,7 @@ Public Class KekkaListClass
         Dim errmsg As String = ""
         Dim oK As RaceHeaderClass = raceHeader
         If oK.id < 0 Then
-            errmsg = oK.loadByDateAndName(cmd, oK.dt, oK.race_name)
+            errmsg = oK.loadByDateAndName(cmd, oK.dt, oK.race_name, oK.jo_code, oK.type_code, oK.kyori)
             If errmsg.Length > 0 Then
                 Return errmsg
             End If
@@ -246,13 +251,16 @@ Public Class KekkaListClass
                                    ByRef existFlag As Boolean,
                                    ByVal dt_race As String,
                                    ByVal racename As String,
+                                   ByVal arg_jo_code As Integer,
+                                   ByVal arg_type_code As Integer,
+                                   ByVal arg_kyori As Integer,
                                    ByVal autosave As Boolean) As String
         Dim errmsg As String = ""
         existFlag = False
         init()
         'Case 1:レース日とレース名が既知でDBに登録済み 
         If IsDate(dt_race) AndAlso racename.Trim.Length > 0 Then
-            errmsg = DB_GetDataByName(cmd, CDate(dt_race), racename)
+            errmsg = DB_GetDataByName(cmd, CDate(dt_race), racename, arg_jo_code, arg_type_code, arg_kyori)
             If errmsg.Length > 0 Then
                 Return errmsg
             Else
@@ -276,8 +284,11 @@ Public Class KekkaListClass
         raceHeader.race_name = GetRaceName(contents, raceHeader.grade)
         raceHeader.class_name = GetClassCource(contents, raceHeader.kyori, raceHeader.syubetu)
         raceHeader.class_code = raceHeader.GetClassCode()
+        arg_jo_code = GetKeibajoCode(raceHeader.keibajo)
+        arg_type_code = GetTypeCode(raceHeader.syubetu)
+        arg_kyori = raceHeader.kyori
         'Case 1でDB_GetDataByNameやっていてもレース名のテキストが"ジャパンC"のように簡略表記されているケースがあるので正式名で再度トライする
-        errmsg = DB_GetDataByName(cmd, raceHeader.dt, raceHeader.race_name)
+        errmsg = DB_GetDataByName(cmd, raceHeader.dt, raceHeader.race_name, arg_jo_code, arg_type_code, arg_kyori)
         If errmsg.Length > 0 Then
             Return errmsg
         Else
@@ -305,8 +316,11 @@ Public Class KekkaListClass
                                  ByRef existFlag As Boolean,
                                  Optional ByVal dt_race As String = "",
                                  Optional ByVal racename As String = "",
+                                 Optional ByVal arg_jo_code As Integer = -1,
+                                 Optional ByVal arg_type_code As Integer = -1,
+                                 Optional ByVal arg_kyori As Integer = -1,
                                  Optional ByVal autosave As Boolean = False) As String
-        Return _GetRaceKekka(cmd, url, existFlag, dt_race, racename, autosave)
+        Return _GetRaceKekka(cmd, url, existFlag, dt_race, racename, arg_jo_code, arg_type_code, arg_kyori, autosave)
     End Function
 
     'レース結果を取得して登録する
@@ -315,11 +329,14 @@ Public Class KekkaListClass
                                  ByRef existFlag As Boolean,
                                  Optional ByVal dt_race As String = "",
                                  Optional ByVal racename As String = "",
+                                 Optional ByVal arg_jo_code As Integer = -1,
+                                 Optional ByVal arg_type_code As Integer = -1,
+                                 Optional ByVal arg_kyori As Integer = -1,
                                  Optional ByVal autosave As Boolean = False) As String
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             conn.Open()
-            Return _GetRaceKekka(cmd, url, existFlag, dt_race, racename, autosave)
+            Return _GetRaceKekka(cmd, url, existFlag, dt_race, racename, arg_jo_code, arg_type_code, arg_kyori, autosave)
         End Using
     End Function
 

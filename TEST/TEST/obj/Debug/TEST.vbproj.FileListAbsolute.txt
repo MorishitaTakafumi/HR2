@@ -23,7 +23,6 @@ C:\STUDY\HR2\TEST\TEST\bin\Debug\TEST.application
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.TrustInfo.xml
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.exe.manifest
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.application
-C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.xml
 C:\STUDY\HR2\TEST\TEST\bin\Debug\EntityFramework.dll
 C:\STUDY\HR2\TEST\TEST\bin\Debug\EntityFramework.SqlServer.dll
 C:\STUDY\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.dll
@@ -36,6 +35,8 @@ C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.StoreAnaValForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.raceReviewForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.WinRateForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.CoefReviewForm.resources
+C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.dll
+C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.TestForm.resources
 C:\学習\HR2\TEST\TEST\bin\Debug\TEST.exe.config
 C:\学習\HR2\TEST\TEST\bin\Debug\TEST.exe.manifest
 C:\学習\HR2\TEST\TEST\bin\Debug\TEST.application
@@ -43,12 +44,12 @@ C:\学習\HR2\TEST\TEST\bin\Debug\TEST.exe
 C:\学習\HR2\TEST\TEST\bin\Debug\TEST.pdb
 C:\学習\HR2\TEST\TEST\bin\Debug\TEST.xml
 C:\学習\HR2\TEST\TEST\bin\Debug\C1.Win.C1FlexGrid.4.dll
-C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.dll
 C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.SqlServer.dll
 C:\学習\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.dll
 C:\学習\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.EF6.dll
 C:\学習\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.Linq.dll
 C:\学習\HR2\TEST\TEST\bin\Debug\C1.Win.C1FlexGrid.4.xml
+C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.xml
 C:\学習\HR2\TEST\TEST\bin\Debug\EntityFramework.SqlServer.xml
 C:\学習\HR2\TEST\TEST\bin\Debug\System.Data.SQLite.xml
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.CoefReviewForm.resources
@@ -72,4 +73,4 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.CopyComplete
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.exe
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.xml
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.pdb
-C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.TestForm.resources
+C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache

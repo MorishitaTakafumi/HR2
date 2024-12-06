@@ -125,7 +125,7 @@ Public Class Form1
     Private Sub GetData()
         ListBox1.Items.Clear()
         Dim existFlag As Boolean
-        DbErrMsg = kekkaList.GetRaceKekka(txtURL.Text, existFlag, txtDate.Text, txtRaceName.Text, chkAutoSave.Checked)
+        DbErrMsg = kekkaList.GetRaceKekka(txtURL.Text, existFlag, txtDate.Text, txtRaceName.Text, -1, -1, -1, chkAutoSave.Checked)
         If DbErrMsg.Length > 0 Then
             MsgBox(DbErrMsg, MsgBoxStyle.Critical, Me.Text)
             Return

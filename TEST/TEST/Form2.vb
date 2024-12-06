@@ -104,11 +104,12 @@ Public Class Form2
 
     Private Sub GetData(ByVal dt_max As Date)
         umaHistList.init()
-        Dim errmsg As String = umaHistList.GetUmaInfo(txtURL.Text.Trim, txtBamei.Text.Trim, dt_max, True)
+        Dim errmsg As String = umaHistList.GetUmaInfo(txtURL.Text.Trim, txtBamei.Text.Trim, dt_max, False)
         If errmsg.Length > 0 Then
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
             Return
         End If
+        txtResult.Text = umaHistList.WebContents
         oUmaHeader = umaHistList.umaHeader
         If (oUmaHeader IsNot Nothing) AndAlso oUmaHeader.bamei.Length > 0 Then
             ListBox1.Items.Clear()

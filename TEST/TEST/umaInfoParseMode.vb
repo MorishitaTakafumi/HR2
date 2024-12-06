@@ -86,6 +86,9 @@
                             words = removeTagPair(lineStr)
                             If words.Count > 0 Then
                                 a.keibajo = words(0)
+                                If a.keibajo.Length = 0 Then '[JRAから転出]等の行は捨てる
+                                    Continue While
+                                End If
                             End If
                         End If
                         lineStr = SearchLineByKeyword(findpos + 1, src, """race""", findpos)

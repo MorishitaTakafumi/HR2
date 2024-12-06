@@ -350,7 +350,7 @@ Public Class AnaForm
                         End If
                         If oRaceHead.id < 0 Then
                             Dim existFlag As Boolean
-                            errmsg = kekkaList.GetRaceKekka(cmd, makeJRAurl(oS.href), existFlag, oS.dt.ToString("yyyy/MM/dd"), oS.racename, True)
+                            errmsg = kekkaList.GetRaceKekka(cmd, makeJRAurl(oS.href), existFlag, oS.dt.ToString("yyyy/MM/dd"), oS.racename, oS.jo_code, oS.type_code, oS.distance, True)
                             If errmsg.Length > 0 Then
                                 Exit Try
                             End If
@@ -458,6 +458,73 @@ Public Class AnaForm
         showWebPageAccessCounter()
     End Sub
 
+    Private Sub BtnGetCount_Click(sender As Object, e As EventArgs) Handles BtnGetCount.Click
+        Dim errmsg As String = ""
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+            Try
+                conn.Open()
+                cmd.CommandText = "SELECT COUNT(R.id) AS cnt FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
+                cmd.Parameters.AddWithValue("@dt", oHead.dt)
+                Dim sql As String = ""
+                If chkJo.Checked Then
+                    sql &= " AND R.jo_code=@jo_code"
+                    cmd.Parameters.AddWithValue("@jo_code", oHead.jo_code)
+                End If
+                If chkKyori.Checked Then
+                    sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
+                    cmd.Parameters.AddWithValue("@kyori", oHead.kyori)
+                    cmd.Parameters.AddWithValue("@type_code", oHead.type_code)
+                End If
+                If chkRacename.Checked Then
+                    sql &= " AND R.race_name=@race_name"
+                    cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                ElseIf chkRacename2.Checked Then
+                    sql &= " AND R.race_name like @race_name"
+                    cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
+                End If
+                If CbGradeL.SelectedIndex >= 0 Then
+                    sql &= " AND R.class_code>=@class_code_lo"
+                    cmd.Parameters.AddWithValue("@class_code_lo", CbGradeL.SelectedIndex)
+                End If
+                If CbGradeH.SelectedIndex >= 0 Then
+                    sql &= " AND R.class_code<=@class_code_hi"
+                    cmd.Parameters.AddWithValue("@class_code_hi", CbGradeH.SelectedIndex)
+                End If
+                If CbCyakujun.SelectedIndex >= 1 AndAlso CbCyakujun.SelectedIndex <= 3 Then
+                    sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
+                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
+                ElseIf CbCyakujun.SelectedIndex = 4 Then
+                    sql &= " AND A.cyakujun>3 AND A.cyakujun<=20 "
+                Else
+                    sql &= " AND A.cyakujun>0 AND A.cyakujun<=20 "
+                End If
+
+                If chkMonth.Checked Then
+                    sql &= " AND strftime('%m', R.dt) = @tuki"
+                    cmd.Parameters.AddWithValue("@tuki", oHead.dt.Month.ToString("D2"))
+                End If
+
+                If sql.Length > 0 Then
+                    cmd.CommandText &= sql
+                End If
+
+                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                If r.Read Then
+                    lb_msg.Text = CInt(r("cnt")).ToString
+                Else
+                    lb_msg.Text = "***"
+                End If
+                r.Close()
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+    End Sub
+
     Private Sub new_logic()
         spanScore.Clear()
         cyakujun.Clear()
@@ -472,9 +539,7 @@ Public Class AnaForm
 
         Dim errmsg As String = ""
         Using conn As New SQLiteConnection(GetDbConnectionString)
-
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
-            Dim cmd2 As SQLite.SQLiteCommand = conn.CreateCommand
             Try
                 conn.Open()
                 errmsg = oShortRaceName.load(cmd)
@@ -501,9 +566,13 @@ Public Class AnaForm
                     sql &= " AND R.race_name like @race_name"
                     cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
                 End If
-                If chkGrade.Checked Then
-                    sql &= " AND R.class_code=@class_code"
-                    cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
+                If CbGradeL.SelectedIndex >= 0 Then
+                    sql &= " AND R.class_code>=@class_code_lo"
+                    cmd.Parameters.AddWithValue("@class_code_lo", CbGradeL.SelectedIndex)
+                End If
+                If CbGradeH.SelectedIndex >= 0 Then
+                    sql &= " AND R.class_code<=@class_code_hi"
+                    cmd.Parameters.AddWithValue("@class_code_hi", CbGradeH.SelectedIndex)
                 End If
                 If CbCyakujun.SelectedIndex >= 1 AndAlso CbCyakujun.SelectedIndex <= 3 Then
                     sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
@@ -525,13 +594,25 @@ Public Class AnaForm
                 cmd.CommandText &= " ORDER BY R.id"
 
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                Dim bameiList As New List(Of String)
+                Dim cyakujunList As New List(Of Integer)
+                Dim dtList As New List(Of Date)
                 While r.Read
-                    errmsg = GetAgarisaCyakusa(cmd2, r("bamei"), r("cyakujun"), r("dt"))
-                    If errmsg.Length > 0 Then
-                        Exit While
-                    End If
+                    bameiList.Add(r("bamei"))
+                    cyakujunList.Add(r("cyakujun"))
+                    dtList.Add(r("dt"))
                 End While
                 r.Close()
+                For j As Integer = 0 To bameiList.Count - 1
+                    If (j Mod 10) = 0 Then
+                        lb_msg.Text = j.ToString & "/" & bameiList.Count.ToString
+                        lb_msg.Refresh()
+                    End If
+                    errmsg = GetAgarisaCyakusa(cmd, bameiList(j), cyakujunList(j), dtList(j))
+                    If errmsg.Length > 0 Then
+                        Exit For
+                    End If
+                Next
             Catch ex As Exception
                 errmsg = ex.Message
             End Try
@@ -578,10 +659,10 @@ Public Class AnaForm
                     sql &= " AND R.race_name like @race_name"
                     cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
                 End If
-                If chkGrade.Checked Then
-                    sql &= " AND R.class_code=@class_code"
-                    cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
-                End If
+                'If chkGrade.Checked Then
+                '    sql &= " AND R.class_code=@class_code"
+                '    cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
+                'End If
                 If CbCyakujun.SelectedIndex >= 1 AndAlso CbCyakujun.SelectedIndex <= 3 Then
                     sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
@@ -644,14 +725,15 @@ Public Class AnaForm
                         Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
                         Dim shortname As String = oS.racename
 
-                        '春麗ジャンプで日付が違うのはなぜか？
-                        XAttribute = 999
-
+                        If InStr(oS.racename, "3歳未勝利") > 0 AndAlso oS.dt.Year = 2020 AndAlso oS.jo_code = 3 Then
+                            MsgBox("でたで！")
+                        End If
 
                         If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                             kekkaList.init()
                             Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
                             oS.racename = oShortRaceName.GetLongName(oS.racename)
+
                             errmsg = oRaceHead.loadByUmaHist(cmd, oS)
                             If errmsg.Length > 0 Then
                                 Return errmsg
@@ -1052,4 +1134,5 @@ Public Class AnaForm
             RbFile.Checked = True
         End If
     End Sub
+
 End Class

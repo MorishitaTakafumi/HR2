@@ -5,6 +5,7 @@ Public Class umaHistListClass
 
     Private m_bf As New List(Of UmaHistClass)
     Public umaHeader As New UmaHeaderClass
+    Public Property WebContents As String
 
     Public ReadOnly Property cnt As Integer
         Get
@@ -246,22 +247,22 @@ Public Class umaHistListClass
         Dim WebGet As Boolean = False
         Dim errmsg As String = ""
         Dim oTmpHeader As UmaHeaderClass = Nothing
-        Dim contents As String = ""
+        WebContents = ""
         While 1
             If bamei.Length > 0 Then
                 errmsg = DB_GetDataByName(cmd, bamei, dt_max)
                 If errmsg.Length > 0 Then
                     Return errmsg
                 End If
-                If umaHeader.rec_id > 0 AndAlso umaHeader.dt_update > dt_max Then
+                If umaHeader.rec_id > 0 AndAlso (umaHeader.dt_update > dt_max OrElse umaHeader.dt_update.Date >= Today.Date) Then
                     Exit While
                 End If
             End If
             'URLから馬情報取得
             If Not WebGet Then
                 If url.Length > 0 Then
-                    contents = GetWebPageText(url)
-                    oTmpHeader = GetUmaHeader(contents)
+                    WebContents = GetWebPageText(url)
+                    oTmpHeader = GetUmaHeader(WebContents)
                     WebGet = True
                     'DBから馬情報取得
                     If oTmpHeader IsNot Nothing Then
@@ -295,14 +296,16 @@ Public Class umaHistListClass
                 umaHeader.dirtyFlag = True
             End If
         End If
-        GetUmaHist(contents, Me, dt_max)
-        If umaHeader.bamei.Length > 0 Then
-            If umaHeader.dt_update < Today OrElse umaHeader.dirtyFlag Then
-                errmsg = umaHeader.save(cmd)
-                If errmsg.Length = 0 Then
-                    errmsg = save(cmd, umaHeader.rec_id)
+        GetUmaHist(WebContents, Me, dt_max)
+        If autosave Then
+            If umaHeader.bamei.Length > 0 Then
+                If umaHeader.dt_update < Today OrElse umaHeader.dirtyFlag Then
+                    errmsg = umaHeader.save(cmd)
+                    If errmsg.Length = 0 Then
+                        errmsg = save(cmd, umaHeader.rec_id)
+                    End If
+                    Return errmsg
                 End If
-                Return errmsg
             End If
         End If
         Return ""

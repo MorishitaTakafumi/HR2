@@ -36,7 +36,6 @@ Partial Class AnaForm
         Me.chkJo = New System.Windows.Forms.CheckBox()
         Me.chkKyori = New System.Windows.Forms.CheckBox()
         Me.chkRacename = New System.Windows.Forms.CheckBox()
-        Me.chkGrade = New System.Windows.Forms.CheckBox()
         Me.chkMonth = New System.Windows.Forms.CheckBox()
         Me.BtnHistGet = New System.Windows.Forms.Button()
         Me.ListBox2 = New System.Windows.Forms.ListBox()
@@ -52,6 +51,11 @@ Partial Class AnaForm
         Me.txtFile = New System.Windows.Forms.TextBox()
         Me.BtnFile = New System.Windows.Forms.Button()
         Me.CbCyakujun2 = New System.Windows.Forms.ComboBox()
+        Me.CbGradeL = New System.Windows.Forms.ComboBox()
+        Me.CbGradeH = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.BtnGetCount = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -136,7 +140,7 @@ Partial Class AnaForm
         Me.NumericUpDown1.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.NumericUpDown1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
         Me.NumericUpDown1.Location = New System.Drawing.Point(152, 90)
-        Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(2)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
         Me.NumericUpDown1.Name = "NumericUpDown1"
@@ -193,16 +197,6 @@ Partial Class AnaForm
         Me.chkRacename.Text = "同一レース名"
         Me.chkRacename.UseVisualStyleBackColor = True
         '
-        'chkGrade
-        '
-        Me.chkGrade.AutoSize = True
-        Me.chkGrade.Location = New System.Drawing.Point(15, 483)
-        Me.chkGrade.Name = "chkGrade"
-        Me.chkGrade.Size = New System.Drawing.Size(116, 16)
-        Me.chkGrade.TabIndex = 15
-        Me.chkGrade.Text = "同一クラス・グレード"
-        Me.chkGrade.UseVisualStyleBackColor = True
-        '
         'chkMonth
         '
         Me.chkMonth.AutoSize = True
@@ -216,9 +210,9 @@ Partial Class AnaForm
         'BtnHistGet
         '
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnHistGet.Location = New System.Drawing.Point(154, 454)
+        Me.BtnHistGet.Location = New System.Drawing.Point(248, 478)
         Me.BtnHistGet.Name = "BtnHistGet"
-        Me.BtnHistGet.Size = New System.Drawing.Size(74, 65)
+        Me.BtnHistGet.Size = New System.Drawing.Size(42, 42)
         Me.BtnHistGet.TabIndex = 17
         Me.BtnHistGet.Text = "検索実行"
         Me.BtnHistGet.UseVisualStyleBackColor = True
@@ -240,8 +234,8 @@ Partial Class AnaForm
         Me.CbCyakujun.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbCyakujun.FormattingEnabled = True
         Me.CbCyakujun.Items.AddRange(New Object() {"ALL", "1着のみ", "2着以内", "3着以内", "4着以下"})
-        Me.CbCyakujun.Location = New System.Drawing.Point(154, 412)
-        Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CbCyakujun.Location = New System.Drawing.Point(132, 412)
+        Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(2)
         Me.CbCyakujun.Name = "CbCyakujun"
         Me.CbCyakujun.Size = New System.Drawing.Size(92, 20)
         Me.CbCyakujun.TabIndex = 19
@@ -259,9 +253,9 @@ Partial Class AnaForm
         'BtnWinRate
         '
         Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnWinRate.Location = New System.Drawing.Point(234, 454)
+        Me.BtnWinRate.Location = New System.Drawing.Point(248, 362)
         Me.BtnWinRate.Name = "BtnWinRate"
-        Me.BtnWinRate.Size = New System.Drawing.Size(47, 65)
+        Me.BtnWinRate.Size = New System.Drawing.Size(42, 44)
         Me.BtnWinRate.TabIndex = 40
         Me.BtnWinRate.Text = "勝率検索"
         Me.BtnWinRate.UseVisualStyleBackColor = True
@@ -299,7 +293,7 @@ Partial Class AnaForm
         'txtRacename
         '
         Me.txtRacename.Location = New System.Drawing.Point(132, 535)
-        Me.txtRacename.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtRacename.Margin = New System.Windows.Forms.Padding(2)
         Me.txtRacename.Name = "txtRacename"
         Me.txtRacename.Size = New System.Drawing.Size(152, 19)
         Me.txtRacename.TabIndex = 44
@@ -309,7 +303,7 @@ Partial Class AnaForm
         Me.RbURL.AutoSize = True
         Me.RbURL.Checked = True
         Me.RbURL.Location = New System.Drawing.Point(14, 18)
-        Me.RbURL.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.RbURL.Margin = New System.Windows.Forms.Padding(2)
         Me.RbURL.Name = "RbURL"
         Me.RbURL.Size = New System.Drawing.Size(45, 16)
         Me.RbURL.TabIndex = 45
@@ -321,7 +315,7 @@ Partial Class AnaForm
         '
         Me.RbFile.AutoSize = True
         Me.RbFile.Location = New System.Drawing.Point(14, 52)
-        Me.RbFile.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.RbFile.Margin = New System.Windows.Forms.Padding(2)
         Me.RbFile.Name = "RbFile"
         Me.RbFile.Size = New System.Drawing.Size(42, 16)
         Me.RbFile.TabIndex = 46
@@ -357,11 +351,68 @@ Partial Class AnaForm
         Me.CbCyakujun2.Size = New System.Drawing.Size(92, 20)
         Me.CbCyakujun2.TabIndex = 49
         '
+        'CbGradeL
+        '
+        Me.CbGradeL.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CbGradeL.FormattingEnabled = True
+        Me.CbGradeL.Items.AddRange(New Object() {"0勝", "1勝", "2勝", "3勝", "Op", "G3", "G2", "G1"})
+        Me.CbGradeL.Location = New System.Drawing.Point(13, 478)
+        Me.CbGradeL.Margin = New System.Windows.Forms.Padding(2)
+        Me.CbGradeL.Name = "CbGradeL"
+        Me.CbGradeL.Size = New System.Drawing.Size(72, 20)
+        Me.CbGradeL.TabIndex = 50
+        '
+        'CbGradeH
+        '
+        Me.CbGradeH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CbGradeH.FormattingEnabled = True
+        Me.CbGradeH.Items.AddRange(New Object() {"0勝", "1勝", "2勝", "3勝", "Op", "G3", "G2", "G1"})
+        Me.CbGradeH.Location = New System.Drawing.Point(120, 478)
+        Me.CbGradeH.Margin = New System.Windows.Forms.Padding(2)
+        Me.CbGradeH.Name = "CbGradeH"
+        Me.CbGradeH.Size = New System.Drawing.Size(72, 20)
+        Me.CbGradeH.TabIndex = 51
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(87, 481)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(29, 12)
+        Me.Label1.TabIndex = 52
+        Me.Label1.Text = "以上"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(196, 481)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(29, 12)
+        Me.Label4.TabIndex = 53
+        Me.Label4.Text = "以下"
+        '
+        'BtnGetCount
+        '
+        Me.BtnGetCount.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGetCount.Location = New System.Drawing.Point(248, 412)
+        Me.BtnGetCount.Name = "BtnGetCount"
+        Me.BtnGetCount.Size = New System.Drawing.Size(42, 59)
+        Me.BtnGetCount.TabIndex = 54
+        Me.BtnGetCount.Text = "該当件数取得"
+        Me.BtnGetCount.UseVisualStyleBackColor = True
+        '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.BtnGetCount)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.CbGradeH)
+        Me.Controls.Add(Me.CbGradeL)
         Me.Controls.Add(Me.CbCyakujun2)
         Me.Controls.Add(Me.BtnFile)
         Me.Controls.Add(Me.txtFile)
@@ -377,7 +428,6 @@ Partial Class AnaForm
         Me.Controls.Add(Me.ListBox2)
         Me.Controls.Add(Me.BtnHistGet)
         Me.Controls.Add(Me.chkMonth)
-        Me.Controls.Add(Me.chkGrade)
         Me.Controls.Add(Me.chkRacename)
         Me.Controls.Add(Me.chkKyori)
         Me.Controls.Add(Me.chkJo)
@@ -415,7 +465,6 @@ Partial Class AnaForm
     Friend WithEvents chkJo As CheckBox
     Friend WithEvents chkKyori As CheckBox
     Friend WithEvents chkRacename As CheckBox
-    Friend WithEvents chkGrade As CheckBox
     Friend WithEvents chkMonth As CheckBox
     Friend WithEvents BtnHistGet As Button
     Friend WithEvents ListBox2 As ListBox
@@ -431,4 +480,9 @@ Partial Class AnaForm
     Friend WithEvents txtFile As TextBox
     Friend WithEvents BtnFile As Button
     Friend WithEvents CbCyakujun2 As ComboBox
+    Friend WithEvents CbGradeL As ComboBox
+    Friend WithEvents CbGradeH As ComboBox
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents BtnGetCount As Button
 End Class

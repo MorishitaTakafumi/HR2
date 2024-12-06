@@ -258,12 +258,30 @@ Public Class RaceHeaderClass
     '日付とレース名を指定してロード
     'Return① DBアクセス正常ならば "" を返す
     'Return② DBアクセス失敗ならばエラーメッセージを返す
-    Public Function loadByDateAndName(ByVal cmd As SQLiteCommand, ByVal dt_race As Date, ByVal racename As String) As String
+    Public Function loadByDateAndName(ByVal cmd As SQLiteCommand,
+                                      ByVal dt_race As Date,
+                                      ByVal racename As String,
+                                      Optional ByVal arg_jo_code As Integer = -1,
+                                      Optional ByVal arg_type_code As Integer = -1,
+                                      Optional ByVal arg_kyori As Integer = -1) As String
         '初期化は呼び出し側責任とする init()
         Try
             cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND race_name=@race_name"
             cmd.Parameters.AddWithValue("@dt", dt_race)
             cmd.Parameters.AddWithValue("@race_name", racename)
+            If arg_jo_code >= 0 Then
+                cmd.CommandText &= " AND jo_code=@jo_code"
+                cmd.Parameters.AddWithValue("@jo_code", arg_jo_code)
+            End If
+            If arg_type_code >= 0 Then
+                cmd.CommandText &= " AND type_code=@type_code"
+                cmd.Parameters.AddWithValue("@type_code", arg_type_code)
+            End If
+            If arg_kyori >= 0 Then
+                cmd.CommandText &= " AND kyori=@kyori"
+                cmd.Parameters.AddWithValue("@kyori", arg_kyori)
+            End If
+
             Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
             If r.Read Then
                 id = r("id")
