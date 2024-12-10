@@ -7,6 +7,7 @@ Public Module GlblMod
 
     Public JoMei() As String = {"札幌", "函館", "福島", "新潟", "中山", "東京", "中京", "京都", "阪神", "小倉"}
     Public RaceSyubetuMei() As String = {"", "芝", "ダート", "障害"}
+    Public oTC As New TimeCorrectionClass
 
     Public Function GetKeibajoCode(ByVal keibajo As String) As Short
         For j As Integer = 0 To JoMei.Length - 1

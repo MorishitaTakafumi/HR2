@@ -80,7 +80,7 @@ Public Class KekkaListClass
     End Function
 
     '着差セット
-    Public Sub setCyakusa()
+    Public Sub setCyakusa_OLD()
         Dim time1 As Single
         Dim time2 As Single
         For j As Integer = 0 To cnt - 1
@@ -98,6 +98,78 @@ Public Class KekkaListClass
                 m_bf(j).cyakusa = m_bf(j).tokei - time1
             End If
         Next
+    End Sub
+
+    '着差セット
+    Public Sub setCyakusa(ByVal oHead As RaceHeaderClass)
+        Dim time1 As Single
+        Dim time2 As Single
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).cyakujun = 1 Then
+                time1 = m_bf(j).tokei
+            End If
+            If m_bf(j).cyakujun = 2 Then
+                time2 = m_bf(j).tokei
+            End If
+        Next
+        Dim cv As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).cyakujun = 1 Then
+                m_bf(j).cyakusa = time1 - time2 + cv
+            ElseIf m_bf(j).cyakujun > 0 Then '除外・中止・取消は除く
+                m_bf(j).cyakusa = m_bf(j).tokei - time1 + cv
+            End If
+        Next
+    End Sub
+
+    '上り差補正値セット
+    Public Sub setAgarisa_OLD(ByVal oHead As RaceHeaderClass)
+        Dim agariList As New List(Of Single)
+        '1～5着以内での上り順
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).cyakujun >= 1 AndAlso m_bf(j).cyakujun <= 5 Then
+                agariList.Add(m_bf(j).agari)
+            End If
+        Next
+        agariList.Sort()
+        'レースクラスをオープンに標準化するための補正値
+        Dim hoseiti As Single = 0
+        Select Case oHead.grade
+            Case "G3"
+                hoseiti = -0.2
+            Case "G2"
+                hoseiti = -0.4
+            Case "G1"
+                hoseiti = -0.6
+            Case Else
+                If InStr(oHead.class_name, "未勝利") > 0 OrElse InStr(oHead.class_name, "新馬") > 0 Then
+                    hoseiti = 0.8
+                ElseIf InStr(oHead.class_name, "1勝") > 0 OrElse InStr(oHead.class_name, "500万") > 0 Then
+                    hoseiti = 0.6
+                ElseIf InStr(oHead.class_name, "2勝") > 0 OrElse InStr(oHead.class_name, "1000万") > 0 Then
+                    hoseiti = 0.4
+                ElseIf InStr(oHead.class_name, "3勝") > 0 OrElse InStr(oHead.class_name, "1600万") > 0 Then
+                    hoseiti = 0.2
+                End If
+        End Select
+
+        '補正計算では何コーナーの通過順位を使うか
+        Dim corner_idx As Integer = oHead.GetCornerToCalcAgarisa() - 1
+
+        For j As Integer = 0 To cnt - 1
+            If m_bf(j).cyakujun > 0 Then
+                If m_bf(j).agari = agariList(0) AndAlso m_bf(j).cyakujun <= 5 Then '5着内で最速の上り馬は5着内で2番目の上りとの差(その馬が5着より下の場合は5着内で最速場と比較する)
+                    m_bf(j).agarisa = m_bf(j).agari - agariList(1)
+                Else
+                    m_bf(j).agarisa = m_bf(j).agari - agariList(0)
+                End If
+                'コーナーでの順位を考慮
+                If m_bf(j).tukajun(corner_idx) > 0 Then
+                    m_bf(j).agarisa += (m_bf(j).tukajun(corner_idx) - 1) * 0.1 - 0.4 + hoseiti
+                End If
+            End If
+        Next
+
     End Sub
 
     '上り差補正値セット

@@ -215,6 +215,7 @@
     <Compile Include="TestForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TimeCorrectionClass.vb" />
     <Compile Include="TopMenu.Designer.vb">
       <DependentUpon>TopMenu.vb</DependentUpon>
     </Compile>

@@ -3,6 +3,11 @@
     Public Sub New()
         InitializeComponent()
         Me.Text &= Application.ProductVersion
+
+        Dim errmsg As String = oTC.createTable()
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
     End Sub
 
     Private Sub BtnRaceKekka_Click(sender As Object, e As EventArgs) Handles BtnRaceKekka.Click
