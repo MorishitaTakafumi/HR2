@@ -112,12 +112,13 @@ Public Class KekkaListClass
                 time2 = m_bf(j).tokei
             End If
         Next
-        Dim cv As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        'レースクラスをオープンに標準化するための補正値
+        Dim hoseiti As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori)
         For j As Integer = 0 To cnt - 1
             If m_bf(j).cyakujun = 1 Then
-                m_bf(j).cyakusa = time1 - time2 + cv
+                m_bf(j).cyakusa = time1 - time2 + hoseiti
             ElseIf m_bf(j).cyakujun > 0 Then '除外・中止・取消は除く
-                m_bf(j).cyakusa = m_bf(j).tokei - time1 + cv
+                m_bf(j).cyakusa = m_bf(j).tokei - time1 + hoseiti
             End If
         Next
     End Sub
@@ -183,26 +184,7 @@ Public Class KekkaListClass
         Next
         agariList.Sort()
         'レースクラスをオープンに標準化するための補正値
-        Dim hoseiti As Single = 0
-        Select Case oHead.grade
-            Case "G3"
-                hoseiti = -0.2
-            Case "G2"
-                hoseiti = -0.4
-            Case "G1"
-                hoseiti = -0.6
-            Case Else
-                If InStr(oHead.class_name, "未勝利") > 0 OrElse InStr(oHead.class_name, "新馬") > 0 Then
-                    hoseiti = 0.8
-                ElseIf InStr(oHead.class_name, "1勝") > 0 OrElse InStr(oHead.class_name, "500万") > 0 Then
-                    hoseiti = 0.6
-                ElseIf InStr(oHead.class_name, "2勝") > 0 OrElse InStr(oHead.class_name, "1000万") > 0 Then
-                    hoseiti = 0.4
-                ElseIf InStr(oHead.class_name, "3勝") > 0 OrElse InStr(oHead.class_name, "1600万") > 0 Then
-                    hoseiti = 0.2
-                End If
-        End Select
-
+        Dim hoseiti As Single = oTC.get_agari_correction(oHead.class_code, oHead.type_code, oHead.kyori)
         '補正計算では何コーナーの通過順位を使うか
         Dim corner_idx As Integer = oHead.GetCornerToCalcAgarisa() - 1
 
@@ -372,7 +354,7 @@ Public Class KekkaListClass
         'Case 3:DB未登録（Headerのみ登録済みのケースがあり得る）
         GetKekka(contents, Me)
         raceHeader.tosu = cnt
-        setCyakusa()
+        setCyakusa(raceHeader)
         setAgarisa(raceHeader)
         If autosave Then
             Return SaveData(cmd)

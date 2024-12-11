@@ -76,7 +76,7 @@ Public Class raceReviewForm
             For j As Integer = 1 To 18
                 .Items.Add($"{j}着")
             Next
-            .SelectedIndex = 0
+            .SelectedIndex = 1
         End With
         With CbMonth
             .Items.Clear()
@@ -530,7 +530,7 @@ Public Class raceReviewForm
                             If oRaceHead.race_name.Trim.Length > 0 Then
                                 'DB未登録レースはここで登録する
                                 If oRaceHead.id < 0 Then
-                                    kekkaList.setCyakusa()
+                                    kekkaList.setCyakusa(oRaceHead)
                                     errmsg = SaveRaceKekka(cmd, kekkaList)
                                     If errmsg.Length > 0 Then
                                         Return errmsg
@@ -659,7 +659,7 @@ Public Class raceReviewForm
         CbKyori.SelectedIndex = 0
         CbGrade.SelectedIndex = 0
         CbMonth.SelectedIndex = 0
-        CbCyakujun.SelectedIndex = 0
+        CbCyakujun.SelectedIndex = 2
         CbRacename.SelectedIndex = 0
     End Sub
 

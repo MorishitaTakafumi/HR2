@@ -39,6 +39,7 @@ Public Class AnaForm
 
     Public Sub New()
         InitializeComponent()
+        CbCyakujun.SelectedIndex = 1 '1着
         If Clipboard.ContainsText Then
             Dim tmp As String = Clipboard.GetText
             If InStr(tmp, "https") Then
@@ -294,6 +295,8 @@ Public Class AnaForm
 
         ListBox1.Items.Clear()
         oHead = fm3.oRaceHeader
+        CbGradeL.SelectedIndex = oHead.GetClassCode
+        CbGradeH.SelectedIndex = CbGradeL.SelectedIndex
 
         ListBox1.Items.Add("競馬場：" & oHead.keibajo)
         ListBox1.Items.Add("開催日：" & oHead.dt.ToString("yyyy年MM月dd日"))
@@ -770,7 +773,7 @@ Public Class AnaForm
                             End If
                             If oRaceHead.race_name.Trim.Length > 0 Then
                                 If oRaceHead.id < 0 Then
-                                    kekkaList.setCyakusa()
+                                    kekkaList.setCyakusa(oRaceHead)
                                     errmsg = SaveRaceKekka(cmd, kekkaList)
                                     If errmsg.Length > 0 Then
                                         Return errmsg
