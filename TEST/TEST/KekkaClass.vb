@@ -174,4 +174,17 @@ Public Class KekkaClass
         End Try
     End Function
 
+    '着差更新
+    Public Function updateCyakusa(ByVal cmd As SQLiteCommand) As String
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "UPDATE Kekka SET cyakusa=@cyakusa WHERE id=@id"
+            cmd.Parameters.AddWithValue("@cyakusa", cyakusa)
+            cmd.Parameters.AddWithValue("@id", rec_id)
+            cmd.ExecuteNonQuery()
+            Return ""
+        Catch ex As Exception
+            Return "KekkaClass.updateCyakusa() " & ex.Message
+        End Try
+    End Function
 End Class

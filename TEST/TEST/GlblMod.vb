@@ -29,11 +29,9 @@ Public Module GlblMod
     '種別名を種別コードに変換
     Public Function GetTypeCode(ByVal typename As String) As Short
         If InStr(typename, "芝") > 0 Then
-            If InStr(typename, "ダート") > 0 Then
-                Return 3 '障害
-            Else
-                Return 1
-            End If
+            Return 1
+        ElseIf InStr(typename, "障害") > 0 Then
+            Return 3
         Else
             Return 2
         End If
@@ -272,8 +270,8 @@ Public Module GlblMod
 
         Dim fullPoint As Integer = 100 '満点
         Dim R1 As Single = -0.1 'myTimeがcmpTimeより良いとき満点からの減量を決める係数
-        Dim R2 As Single = 0.3  'myTimeがcmpTimeより悪いとき満点からの減量を決める係数
-        Dim P() As Single = {1, 0.95, 0.85, 0.65} '{1, 0.95, 0.9, 0.85} '{1, 0.9, 0.8, 0.7} '何走前かでの重みづけ用
+        Dim R2 As Single = 0.2 '0.3  'myTimeがcmpTimeより悪いとき満点からの減量を決める係数
+        Dim P() As Single = {1, 0.95, 0.9, 0.85} '{1, 0.95, 0.85, 0.65} '{1, 0.9, 0.8, 0.7} '何走前かでの重みづけ用
         Dim myZone As Integer = GetTimeZone(myTime)
         Dim cmpZone As Integer = GetTimeZone(cmpTime)
         Dim coef As Single

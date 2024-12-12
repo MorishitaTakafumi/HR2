@@ -362,4 +362,43 @@ Public Class TestForm
             End Try
         End Using
     End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        Dim a As New DebufForm
+        a.ShowDialog()
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        ListBox1.Items.Clear()
+        Dim errmsg As String = ""
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                Dim race_id As Integer = 13859
+                Dim empcnt As Integer = 0
+                Dim kekkaList As New KekkaListClass
+                While empcnt < 3
+                    errmsg = kekkaList.loadAll(cmd, race_id)
+                    If errmsg.Length > 0 Then
+                        Exit Try
+                    End If
+                    If kekkaList.raceHeader.id < 0 Then
+                        empcnt += 1
+                    Else
+                        empcnt = 0
+                        kekkaList.setCyakusa()
+                        errmsg = kekkaList.updateCyakusa(cmd)
+                    End If
+                    race_id += 1
+                End While
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+    End Sub
 End Class

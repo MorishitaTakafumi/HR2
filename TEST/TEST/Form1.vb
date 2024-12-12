@@ -130,7 +130,8 @@ Public Class Form1
             MsgBox(DbErrMsg, MsgBoxStyle.Critical, Me.Text)
             Return
         End If
-        If kekkaList.raceHeader.id > 0 AndAlso kekkaList.cnt > 0 Then
+        If kekkaList.cnt > 0 Then
+            txtResult.Text = kekkaList.WebPageContents
             ShowHeader()
             ShowTable(kekkaList)
             Return

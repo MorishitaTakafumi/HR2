@@ -5,6 +5,7 @@ Public Class KekkaListClass
 
     Private m_bf As New List(Of KekkaClass)
     Public raceHeader As New RaceHeaderClass
+    Public WebPageContents As String = ""
 
     Public ReadOnly Property cnt As Integer
         Get
@@ -101,9 +102,9 @@ Public Class KekkaListClass
     End Sub
 
     '着差セット
-    Public Sub setCyakusa(ByVal oHead As RaceHeaderClass)
-        Dim time1 As Single
-        Dim time2 As Single
+    Public Sub setCyakusa()
+        Dim time1 As Single = DMY_VAL
+        Dim time2 As Single = DMY_VAL
         For j As Integer = 0 To cnt - 1
             If m_bf(j).cyakujun = 1 Then
                 time1 = m_bf(j).tokei
@@ -112,14 +113,36 @@ Public Class KekkaListClass
                 time2 = m_bf(j).tokei
             End If
         Next
-        'レースクラスをオープンに標準化するための補正値
-        Dim hoseiti As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        If time2 = DMY_VAL Then '1着同着
+            time2 = time1
+        End If
+
         For j As Integer = 0 To cnt - 1
             If m_bf(j).cyakujun = 1 Then
-                m_bf(j).cyakusa = time1 - time2 + hoseiti
+                m_bf(j).cyakusa = time1 - time2
             ElseIf m_bf(j).cyakujun > 0 Then '除外・中止・取消は除く
-                m_bf(j).cyakusa = m_bf(j).tokei - time1 + hoseiti
+                m_bf(j).cyakusa = m_bf(j).tokei - time1
             End If
+        Next
+    End Sub
+
+    '着差補正
+    Public Sub correctCyakusa(ByVal oHead As RaceHeaderClass)
+        'レースクラスをオープンに標準化するための補正値
+        Dim hoseiti As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        If hoseiti = DMY_VAL Then '距離によってはデータが無い場合がある
+            Dim alKyori As Integer
+            If oHead.kyori < 1200 Then
+                alKyori = 1200
+            ElseIf oHead.kyori < 2000 Then
+                alKyori = 1200
+            Else
+                alKyori = 2000
+            End If
+            hoseiti = oTC.get_time_correction(oHead.class_code, oHead.type_code, alKyori)
+        End If
+        For j As Integer = 0 To cnt - 1
+            m_bf(j).cyakusa += hoseiti
         Next
     End Sub
 
@@ -185,6 +208,17 @@ Public Class KekkaListClass
         agariList.Sort()
         'レースクラスをオープンに標準化するための補正値
         Dim hoseiti As Single = oTC.get_agari_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        If hoseiti = DMY_VAL Then '距離によってはデータが無い場合がある
+            Dim alKyori As Integer
+            If oHead.kyori < 1200 Then
+                alKyori = 1200
+            ElseIf oHead.kyori < 2000 Then
+                alKyori = 1200
+            Else
+                alKyori = 2000
+            End If
+            hoseiti = oTC.get_time_correction(oHead.class_code, oHead.type_code, alKyori)
+        End If
         '補正計算では何コーナーの通過順位を使うか
         Dim corner_idx As Integer = oHead.GetCornerToCalcAgarisa() - 1
 
@@ -243,6 +277,15 @@ Public Class KekkaListClass
         End Try
     End Function
 
+    Public Function loadAll(ByVal cmd As SQLiteCommand, ByVal race_header_id As Integer) As String
+        Dim errmsg As String = raceHeader.loadById(cmd, race_header_id)
+        If errmsg.Length = 0 Then
+            Return load(cmd, race_header_id)
+        Else
+            Return errmsg
+        End If
+    End Function
+
     'レース結果登録
     Public Function save(ByVal cmd As SQLiteCommand) As String
         Dim errmsg As String = ""
@@ -255,6 +298,22 @@ Public Class KekkaListClass
                 End If
             End If
         Next
+        Return ""
+    End Function
+
+    'レース結果登録
+    Public Function updateCyakusa(ByVal cmd As SQLiteCommand) As String
+        Dim errmsg As String = ""
+        Try
+            For j As Integer = 0 To cnt - 1
+                errmsg = m_bf(j).updateCyakusa(cmd)
+                If errmsg.Length > 0 Then
+                    Return errmsg
+                End If
+            Next
+        Catch ex As Exception
+            Return "kekaListClass.updateCyakusa() " & ex.Message
+        End Try
         Return ""
     End Function
 
@@ -333,6 +392,7 @@ Public Class KekkaListClass
         If contents.Length = 0 Then
             Return ""
         End If
+        WebPageContents = contents
         raceHeader.keibajo = GetWhenWhere(contents, raceHeader.dt)
         raceHeader.race_no = GetRaceNo(contents)
         raceHeader.race_name = GetRaceName(contents, raceHeader.grade)
@@ -354,7 +414,7 @@ Public Class KekkaListClass
         'Case 3:DB未登録（Headerのみ登録済みのケースがあり得る）
         GetKekka(contents, Me)
         raceHeader.tosu = cnt
-        setCyakusa(raceHeader)
+        setCyakusa()
         setAgarisa(raceHeader)
         If autosave Then
             Return SaveData(cmd)

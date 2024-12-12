@@ -34,6 +34,8 @@ Partial Class TestForm
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button11 = New System.Windows.Forms.Button()
+        Me.Button12 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button1
@@ -144,11 +146,31 @@ Partial Class TestForm
         Me.Button10.Text = "不整合レース削除"
         Me.Button10.UseVisualStyleBackColor = True
         '
+        'Button11
+        '
+        Me.Button11.Location = New System.Drawing.Point(14, 520)
+        Me.Button11.Name = "Button11"
+        Me.Button11.Size = New System.Drawing.Size(179, 44)
+        Me.Button11.TabIndex = 12
+        Me.Button11.Text = "クラス間補正値表示"
+        Me.Button11.UseVisualStyleBackColor = True
+        '
+        'Button12
+        '
+        Me.Button12.Location = New System.Drawing.Point(199, 520)
+        Me.Button12.Name = "Button12"
+        Me.Button12.Size = New System.Drawing.Size(179, 44)
+        Me.Button12.TabIndex = 13
+        Me.Button12.Text = "着差を生値に戻す"
+        Me.Button12.UseVisualStyleBackColor = True
+        '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1081, 608)
+        Me.Controls.Add(Me.Button12)
+        Me.Controls.Add(Me.Button11)
         Me.Controls.Add(Me.Button10)
         Me.Controls.Add(Me.Button9)
         Me.Controls.Add(Me.Button8)
@@ -180,4 +202,6 @@ Partial Class TestForm
     Friend WithEvents Button8 As Button
     Friend WithEvents Button9 As Button
     Friend WithEvents Button10 As Button
+    Friend WithEvents Button11 As Button
+    Friend WithEvents Button12 As Button
 End Class

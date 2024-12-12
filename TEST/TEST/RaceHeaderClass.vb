@@ -165,6 +165,24 @@ Public Class RaceHeaderClass
         End Select
     End Sub
 
+    Public Shared Function GetClassName(ByVal arg_class_code As Integer) As String
+        Select Case arg_class_code
+            Case 0
+                Return "新馬・未勝利"
+            Case 1, 2, 3
+                Return arg_class_code.ToString & "勝"
+            Case 4
+                Return "Open・L"
+            Case 5
+                Return "G3"
+            Case 6
+                Return "G2"
+            Case 7
+                Return "G1"
+        End Select
+        Return "?"
+    End Function
+
     '上り差の補正値を計算するため何コーナーでの通過順位を使うか
     Public Function GetCornerToCalcAgarisa() As Integer
 
@@ -255,6 +273,36 @@ Public Class RaceHeaderClass
         End Using
     End Function
 
+    'レースIDを指定してロード
+    'Return DBアクセス失敗ならばエラーメッセージを返す
+    Public Function loadById(ByVal cmd As SQLiteCommand, ByVal race_id As Integer) As String
+        init()
+        Try
+            cmd.Parameters.Clear()
+            cmd.CommandText = "SELECT * FROM RaceHeader WHERE id=@id"
+            cmd.Parameters.AddWithValue("@id", race_id)
+            Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+            If r.Read Then
+                id = r("id")
+                dt = r("dt")
+                class_code = r("class_code")
+                SetGradeAndClassname()
+                type_code = r("type_code")
+                syubetu = GetRaceTypeName(type_code)
+                kyori = r("kyori")
+                jo_code = r("jo_code")
+                keibajo = GetKeibajoName(jo_code)
+                race_name = r("race_name")
+                race_no = r("race_no")
+                tosu = r("tosu")
+            End If
+            r.Close()
+            Return ""
+        Catch ex As Exception
+            Return "raceHeaderClass.loadById() " & ex.Message
+        End Try
+    End Function
+
     '日付とレース名を指定してロード
     'Return① DBアクセス正常ならば "" を返す
     'Return② DBアクセス失敗ならばエラーメッセージを返す
@@ -266,6 +314,7 @@ Public Class RaceHeaderClass
                                       Optional ByVal arg_kyori As Integer = -1) As String
         '初期化は呼び出し側責任とする init()
         Try
+            cmd.Parameters.Clear()
             cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND race_name=@race_name"
             cmd.Parameters.AddWithValue("@dt", dt_race)
             cmd.Parameters.AddWithValue("@race_name", racename)
@@ -337,6 +386,7 @@ Public Class RaceHeaderClass
     Public Function loadByUmaHist(ByVal cmd As SQLiteCommand, ByVal oUmaHist As UmaHistClass) As String
         init()
         Try
+            cmd.Parameters.Clear()
             cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND jo_code=@jo_code AND type_code=@type_code AND kyori=@kyori"
             cmd.Parameters.AddWithValue("@dt", oUmaHist.dt)
             cmd.Parameters.AddWithValue("@jo_code", oUmaHist.jo_code)

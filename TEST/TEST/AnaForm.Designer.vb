@@ -170,6 +170,8 @@ Partial Class AnaForm
         'chkJo
         '
         Me.chkJo.AutoSize = True
+        Me.chkJo.Checked = True
+        Me.chkJo.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkJo.Location = New System.Drawing.Point(15, 402)
         Me.chkJo.Name = "chkJo"
         Me.chkJo.Size = New System.Drawing.Size(84, 16)
@@ -180,6 +182,8 @@ Partial Class AnaForm
         'chkKyori
         '
         Me.chkKyori.AutoSize = True
+        Me.chkKyori.Checked = True
+        Me.chkKyori.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkKyori.Location = New System.Drawing.Point(15, 429)
         Me.chkKyori.Name = "chkKyori"
         Me.chkKyori.Size = New System.Drawing.Size(72, 16)

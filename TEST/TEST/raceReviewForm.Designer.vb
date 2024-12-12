@@ -177,7 +177,6 @@ Partial Class raceReviewForm
         '
         Me.CbJo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbJo.FormattingEnabled = True
-        Me.CbJo.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbJo.Location = New System.Drawing.Point(63, 43)
         Me.CbJo.Margin = New System.Windows.Forms.Padding(2)
         Me.CbJo.Name = "CbJo"
@@ -188,7 +187,6 @@ Partial Class raceReviewForm
         '
         Me.CbSyubetu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbSyubetu.FormattingEnabled = True
-        Me.CbSyubetu.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbSyubetu.Location = New System.Drawing.Point(63, 78)
         Me.CbSyubetu.Margin = New System.Windows.Forms.Padding(2)
         Me.CbSyubetu.Name = "CbSyubetu"
@@ -210,7 +208,6 @@ Partial Class raceReviewForm
         Me.CbKyori.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbKyori.FormattingEnabled = True
         Me.CbKyori.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.CbKyori.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbKyori.Location = New System.Drawing.Point(63, 113)
         Me.CbKyori.Margin = New System.Windows.Forms.Padding(2)
         Me.CbKyori.Name = "CbKyori"
@@ -231,7 +228,6 @@ Partial Class raceReviewForm
         '
         Me.CbGrade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbGrade.FormattingEnabled = True
-        Me.CbGrade.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbGrade.Location = New System.Drawing.Point(63, 149)
         Me.CbGrade.Margin = New System.Windows.Forms.Padding(2)
         Me.CbGrade.Name = "CbGrade"
@@ -252,7 +248,6 @@ Partial Class raceReviewForm
         '
         Me.CbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbMonth.FormattingEnabled = True
-        Me.CbMonth.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbMonth.Location = New System.Drawing.Point(63, 218)
         Me.CbMonth.Margin = New System.Windows.Forms.Padding(2)
         Me.CbMonth.Name = "CbMonth"
@@ -293,7 +288,6 @@ Partial Class raceReviewForm
         '
         Me.CbRacename.FormattingEnabled = True
         Me.CbRacename.ImeMode = System.Windows.Forms.ImeMode.[On]
-        Me.CbRacename.Items.AddRange(New Object() {"1着のみ", "1,2着", "1,2,3着"})
         Me.CbRacename.Location = New System.Drawing.Point(63, 253)
         Me.CbRacename.Margin = New System.Windows.Forms.Padding(2)
         Me.CbRacename.Name = "CbRacename"

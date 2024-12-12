@@ -81,7 +81,14 @@
     'クラス・距離・種別の取得
     Public Function GetClassCource(ByVal src As String, ByRef distance As Integer, ByRef GorD As String) As String
         Dim findpos As Integer = 1
-        Dim lineStr As String = SearchLineByKeyword(findpos, src, "cell class", findpos)
+        Dim lineStr As String = SearchLineByKeyword(findpos, src, "cell category", findpos)
+        If lineStr.Length > 0 Then
+            If InStr(lineStr, "障害") > 0 Then
+                GorD = "障害"
+            End If
+        End If
+        findpos = 1
+        lineStr = SearchLineByKeyword(findpos, src, "cell class", findpos)
         If lineStr.Length > 0 Then
             Dim words As List(Of String) = removeTagPair(lineStr)
             If words.Count > 0 Then
@@ -93,13 +100,15 @@
                         If IsNumeric(words(j)) Then
                             distance = CInt(words(j))
                         End If
-                        If InStr(words(j), "芝") > 0 Then
-                            GorD = "芝"
-                            If InStr(words(j), "外") > 0 Then
-                                GorD &= "外"
+                        If GorD <> "障害" Then
+                            If InStr(words(j), "芝") > 0 Then
+                                GorD = "芝"
+                                If InStr(words(j), "外") > 0 Then
+                                    GorD &= "外"
+                                End If
+                            ElseIf InStr(words(j), "ダート") > 0 Then
+                                GorD = "ダート"
                             End If
-                        ElseIf InStr(words(j), "ダート") > 0 Then
-                            GorD = "ダート"
                         End If
                     Next
                 End If

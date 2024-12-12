@@ -530,7 +530,7 @@ Public Class raceReviewForm
                             If oRaceHead.race_name.Trim.Length > 0 Then
                                 'DB未登録レースはここで登録する
                                 If oRaceHead.id < 0 Then
-                                    kekkaList.setCyakusa(oRaceHead)
+                                    kekkaList.setCyakusa()
                                     errmsg = SaveRaceKekka(cmd, kekkaList)
                                     If errmsg.Length > 0 Then
                                         Return errmsg
@@ -541,6 +541,7 @@ Public Class raceReviewForm
                                         Return errmsg
                                     End If
                                 End If
+                                kekkaList.correctCyakusa(oRaceHead)
                                 kekkaList.setAgarisa(oRaceHead)
                                 Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
                                 If oK IsNot Nothing Then

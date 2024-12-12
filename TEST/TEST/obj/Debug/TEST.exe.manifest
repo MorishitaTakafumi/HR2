@@ -115,14 +115,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TEST.exe" size="276496">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TEST.exe" size="290832">
       <assemblyIdentity name="TEST" version="1.0.0.5" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>c04b2WdXH+hkemfdPv6R99bDd3OdAZON0JzOxOm6kJ0=</dsig:DigestValue>
+        <dsig:DigestValue>Igzsq+ki/c0+A0MTT9FIzsUhwh/gtM0QQzF8W3ic+Dg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
