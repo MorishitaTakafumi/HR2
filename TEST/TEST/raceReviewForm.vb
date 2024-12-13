@@ -305,9 +305,10 @@ Public Class raceReviewForm
                     sql &= " AND R.type_code=@type_code"
                     cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
                 End If
-                If CbRacename.SelectedIndex > 0 Then
-                    sql &= " AND R.race_name=@race_name"
-                    cmd.Parameters.AddWithValue("@race_name", CbRacename.Text)
+                If CbRacename.Text.Trim.Length > 0 Then
+                    'sql &= " AND R.race_name=@race_name"
+                    sql &= " AND R.race_name like @race_name"
+                    cmd.Parameters.AddWithValue("@race_name", "%" & CbRacename.Text & "%")
                 End If
                 If CbGrade.SelectedIndex > 0 Then
                     sql &= " AND R.class_code=@class_code"

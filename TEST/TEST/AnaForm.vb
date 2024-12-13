@@ -39,7 +39,8 @@ Public Class AnaForm
 
     Public Sub New()
         InitializeComponent()
-        CbCyakujun.SelectedIndex = 1 '1着
+        CbCyakujun.SelectedIndex = 2 '2着以内
+        CbCyakujun2.SelectedIndex = 1 '2着以内
         If Clipboard.ContainsText Then
             Dim tmp As String = Clipboard.GetText
             If InStr(tmp, "https") Then

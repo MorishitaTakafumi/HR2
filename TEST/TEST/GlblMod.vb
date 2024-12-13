@@ -252,9 +252,6 @@ Public Module GlblMod
     Public Function GetDegreeOfFit_time(ByVal myTime As Single, ByVal cmpTime As Single, ByVal soumaeV As Integer) As Integer
         '上り差／着差の適合度
         '
-        '0.3秒間隔で６個ゾーンを作る
-        '①～-0.3/ ②-0.3～0/ ③0～0.3/ ④0.3～0.6/ ⑤0.6～0.9/ ⑥0.9～
-        '
         '出走馬myTimeと比較対象馬cmpTimeのゾーンの一致度を得点化する
         '
         'myTimeのゾーン=a, cmpTimeのゾーン=b として
@@ -269,11 +266,11 @@ Public Module GlblMod
         End If
 
         Dim fullPoint As Integer = 100 '満点
-        Dim R1 As Single = -0.1 'myTimeがcmpTimeより良いとき満点からの減量を決める係数
-        Dim R2 As Single = 0.2 '0.3  'myTimeがcmpTimeより悪いとき満点からの減量を決める係数
+        Dim R1 As Single = 0.05 '-0.05 'myTimeがcmpTimeより良いとき満点からの減量を決める係数
+        Dim R2 As Single = 0.15 '0.3  'myTimeがcmpTimeより悪いとき満点からの減量を決める係数
         Dim P() As Single = {1, 0.95, 0.9, 0.85} '{1, 0.95, 0.85, 0.65} '{1, 0.9, 0.8, 0.7} '何走前かでの重みづけ用
-        Dim myZone As Integer = GetTimeZone(myTime)
-        Dim cmpZone As Integer = GetTimeZone(cmpTime)
+        Dim myZone As Integer = GetTimeZone12(myTime)
+        Dim cmpZone As Integer = GetTimeZone12(cmpTime)
         Dim coef As Single
 
         If myZone = cmpZone Then
@@ -283,10 +280,31 @@ Public Module GlblMod
         Else
             coef = 1 - (myZone - cmpZone) * R2
         End If
-        Return fullPoint * P(soumaeV) * coef
+        Return fullPoint * P(soumaeV) * coef * GetTimeZoneCoef(myZone)
     End Function
 
-    Private Function GetTimeZone(ByVal tmpTime As Single) As Integer
+    'ゾーンに応じた係数
+    '優秀なタイムに多く得点を与えたいので最優秀ゾーンの係数を1としてゾーンが落ちるほど係数は小さくする
+    Private Function GetTimeZoneCoef(ByVal myZone As Integer) As Single
+        Return (1 - myZone * 0.03)
+    End Function
+
+    '0.2秒間隔で12個ゾーンを作る
+    '①-∞～-1.0/ ②-1.0～-0.8/ ③-0.8～-0.6/・・・/⑫1.0～+∞
+    Private Function GetTimeZone12(ByVal tmpTime As Single) As Integer
+        Dim idx As Integer = Int(tmpTime / 0.2) + 6
+        If idx < 0 Then
+            Return 0
+        ElseIf idx > 11 Then
+            Return 11
+        Else
+            Return idx
+        End If
+    End Function
+
+    '0.3秒間隔で６個ゾーンを作る
+    '①～-0.3/ ②-0.3～0/ ③0～0.3/ ④0.3～0.6/ ⑤0.6～0.9/ ⑥0.9～
+    Private Function GetTimeZone6(ByVal tmpTime As Single) As Integer
         If tmpTime < -0.299 Then
             Return 0
         ElseIf tmpTime < 0 Then
