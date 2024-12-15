@@ -67,7 +67,7 @@ Public Class TimeCorrectionClass
                 minv = ave_times(j)
             End If
         Next
-        If std_time > 0 Then
+        If std_time <> 9999 AndAlso minv <> 9999 Then
             Dim sa As Single = minv - std_time
             If class_code > 4 AndAlso sa > 0 Then
                 Return 0
@@ -105,7 +105,7 @@ Public Class TimeCorrectionClass
                 minv = ave_agari(j)
             End If
         Next
-        If std_agari > 0 Then
+        If std_agari <> 9999 AndAlso minv <> 9999 Then
             Dim sa As Single = minv - std_agari
             If class_code > 4 AndAlso sa > 0 Then
                 Return 0
