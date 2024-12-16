@@ -716,7 +716,7 @@ Public Class AnaForm
         Dim oUmaHeader As New UmaHeaderClass
         Try
             Dim errmsg As String = oUmaHeader.load(cmd, arg_bamei)
-            If errmsg.Length = 0 Then
+            If errmsg.Length = 0 AndAlso oUmaHeader.rec_id > 0 Then
                 Dim oUmaHist As New umaHistListClass
                 Dim kekkaList As New KekkaListClass
                 errmsg = oUmaHist.load(cmd, oUmaHeader.rec_id, dt_max)
@@ -1120,7 +1120,9 @@ Public Class AnaForm
         If chkRacename2.Checked Then
             chkRacename.Checked = False
             If txtRacename.Text.Length = 0 Then
-                txtRacename.Text = oHead.race_name
+                If oHead IsNot Nothing Then
+                    txtRacename.Text = oHead.race_name
+                End If
             End If
         End If
     End Sub

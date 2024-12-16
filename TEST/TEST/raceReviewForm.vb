@@ -474,9 +474,14 @@ Public Class raceReviewForm
 
     '馬名を指定して直近４走の上り差と着差をagarisa1-4, cyakusa1-4にセットする
     '
-    Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand, ByVal arg_bamei As String, ByVal arg_cyakujun As Integer, ByVal arg_ninki As Integer,
-                                                                    ByVal arg_dt_race As Date, ByVal arg_racename As String, ByVal arg_kyori As Integer,
-                                                                    ByVal arg_syubetu As String) As String
+    Private Function GetAgarisaCyakusa(ByVal cmd As SQLiteCommand,
+                                       ByVal arg_bamei As String,
+                                       ByVal arg_cyakujun As Integer,
+                                       ByVal arg_ninki As Integer,
+                                       ByVal arg_dt_race As Date,
+                                       ByVal arg_racename As String,
+                                       ByVal arg_kyori As Integer,
+                                       ByVal arg_syubetu As String) As String
         Dim oUmaHist As New umaHistListClass
         Dim oUmaHeader As UmaHeaderClass = oUmaHist.umaHeader
         Try

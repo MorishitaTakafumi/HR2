@@ -36,6 +36,8 @@ Partial Class TestForm
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
         Me.Button12 = New System.Windows.Forms.Button()
+        Me.Button13 = New System.Windows.Forms.Button()
+        Me.Button14 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button1
@@ -164,11 +166,31 @@ Partial Class TestForm
         Me.Button12.Text = "着差を生値に戻す"
         Me.Button12.UseVisualStyleBackColor = True
         '
+        'Button13
+        '
+        Me.Button13.Location = New System.Drawing.Point(384, 520)
+        Me.Button13.Name = "Button13"
+        Me.Button13.Size = New System.Drawing.Size(179, 44)
+        Me.Button13.TabIndex = 14
+        Me.Button13.Text = "レースの連帯馬で未登録馬の検索"
+        Me.Button13.UseVisualStyleBackColor = True
+        '
+        'Button14
+        '
+        Me.Button14.Location = New System.Drawing.Point(569, 520)
+        Me.Button14.Name = "Button14"
+        Me.Button14.Size = New System.Drawing.Size(179, 44)
+        Me.Button14.TabIndex = 15
+        Me.Button14.Text = "レースの連帯馬で未登録馬の登録"
+        Me.Button14.UseVisualStyleBackColor = True
+        '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1081, 608)
+        Me.Controls.Add(Me.Button14)
+        Me.Controls.Add(Me.Button13)
         Me.Controls.Add(Me.Button12)
         Me.Controls.Add(Me.Button11)
         Me.Controls.Add(Me.Button10)
@@ -204,4 +226,6 @@ Partial Class TestForm
     Friend WithEvents Button10 As Button
     Friend WithEvents Button11 As Button
     Friend WithEvents Button12 As Button
+    Friend WithEvents Button13 As Button
+    Friend WithEvents Button14 As Button
 End Class

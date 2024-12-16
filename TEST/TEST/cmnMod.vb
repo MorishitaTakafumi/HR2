@@ -2,6 +2,7 @@
 
 Module cmnMod
 
+    Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Integer)
     Private HR2Path As String = ""
 
     'データベースファイルや出馬表を置くフォルダーの取得

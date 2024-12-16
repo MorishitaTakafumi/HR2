@@ -401,4 +401,80 @@ Public Class TestForm
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
         End If
     End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        ListBox1.Items.Clear()
+        Dim errmsg As String = ""
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "select R.dt, R.race_name, K.cyakujun, k.bamei, k.href
+                                    from raceheader R inner join kekka K on R.id=K.race_header_id 
+                                    Left JOIN UmaHeader U on K.bamei=U.name
+                                    where K.cyakujun>0 AND K.cyakujun<2 AND U.id IS NULL"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                Dim cnt As Integer = 0
+                While r.Read
+                    cnt += 1
+                    ListBox1.Items.Add(cnt.ToString & " : " & CDate(r("dt")).ToString & " " & r("race_name") & " " & r("bamei"))
+                End While
+                r.Close()
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+    End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        ClearWebPageAccessCounter()
+        ListBox1.Items.Clear()
+        Dim umaHref As New List(Of String)
+        Dim errmsg As String = ""
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "select k.href
+                                    from raceheader R inner join kekka K on R.id=K.race_header_id 
+                                    Left JOIN UmaHeader U on K.bamei=U.name
+                                    where K.cyakujun>0 AND K.cyakujun<2 AND U.id IS NULL"
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    Dim ss As String = r("href")
+                    If Not umaHref.Contains(ss) Then
+                        umaHref.Add(ss)
+                    End If
+                End While
+                r.Close()
+
+                Dim umaHistList As New umaHistListClass
+                For j As Integer = 0 To umaHref.Count - 1
+                    If (j Mod 10) = 0 Then
+                        lb_msg.Text = j.ToString & "/" & umaHref.Count.ToString
+                        Application.DoEvents()
+                        Sleep(1000)
+                    End If
+                    errmsg = umaHistList.GetUmaInfo(umaHref(j), "", Today, True)
+                    If errmsg.Length > 0 Then
+                        Exit Try
+                    End If
+                    If j > 100 Then
+                        Exit For
+                    End If
+                Next
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+        showWebPageAccessCounter()
+    End Sub
 End Class
