@@ -33,7 +33,6 @@ Partial Class AnaForm
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.BtnRedisp = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.chkJo = New System.Windows.Forms.CheckBox()
         Me.chkKyori = New System.Windows.Forms.CheckBox()
         Me.chkRacename = New System.Windows.Forms.CheckBox()
         Me.chkMonth = New System.Windows.Forms.CheckBox()
@@ -56,6 +55,9 @@ Partial Class AnaForm
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.BtnGetCount = New System.Windows.Forms.Button()
+        Me.BtnSelectJo = New System.Windows.Forms.Button()
+        Me.txtJo = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -106,7 +108,7 @@ Partial Class AnaForm
         'lb_msg
         '
         Me.lb_msg.AutoSize = True
-        Me.lb_msg.Location = New System.Drawing.Point(11, 344)
+        Me.lb_msg.Location = New System.Drawing.Point(11, 339)
         Me.lb_msg.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lb_msg.Name = "lb_msg"
         Me.lb_msg.Size = New System.Drawing.Size(23, 12)
@@ -161,23 +163,11 @@ Partial Class AnaForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(15, 379)
+        Me.Label3.Location = New System.Drawing.Point(13, 370)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(151, 12)
         Me.Label3.TabIndex = 11
         Me.Label3.Text = "過去レース解析値の検索条件"
-        '
-        'chkJo
-        '
-        Me.chkJo.AutoSize = True
-        Me.chkJo.Checked = True
-        Me.chkJo.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkJo.Location = New System.Drawing.Point(15, 402)
-        Me.chkJo.Name = "chkJo"
-        Me.chkJo.Size = New System.Drawing.Size(84, 16)
-        Me.chkJo.TabIndex = 12
-        Me.chkJo.Text = "同一競馬場"
-        Me.chkJo.UseVisualStyleBackColor = True
         '
         'chkKyori
         '
@@ -238,7 +228,7 @@ Partial Class AnaForm
         Me.CbCyakujun.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbCyakujun.FormattingEnabled = True
         Me.CbCyakujun.Items.AddRange(New Object() {"ALL", "1着のみ", "2着以内", "3着以内", "4着以下"})
-        Me.CbCyakujun.Location = New System.Drawing.Point(132, 412)
+        Me.CbCyakujun.Location = New System.Drawing.Point(120, 433)
         Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(2)
         Me.CbCyakujun.Name = "CbCyakujun"
         Me.CbCyakujun.Size = New System.Drawing.Size(92, 20)
@@ -407,11 +397,41 @@ Partial Class AnaForm
         Me.BtnGetCount.Text = "該当件数取得"
         Me.BtnGetCount.UseVisualStyleBackColor = True
         '
+        'BtnSelectJo
+        '
+        Me.BtnSelectJo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnSelectJo.Location = New System.Drawing.Point(167, 393)
+        Me.BtnSelectJo.Name = "BtnSelectJo"
+        Me.BtnSelectJo.Size = New System.Drawing.Size(35, 32)
+        Me.BtnSelectJo.TabIndex = 57
+        Me.BtnSelectJo.Text = "･･･"
+        Me.BtnSelectJo.UseVisualStyleBackColor = True
+        '
+        'txtJo
+        '
+        Me.txtJo.Location = New System.Drawing.Point(61, 401)
+        Me.txtJo.Name = "txtJo"
+        Me.txtJo.Size = New System.Drawing.Size(100, 19)
+        Me.txtJo.TabIndex = 56
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(15, 404)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(41, 12)
+        Me.Label5.TabIndex = 55
+        Me.Label5.Text = "競馬場"
+        '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.BtnSelectJo)
+        Me.Controls.Add(Me.txtJo)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.BtnGetCount)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label1)
@@ -434,7 +454,6 @@ Partial Class AnaForm
         Me.Controls.Add(Me.chkMonth)
         Me.Controls.Add(Me.chkRacename)
         Me.Controls.Add(Me.chkKyori)
-        Me.Controls.Add(Me.chkJo)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.BtnRedisp)
         Me.Controls.Add(Me.NumericUpDown1)
@@ -466,7 +485,6 @@ Partial Class AnaForm
     Friend WithEvents NumericUpDown1 As NumericUpDown
     Friend WithEvents BtnRedisp As Button
     Friend WithEvents Label3 As Label
-    Friend WithEvents chkJo As CheckBox
     Friend WithEvents chkKyori As CheckBox
     Friend WithEvents chkRacename As CheckBox
     Friend WithEvents chkMonth As CheckBox
@@ -489,4 +507,7 @@ Partial Class AnaForm
     Friend WithEvents Label1 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents BtnGetCount As Button
+    Friend WithEvents BtnSelectJo As Button
+    Friend WithEvents txtJo As TextBox
+    Friend WithEvents Label5 As Label
 End Class

@@ -205,6 +205,12 @@
     <Compile Include="raceAnanClass.vb" />
     <Compile Include="RaceHeaderClass.vb" />
     <Compile Include="resultParseMod.vb" />
+    <Compile Include="SelectJoForm.Designer.vb">
+      <DependentUpon>SelectJoForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SelectJoForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ShortRaceNameClass.vb" />
     <Compile Include="StoreAnaValForm.Designer.vb">
       <DependentUpon>StoreAnaValForm.vb</DependentUpon>
@@ -268,6 +274,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectJoForm.resx">
+      <DependentUpon>SelectJoForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StoreAnaValForm.resx">
       <DependentUpon>StoreAnaValForm.vb</DependentUpon>

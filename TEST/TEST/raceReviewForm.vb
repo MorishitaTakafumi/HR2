@@ -41,14 +41,6 @@ Public Class raceReviewForm
     End Sub
 
     Private Sub SetupCombobox()
-        With CbJo
-            .Items.Clear()
-            .Items.Add("All")
-            For j As Integer = 0 To JoMei.Length - 1
-                .Items.Add(JoMei(j))
-            Next
-            .SelectedIndex = 0
-        End With
         With CbSyubetu
             .Items.Clear()
             .Items.Add("All")
@@ -108,7 +100,7 @@ Public Class raceReviewForm
                 r = cmd.ExecuteReader
                 With CbRacename
                     .Items.Clear()
-                    .Items.Add("All")
+                    .Items.Add("") 'Allはダメ
                     While r.Read
                         .Items.Add(r("race_name"))
                     End While
@@ -293,9 +285,9 @@ Public Class raceReviewForm
                 End If
                 cmd.CommandText = "SELECT R.dt, R.kyori, R.type_code, R.race_name, K.cyakujun, K.bamei, K.ninki FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id WHERE K.cyakujun>0"
                 Dim sql As String = ""
-                If CbJo.SelectedIndex > 0 Then
-                    sql &= " AND R.jo_code=@jo_code"
-                    cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
+                If txtJo.Text.Trim.Length > 0 Then
+                    Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
+                    sql &= " AND R.jo_code IN (" & ss & ")"
                 End If
                 If CbKyori.SelectedIndex > 0 Then
                     sql &= " AND R.kyori=@kyori"
@@ -329,6 +321,7 @@ Public Class raceReviewForm
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
+                cmd.CommandText &= " ORDER BY R.race_name, R.dt"
                 flx.Redraw = False
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
@@ -661,12 +654,12 @@ Public Class raceReviewForm
     End Function
 
     Private Sub BtnJokenCls_Click(sender As Object, e As EventArgs) Handles BtnJokenCls.Click
-        CbJo.SelectedIndex = 0
+        txtJo.Text = ""
         CbSyubetu.SelectedIndex = 0
         CbKyori.SelectedIndex = 0
         CbGrade.SelectedIndex = 0
         CbMonth.SelectedIndex = 0
-        CbCyakujun.SelectedIndex = 2
+        CbCyakujun.SelectedIndex = 1
         CbRacename.SelectedIndex = 0
     End Sub
 
@@ -694,97 +687,97 @@ Public Class raceReviewForm
         End With
     End Sub
 
-    '係数検証
-    Private Sub BtnCoefReview_Click(sender As Object, e As EventArgs) Handles BtnCoefReview.Click
-        Dim spanCoefRankCnt(10, 2) As Integer
-        Dim dateCoefRankCnt(10, 2) As Integer
-        Dim distCoefRankCnt(10, 2) As Integer
-        Dim errmsg As String = ""
+    ''係数検証
+    'Private Sub BtnCoefReview_Click(sender As Object, e As EventArgs) Handles BtnCoefReview.Click
+    '    Dim spanCoefRankCnt(10, 2) As Integer
+    '    Dim dateCoefRankCnt(10, 2) As Integer
+    '    Dim distCoefRankCnt(10, 2) As Integer
+    '    Dim errmsg As String = ""
 
-        Using conn As New SQLiteConnection(GetDbConnectionString)
-            Dim cmd As SQLiteCommand = conn.CreateCommand
-            conn.Open()
-            Try
-                cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
-                Dim sql As String = ""
-                If CbJo.SelectedIndex > 0 Then
-                    sql &= " AND R.jo_code=@jo_code"
-                    cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
-                End If
-                If CbKyori.SelectedIndex > 0 Then
-                    sql &= " AND R.kyori=@kyori"
-                    cmd.Parameters.AddWithValue("@kyori", CInt(CbKyori.Text))
-                End If
-                If CbSyubetu.SelectedIndex > 0 Then
-                    sql &= " AND R.type_code=@type_code"
-                    cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
-                End If
-                If CbRacename.SelectedIndex > 0 Then
-                    sql &= " AND R.race_name=@race_name"
-                    cmd.Parameters.AddWithValue("@race_name", CbRacename.Text)
-                End If
-                If CbGrade.SelectedIndex > 0 Then
-                    sql &= " AND R.class_code=@class_code"
-                    cmd.Parameters.AddWithValue("@class_code", CbGrade.SelectedIndex - 1)
-                End If
-                If CbCyakujun.SelectedIndex > 0 Then
-                    If RbInai.Checked Then
-                        sql &= " AND A.cyakujun<=@cyakujun"
-                    Else
-                        sql &= " AND A.cyakujun>=@cyakujun"
-                    End If
-                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
-                End If
-                If CbMonth.SelectedIndex > 0 Then
-                    sql &= " AND strftime('%m', R.dt) = @tuki"
-                    cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
-                End If
-                If sql.Length > 0 Then
-                    cmd.CommandText &= sql
-                End If
-                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
-                Dim CyakujunNinkiSa As Integer
-                Dim CyakujunNinkiSaIdx As Integer
-                Dim rank As Integer
-                While r.Read
-                    'CyakujunNinkiSa = CInt(r("cyakujun")) - CInt(r("ninki"))
-                    'CyakujunNinkiSaIdx = GetCyakujunNinkiSaIndex(CyakujunNinkiSa)
-                    Select Case CInt(r("cyakujun"))
-                        Case 1, 2
-                            CyakujunNinkiSaIdx = 0
-                        Case 3
-                            CyakujunNinkiSaIdx = 1
-                        Case Else
-                            CyakujunNinkiSaIdx = 2
-                    End Select
+    '    Using conn As New SQLiteConnection(GetDbConnectionString)
+    '        Dim cmd As SQLiteCommand = conn.CreateCommand
+    '        conn.Open()
+    '        Try
+    '            cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
+    '            Dim sql As String = ""
+    '            If CbJo.SelectedIndex > 0 Then
+    '                sql &= " AND R.jo_code=@jo_code"
+    '                cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
+    '            End If
+    '            If CbKyori.SelectedIndex > 0 Then
+    '                sql &= " AND R.kyori=@kyori"
+    '                cmd.Parameters.AddWithValue("@kyori", CInt(CbKyori.Text))
+    '            End If
+    '            If CbSyubetu.SelectedIndex > 0 Then
+    '                sql &= " AND R.type_code=@type_code"
+    '                cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
+    '            End If
+    '            If CbRacename.SelectedIndex > 0 Then
+    '                sql &= " AND R.race_name=@race_name"
+    '                cmd.Parameters.AddWithValue("@race_name", CbRacename.Text)
+    '            End If
+    '            If CbGrade.SelectedIndex > 0 Then
+    '                sql &= " AND R.class_code=@class_code"
+    '                cmd.Parameters.AddWithValue("@class_code", CbGrade.SelectedIndex - 1)
+    '            End If
+    '            If CbCyakujun.SelectedIndex > 0 Then
+    '                If RbInai.Checked Then
+    '                    sql &= " AND A.cyakujun<=@cyakujun"
+    '                Else
+    '                    sql &= " AND A.cyakujun>=@cyakujun"
+    '                End If
+    '                cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
+    '            End If
+    '            If CbMonth.SelectedIndex > 0 Then
+    '                sql &= " AND strftime('%m', R.dt) = @tuki"
+    '                cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
+    '            End If
+    '            If sql.Length > 0 Then
+    '                cmd.CommandText &= sql
+    '            End If
+    '            Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+    '            Dim CyakujunNinkiSa As Integer
+    '            Dim CyakujunNinkiSaIdx As Integer
+    '            Dim rank As Integer
+    '            While r.Read
+    '                'CyakujunNinkiSa = CInt(r("cyakujun")) - CInt(r("ninki"))
+    '                'CyakujunNinkiSaIdx = GetCyakujunNinkiSaIndex(CyakujunNinkiSa)
+    '                Select Case CInt(r("cyakujun"))
+    '                    Case 1, 2
+    '                        CyakujunNinkiSaIdx = 0
+    '                    Case 3
+    '                        CyakujunNinkiSaIdx = 1
+    '                    Case Else
+    '                        CyakujunNinkiSaIdx = 2
+    '                End Select
 
-                    rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
-                    spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
-                    rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
-                    dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
-                    rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
-                    distCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
+    '                rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
+    '                spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
+    '                rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
+    '                dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
+    '                rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
+    '                distCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
 
-                    'CyakujunNinkiSa = NinkiCyakujunPoint(CInt(r("cyakujun")), CInt(r("ninki")))
-                    'rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
-                    'spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
-                    'rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
-                    'dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
-                    'rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
-                    'distCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
-                End While
-                r.Close()
-            Catch ex As Exception
-                errmsg = ex.Message
-            End Try
-        End Using
-        If errmsg.Length > 0 Then
-            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
-        Else
-            Dim a As New CoefReviewForm
-            a.entry(spanCoefRankCnt, dateCoefRankCnt, distCoefRankCnt)
-        End If
-    End Sub
+    '                'CyakujunNinkiSa = NinkiCyakujunPoint(CInt(r("cyakujun")), CInt(r("ninki")))
+    '                'rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
+    '                'spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
+    '                'rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
+    '                'dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
+    '                'rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
+    '                'distCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
+    '            End While
+    '            r.Close()
+    '        Catch ex As Exception
+    '            errmsg = ex.Message
+    '        End Try
+    '    End Using
+    '    If errmsg.Length > 0 Then
+    '        MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+    '    Else
+    '        Dim a As New CoefReviewForm
+    '        a.entry(spanCoefRankCnt, dateCoefRankCnt, distCoefRankCnt)
+    '    End If
+    'End Sub
 
     '人気と着順から得点を決める
     Private Function NinkiCyakujunPoint(ByVal ninki As Integer, ByVal cyakujun As Integer) As Integer
@@ -898,4 +891,82 @@ Public Class raceReviewForm
             End If
         End If
     End Function
+
+    Private Sub BtnGetCount_Click(sender As Object, e As EventArgs) Handles BtnGetCount.Click
+        ListBox2.Items.Clear()
+        Dim errmsg As String = ""
+
+        Using conn As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = conn.CreateCommand
+            Dim cmd2 As SQLiteCommand = conn.CreateCommand
+            Try
+                conn.Open()
+                errmsg = oShortRaceName.load(cmd)
+                If errmsg.Length > 0 Then
+                    Exit Try
+                End If
+                cmd.CommandText = "SELECT R.dt, R.race_name FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id WHERE K.cyakujun>0"
+                Dim sql As String = ""
+                If txtJo.Text.Trim.Length > 0 Then
+                    Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
+                    sql &= " AND R.jo_code IN (" & ss & ")"
+                End If
+                If CbKyori.SelectedIndex > 0 Then
+                    sql &= " AND R.kyori=@kyori"
+                    cmd.Parameters.AddWithValue("@kyori", CInt(CbKyori.Text))
+                End If
+                If CbSyubetu.SelectedIndex > 0 Then
+                    sql &= " AND R.type_code=@type_code"
+                    cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
+                End If
+                If CbRacename.Text.Trim.Length > 0 Then
+                    sql &= " AND R.race_name like @race_name"
+                    cmd.Parameters.AddWithValue("@race_name", "%" & CbRacename.Text & "%")
+                End If
+                If CbGrade.SelectedIndex > 0 Then
+                    sql &= " AND R.class_code=@class_code"
+                    cmd.Parameters.AddWithValue("@class_code", CbGrade.SelectedIndex - 1)
+                End If
+                If CbCyakujun.SelectedIndex > 0 Then
+                    If RbInai.Checked Then
+                        sql &= " AND K.cyakujun<=@cyakujun"
+                    Else
+                        sql &= " AND K.cyakujun>=@cyakujun"
+                    End If
+                    cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
+                End If
+                If CbMonth.SelectedIndex > 0 Then
+                    sql &= " AND strftime('%m', R.dt) = @tuki"
+                    cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
+                End If
+                If sql.Length > 0 Then
+                    cmd.CommandText &= sql
+                End If
+                cmd.CommandText &= " ORDER BY R.race_name, R.dt"
+                flx.Redraw = False
+                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                Dim cnt As Integer = 0
+                While r.Read
+                    cnt += 1
+                    ListBox2.Items.Add(cnt.ToString("D2") & ":" & CDate(r("dt")).Year & " " & r("race_name"))
+                End While
+                r.Close()
+                flx.Redraw = True
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+
+    End Sub
+
+    Private Sub BtnSelectJo_Click(sender As Object, e As EventArgs) Handles BtnSelectJo.Click
+        Dim a As New SelectJoForm
+        a.entry(txtJo.Text, Me.Left + BtnSelectJo.Left, Me.Top + BtnSelectJo.Top)
+        If a.SaveFlag Then
+            txtJo.Text = a.SelectedJoText
+        End If
+    End Sub
 End Class

@@ -33,7 +33,6 @@ Partial Class raceReviewForm
         Me.CbCyakujun = New System.Windows.Forms.ComboBox()
         Me.chkDosu = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.CbJo = New System.Windows.Forms.ComboBox()
         Me.CbSyubetu = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.CbKyori = New System.Windows.Forms.ComboBox()
@@ -53,6 +52,9 @@ Partial Class raceReviewForm
         Me.BtnWinRate = New System.Windows.Forms.Button()
         Me.BtnFilterClear = New System.Windows.Forms.Button()
         Me.BtnCoefReview = New System.Windows.Forms.Button()
+        Me.BtnGetCount = New System.Windows.Forms.Button()
+        Me.txtJo = New System.Windows.Forms.TextBox()
+        Me.BtnSelectJo = New System.Windows.Forms.Button()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -121,7 +123,7 @@ Partial Class raceReviewForm
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnHistGet.Image = CType(resources.GetObject("BtnHistGet.Image"), System.Drawing.Image)
         Me.BtnHistGet.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.BtnHistGet.Location = New System.Drawing.Point(169, 83)
+        Me.BtnHistGet.Location = New System.Drawing.Point(167, 118)
         Me.BtnHistGet.Name = "BtnHistGet"
         Me.BtnHistGet.Size = New System.Drawing.Size(93, 50)
         Me.BtnHistGet.TabIndex = 7
@@ -172,16 +174,6 @@ Partial Class raceReviewForm
         Me.Label1.Size = New System.Drawing.Size(41, 12)
         Me.Label1.TabIndex = 21
         Me.Label1.Text = "競馬場"
-        '
-        'CbJo
-        '
-        Me.CbJo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CbJo.FormattingEnabled = True
-        Me.CbJo.Location = New System.Drawing.Point(63, 43)
-        Me.CbJo.Margin = New System.Windows.Forms.Padding(2)
-        Me.CbJo.Name = "CbJo"
-        Me.CbJo.Size = New System.Drawing.Size(92, 20)
-        Me.CbJo.TabIndex = 0
         '
         'CbSyubetu
         '
@@ -297,9 +289,9 @@ Partial Class raceReviewForm
         'BtnJokenCls
         '
         Me.BtnJokenCls.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnJokenCls.Location = New System.Drawing.Point(169, 40)
+        Me.BtnJokenCls.Location = New System.Drawing.Point(205, 5)
         Me.BtnJokenCls.Name = "BtnJokenCls"
-        Me.BtnJokenCls.Size = New System.Drawing.Size(47, 37)
+        Me.BtnJokenCls.Size = New System.Drawing.Size(89, 32)
         Me.BtnJokenCls.TabIndex = 34
         Me.BtnJokenCls.Text = "条件クリア"
         Me.BtnJokenCls.UseVisualStyleBackColor = True
@@ -354,7 +346,7 @@ Partial Class raceReviewForm
         'BtnWinRate
         '
         Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnWinRate.Location = New System.Drawing.Point(222, 40)
+        Me.BtnWinRate.Location = New System.Drawing.Point(162, 211)
         Me.BtnWinRate.Name = "BtnWinRate"
         Me.BtnWinRate.Size = New System.Drawing.Size(47, 37)
         Me.BtnWinRate.TabIndex = 39
@@ -374,18 +366,50 @@ Partial Class raceReviewForm
         'BtnCoefReview
         '
         Me.BtnCoefReview.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnCoefReview.Location = New System.Drawing.Point(169, 139)
+        Me.BtnCoefReview.Location = New System.Drawing.Point(215, 211)
         Me.BtnCoefReview.Name = "BtnCoefReview"
-        Me.BtnCoefReview.Size = New System.Drawing.Size(91, 37)
+        Me.BtnCoefReview.Size = New System.Drawing.Size(47, 37)
         Me.BtnCoefReview.TabIndex = 41
         Me.BtnCoefReview.Text = "係数検証"
         Me.BtnCoefReview.UseVisualStyleBackColor = True
+        '
+        'BtnGetCount
+        '
+        Me.BtnGetCount.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGetCount.Image = CType(resources.GetObject("BtnGetCount.Image"), System.Drawing.Image)
+        Me.BtnGetCount.ImageAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.BtnGetCount.Location = New System.Drawing.Point(167, 78)
+        Me.BtnGetCount.Name = "BtnGetCount"
+        Me.BtnGetCount.Size = New System.Drawing.Size(93, 37)
+        Me.BtnGetCount.TabIndex = 42
+        Me.BtnGetCount.Text = "件数取得"
+        Me.BtnGetCount.UseVisualStyleBackColor = True
+        '
+        'txtJo
+        '
+        Me.txtJo.Location = New System.Drawing.Point(63, 43)
+        Me.txtJo.Name = "txtJo"
+        Me.txtJo.Size = New System.Drawing.Size(100, 19)
+        Me.txtJo.TabIndex = 43
+        '
+        'BtnSelectJo
+        '
+        Me.BtnSelectJo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnSelectJo.Location = New System.Drawing.Point(169, 35)
+        Me.BtnSelectJo.Name = "BtnSelectJo"
+        Me.BtnSelectJo.Size = New System.Drawing.Size(35, 32)
+        Me.BtnSelectJo.TabIndex = 44
+        Me.BtnSelectJo.Text = "･･･"
+        Me.BtnSelectJo.UseVisualStyleBackColor = True
         '
         'raceReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.BtnSelectJo)
+        Me.Controls.Add(Me.txtJo)
+        Me.Controls.Add(Me.BtnGetCount)
         Me.Controls.Add(Me.BtnCoefReview)
         Me.Controls.Add(Me.BtnFilterClear)
         Me.Controls.Add(Me.BtnWinRate)
@@ -405,7 +429,6 @@ Partial Class raceReviewForm
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.CbSyubetu)
         Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.CbJo)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.chkDosu)
         Me.Controls.Add(Me.CbCyakujun)
@@ -437,7 +460,6 @@ Partial Class raceReviewForm
     Friend WithEvents CbCyakujun As ComboBox
     Friend WithEvents chkDosu As CheckBox
     Friend WithEvents Label1 As Label
-    Friend WithEvents CbJo As ComboBox
     Friend WithEvents CbSyubetu As ComboBox
     Friend WithEvents Label4 As Label
     Friend WithEvents CbKyori As ComboBox
@@ -457,4 +479,7 @@ Partial Class raceReviewForm
     Friend WithEvents BtnWinRate As Button
     Friend WithEvents BtnFilterClear As Button
     Friend WithEvents BtnCoefReview As Button
+    Friend WithEvents BtnGetCount As Button
+    Friend WithEvents txtJo As TextBox
+    Friend WithEvents BtnSelectJo As Button
 End Class

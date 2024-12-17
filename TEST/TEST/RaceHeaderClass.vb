@@ -376,7 +376,15 @@ Public Class RaceHeaderClass
         If InStr(fullName, front3c) > 0 Then
             Return True
         Else
-            Return False
+            If InStr(shortname, fullName) > 0 Then '農林水産省章典○○みたいな名前は昔は○○だけだった
+                Return True
+            Else
+                If InStr(fullName, "セントライト記念") > 0 AndAlso InStr(shortname, "セントライト記念") Then
+                    Return True '冠名が無い／朝日杯／ラジオ日本賞の3通りある
+                Else
+                    Return False
+                End If
+            End If
         End If
     End Function
 

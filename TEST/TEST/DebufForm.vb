@@ -6,6 +6,8 @@ Public Class DebufForm
         classname = 0
         ave_time = 1
         ave_agari = 2
+        ave_cr_time = 3
+        ave_cr_agari = 4
         cols
     End Enum
 
@@ -59,6 +61,8 @@ Public Class DebufForm
             .Item(0, FlxCol.classname) = "クラス"
             .Item(0, FlxCol.ave_time) = "平均タイム"
             .Item(0, FlxCol.ave_agari) = "平均あがり"
+            .Item(0, FlxCol.ave_cr_time) = "補正平均タイム"
+            .Item(0, FlxCol.ave_cr_agari) = "補正平均あがり"
             For j As Integer = 0 To 7
                 .Item(1 + j, FlxCol.classname) = RaceHeaderClass.GetClassName(j)
             Next
@@ -86,17 +90,32 @@ Public Class DebufForm
         With flx
             .Redraw = False
             For jrow As Integer = .Rows.Fixed To .Rows.Count - 1
-                sv = oTC.get_time_correction(class_code, type_code, kyori)
+                sv = oTC.get_time_ave(class_code, type_code, kyori)
                 If sv = DMY_VAL Then
                     .Item(jrow, FlxCol.ave_time) = "*****"
                 Else
                     .Item(jrow, FlxCol.ave_time) = sv.ToString("F2")
                 End If
-                sv = oTC.get_agari_correction(class_code, type_code, kyori)
+
+                sv = oTC.get_agari_ave(class_code, type_code, kyori)
                 If sv = DMY_VAL Then
                     .Item(jrow, FlxCol.ave_agari) = "*****"
                 Else
                     .Item(jrow, FlxCol.ave_agari) = sv.ToString("F2")
+                End If
+
+                sv = oTC.get_time_correction(class_code, type_code, kyori)
+                If sv = DMY_VAL Then
+                    .Item(jrow, FlxCol.ave_cr_time) = "*****"
+                Else
+                    .Item(jrow, FlxCol.ave_cr_time) = sv.ToString("F2")
+                End If
+
+                sv = oTC.get_agari_correction(class_code, type_code, kyori)
+                If sv = DMY_VAL Then
+                    .Item(jrow, FlxCol.ave_cr_agari) = "*****"
+                Else
+                    .Item(jrow, FlxCol.ave_cr_agari) = sv.ToString("F2")
                 End If
                 class_code += 1
             Next

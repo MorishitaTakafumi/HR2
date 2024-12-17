@@ -310,6 +310,7 @@ Public Class AnaForm
         ListBox1.Items.Add("クラス：" & oHead.class_name)
         oHead.class_code = oHead.GetClassCode()
         anaList.init()
+        txtJo.Text = oHead.keibajo
         Dim errmsg As String = ""
         Using con As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = con.CreateCommand
@@ -472,9 +473,9 @@ Public Class AnaForm
                 cmd.CommandText = "SELECT COUNT(R.id) AS cnt FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
-                If chkJo.Checked Then
-                    sql &= " AND R.jo_code=@jo_code"
-                    cmd.Parameters.AddWithValue("@jo_code", oHead.jo_code)
+                If txtJo.Text.Trim.Length > 0 Then
+                    Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
+                    sql &= " AND R.jo_code IN (" & ss & ")"
                 End If
                 If chkKyori.Checked Then
                     sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
@@ -555,9 +556,9 @@ Public Class AnaForm
                 cmd.CommandText = "SELECT R.dt, A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
-                If chkJo.Checked Then
-                    sql &= " AND R.jo_code=@jo_code"
-                    cmd.Parameters.AddWithValue("@jo_code", oHead.jo_code)
+                If txtJo.Text.Trim.Length > 0 Then
+                    Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
+                    sql &= " AND R.jo_code IN (" & ss & ")"
                 End If
                 If chkKyori.Checked Then
                     sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
@@ -648,9 +649,9 @@ Public Class AnaForm
                 cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE R.dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
-                If chkJo.Checked Then
-                    sql &= " AND R.jo_code=@jo_code"
-                    cmd.Parameters.AddWithValue("@jo_code", oHead.jo_code)
+                If txtJo.Text.Trim.Length > 0 Then
+                    Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
+                    sql &= " AND R.jo_code IN (" & ss & ")"
                 End If
                 If chkKyori.Checked Then
                     sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
@@ -730,9 +731,9 @@ Public Class AnaForm
                         Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
                         Dim shortname As String = oS.racename
 
-                        If InStr(oS.racename, "3歳未勝利") > 0 AndAlso oS.dt.Year = 2020 AndAlso oS.jo_code = 3 Then
-                            MsgBox("でたで！")
-                        End If
+                        'If InStr(oS.racename, "安田記念") > 0 Then
+                        '    MsgBox("でたで！")
+                        'End If
 
                         If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                             kekkaList.init()
@@ -1143,4 +1144,11 @@ Public Class AnaForm
         End If
     End Sub
 
+    Private Sub BtnSelectJo_Click(sender As Object, e As EventArgs) Handles BtnSelectJo.Click
+        Dim a As New SelectJoForm
+        a.entry(txtJo.Text, Me.Left + BtnSelectJo.Left, Me.Top + BtnSelectJo.Top)
+        If a.SaveFlag Then
+            txtJo.Text = a.SelectedJoText
+        End If
+    End Sub
 End Class

@@ -118,4 +118,28 @@ Public Class TimeCorrectionClass
             Return DMY_VAL
         End If
     End Function
+
+    '時計の平均値取得
+    Public Function get_time_ave(ByVal class_code As Integer, ByVal type_code As Integer, ByVal kyori As Integer) As Single
+        For j As Integer = 0 To m_bf.Count - 1
+            With m_bf(j)
+                If .class_code = class_code AndAlso .type_code = type_code AndAlso .kyori = kyori Then
+                    Return .ave_time
+                End If
+            End With
+        Next
+        Return DMY_VAL
+    End Function
+
+    '上りの平均値取得
+    Public Function get_agari_ave(ByVal class_code As Integer, ByVal type_code As Integer, ByVal kyori As Integer) As Single
+        For j As Integer = 0 To m_bf.Count - 1
+            With m_bf(j)
+                If .class_code = class_code AndAlso .type_code = type_code AndAlso .kyori = kyori Then
+                    Return .ave_agari
+                End If
+            End With
+        Next
+        Return DMY_VAL
+    End Function
 End Class
