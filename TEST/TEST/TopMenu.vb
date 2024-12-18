@@ -60,4 +60,11 @@
         a.ShowDialog()
         Show()
     End Sub
+
+    Private Sub BtnReviewParam_Click(sender As Object, e As EventArgs) Handles BtnReviewParam.Click
+        Hide()
+        Dim a As New ParamReviewForm
+        a.ShowDialog()
+        Show()
+    End Sub
 End Class

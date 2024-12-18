@@ -1,13 +1,11 @@
-﻿Imports System.Runtime.InteropServices.WindowsRuntime
-Imports System.Data.SQLite
-
-Public Module GlblMod
+﻿Public Module GlblMod
     Public Const DMY_DATE As Date = #1900/1/1#
     Public Const DMY_VAL As Integer = -9999
 
     Public JoMei() As String = {"札幌", "函館", "福島", "新潟", "中山", "東京", "中京", "京都", "阪神", "小倉"}
     Public RaceSyubetuMei() As String = {"", "芝", "ダート", "障害"}
-    Public oTC As New TimeCorrectionClass
+    Public oTC As New TimeCorrectionClass 'クラス間のタイム補正用
+    Public oParam As New ParamSetClass '適合度計算用のパラメータ
 
     Public Function GetKeibajoCode(ByVal keibajo As String) As Short
         For j As Integer = 0 To JoMei.Length - 1
@@ -227,22 +225,12 @@ Public Module GlblMod
     'spanScore/dateScore/distancrScoreによる係数
     'Return 係数
     Public Function GetScoreCoefficient(ByVal myScore As Integer) As Double
-        'spanScoreによる係数
         '1着,2着,3着,4着以下の４区分で
-        '1着回数×0.025
-        '2着回数×0.012
-        '3着回数×0.006
-        '4着以下回数×(-0.007)
-        '
-        '
-        'Dim P() As Double = {-0.00625, 0.00625, 0.01, 0.025}
-        'Dim P() As Double = {0.001, 0.00625, 0.01, 0.025}
-        'Dim P() As Double = {0.001, 0.005, 0.02, 0.05}
-        Dim P() As Double = {0.003, 0.01, 0.025, 0.05}
+        'Σ各着の回数×係数（パラメータ）
         Dim psum As Double = 1
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
-            psum += myp * P(j)
+            psum += myp * oParam.scoreP(j)
         Next
         Return psum
     End Function
@@ -256,19 +244,16 @@ Public Module GlblMod
         '
         'myTimeのゾーン=a, cmpTimeのゾーン=b として
         '(a-b)=0　のとき 1
-        '(a-b)<0　のとき (a-b)*R1
-        '(a-b)>0　のとき (a-b)*R2
+        '(a-b)<0　のとき (a-b)*係数（パラメータ）
+        '(a-b)>0　のとき (a-b)*係数（パラメータ）
         '
-        'さらにそれが何走前かでも重みづけの係数 P1, P2, P3, P4 を掛ける
+        'さらにそれが何走前かでも重みづけの係数（パラメータ）を掛ける
         '
         If myTime = DMY_VAL OrElse cmpTime = DMY_VAL Then
             Return 0
         End If
 
         Dim fullPoint As Integer = 100 '満点
-        Dim R1 As Single = 0.05 '-0.05 'myTimeがcmpTimeより良いとき満点からの減量を決める係数
-        Dim R2 As Single = 0.15 '0.3  'myTimeがcmpTimeより悪いとき満点からの減量を決める係数
-        Dim P() As Single = {1, 0.95, 0.9, 0.85} '{1, 0.95, 0.85, 0.65} '{1, 0.9, 0.8, 0.7} '何走前かでの重みづけ用
         Dim myZone As Integer = GetTimeZone12(myTime)
         Dim cmpZone As Integer = GetTimeZone12(cmpTime)
         Dim coef As Single
@@ -276,17 +261,17 @@ Public Module GlblMod
         If myZone = cmpZone Then
             coef = 1
         ElseIf myZone < cmpZone Then
-            coef = 1 - (myZone - cmpZone) * R1
+            coef = 1 - (myZone - cmpZone) * oParam.timeR1
         Else
-            coef = 1 - (myZone - cmpZone) * R2
+            coef = 1 - (myZone - cmpZone) * oParam.timeR2
         End If
-        Return fullPoint * P(soumaeV) * coef * GetTimeZoneCoef(myZone)
+        Return fullPoint * oParam.timeP(soumaeV) * coef * GetTimeZoneCoef(myZone)
     End Function
 
     'ゾーンに応じた係数
     '優秀なタイムに多く得点を与えたいので最優秀ゾーンの係数を1としてゾーンが落ちるほど係数は小さくする
     Private Function GetTimeZoneCoef(ByVal myZone As Integer) As Single
-        Return (1 - myZone * 0.03)
+        Return (1 - myZone * oParam.timeZoneCoef)
     End Function
 
     '0.2秒間隔で12個ゾーンを作る

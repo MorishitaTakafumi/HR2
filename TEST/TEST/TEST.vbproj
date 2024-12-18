@@ -148,6 +148,13 @@
     <Compile Include="DebufForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ParamReviewForm.Designer.vb">
+      <DependentUpon>ParamReviewForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ParamReviewForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ParamSetClass.vb" />
     <Compile Include="raceReviewForm.Designer.vb">
       <DependentUpon>raceReviewForm.vb</DependentUpon>
     </Compile>
@@ -252,6 +259,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DebufForm.resx">
       <DependentUpon>DebufForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParamReviewForm.resx">
+      <DependentUpon>ParamReviewForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="raceReviewForm.resx">
       <DependentUpon>raceReviewForm.vb</DependentUpon>

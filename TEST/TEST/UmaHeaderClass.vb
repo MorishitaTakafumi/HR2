@@ -47,15 +47,6 @@ Public Class UmaHeaderClass
         End Try
     End Function
 
-    '既存の馬か？
-    Public Function IsExist(ByRef exist_flag As Boolean) As String
-        Using conn As New SQLiteConnection(GetDbConnectionString)
-            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
-            conn.Open()
-            Return IsExist(cmd, exist_flag)
-        End Using
-    End Function
-
     'データ取得
     Public Function load(ByVal cmd As SQLiteCommand, ByVal arg_name As String) As String
         init()

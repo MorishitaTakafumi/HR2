@@ -36,6 +36,8 @@ Public Class AnaForm
     Private cyakusa2 As New List(Of Single)
     Private cyakusa3 As New List(Of Single)
     Private cyakusa4 As New List(Of Single)
+    Private autoMode As Boolean = False
+    Public Property autoModeResult As String
 
     Public Sub New()
         InitializeComponent()
@@ -48,6 +50,30 @@ Public Class AnaForm
                 RbURL.Checked = True
             End If
         End If
+    End Sub
+
+    Public Sub autoRun(ByVal syutubaFileName As String)
+        autoMode = True
+        txtURL.Text = ""
+        RbFile.Checked = True
+        txtFile.Text = syutubaFileName
+        Show()
+        BtnGo.PerformClick()
+        BtnHistGet.PerformClick()
+        BtnDof.PerformClick()
+        flx.Sort(SortFlags.Descending, FlxCol.dof_total)
+        autoModeResult = ""
+        Dim cnt As Integer = 0
+        Dim jrow As Integer = flx.Rows.Fixed
+        While 1 = 1
+            If jrow >= flx.Rows.Count OrElse
+                    (cnt > 4 AndAlso flx.Item(jrow, FlxCol.dof_total).ToString <> flx.Item(jrow - 1, FlxCol.dof_total).ToString) Then
+                Exit While
+            End If
+            autoModeResult &= flx.Item(jrow, FlxCol.chk).ToString & "," & flx.Item(jrow, FlxCol.ninki).ToString & "," & flx.Item(jrow, FlxCol.dof_total).ToString & vbLf
+            cnt += 1
+            jrow += 1
+        End While
     End Sub
 
     '一覧グリッド書式設定
@@ -184,7 +210,7 @@ Public Class AnaForm
                     xx(FlxCol.umaban) = "取消"
                 End If
                 If oUma.ninki > 0 Then
-                    xx(FlxCol.ninki) = oUma.ninki
+                    xx(FlxCol.ninki) = oUma.ninki.ToString("D2")
                 Else
                     xx(FlxCol.ninki) = ""
                 End If
@@ -272,7 +298,9 @@ Public Class AnaForm
 
     '解析実行
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
-        ClearWebPageAccessCounter()
+        If Not autoMode Then
+            ClearWebPageAccessCounter()
+        End If
         Dim form3argStr As String = ""
         If RbURL.Checked Then
             form3argStr = txtURL.Text.Trim
@@ -399,7 +427,9 @@ Public Class AnaForm
         If RbFile.Checked Then
             ShowCyakujun()
         End If
-        showWebPageAccessCounter()
+        If Not autoMode Then
+            showWebPageAccessCounter()
+        End If
     End Sub
 
     Private Sub BtnURL_Click(sender As Object, e As EventArgs) Handles BtnURL.Click
@@ -458,10 +488,14 @@ Public Class AnaForm
     End Sub
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
-        ClearWebPageAccessCounter()
+        If Not autoMode Then
+            ClearWebPageAccessCounter()
+        End If
         new_logic()
         makeDosu()
-        showWebPageAccessCounter()
+        If Not autoMode Then
+            showWebPageAccessCounter()
+        End If
     End Sub
 
     Private Sub BtnGetCount_Click(sender As Object, e As EventArgs) Handles BtnGetCount.Click

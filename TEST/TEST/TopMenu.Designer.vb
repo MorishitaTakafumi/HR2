@@ -31,6 +31,7 @@ Partial Class TopMenu
         Me.BtnStoreAnaVal = New System.Windows.Forms.Button()
         Me.BtnReview = New System.Windows.Forms.Button()
         Me.BtnTest = New System.Windows.Forms.Button()
+        Me.BtnReviewParam = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'BtnRaceKekka
@@ -129,11 +130,24 @@ Partial Class TopMenu
         Me.BtnTest.Text = "TEST"
         Me.BtnTest.UseVisualStyleBackColor = False
         '
+        'BtnReviewParam
+        '
+        Me.BtnReviewParam.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BtnReviewParam.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.BtnReviewParam.Font = New System.Drawing.Font("MS UI Gothic", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnReviewParam.Location = New System.Drawing.Point(296, 101)
+        Me.BtnReviewParam.Name = "BtnReviewParam"
+        Me.BtnReviewParam.Size = New System.Drawing.Size(249, 54)
+        Me.BtnReviewParam.TabIndex = 8
+        Me.BtnReviewParam.Text = "パラメータの検討"
+        Me.BtnReviewParam.UseVisualStyleBackColor = False
+        '
         'TopMenu
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(592, 388)
+        Me.Controls.Add(Me.BtnReviewParam)
         Me.Controls.Add(Me.BtnTest)
         Me.Controls.Add(Me.BtnReview)
         Me.Controls.Add(Me.BtnStoreAnaVal)
@@ -158,4 +172,5 @@ Partial Class TopMenu
     Friend WithEvents BtnStoreAnaVal As Button
     Friend WithEvents BtnReview As Button
     Friend WithEvents BtnTest As Button
+    Friend WithEvents BtnReviewParam As Button
 End Class
