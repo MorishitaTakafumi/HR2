@@ -2,6 +2,7 @@
 
 Public Class KekkaClass
     'レース結果・・・ある1頭の馬のある１つのレース結果
+    Implements ICloneable
 
     Public Property rec_id As Integer
     Public Property race_id As Integer
@@ -18,7 +19,8 @@ Public Class KekkaClass
     Public Property zogen As Single
     Public Property cyokyosi As String
     Public Property ninki As Short
-    Public Property cyakusa As Single '1(2)着馬とのタイム差
+    Public Property cyakusa_raw As Single '1(2)着馬とのタイム差
+    Public Property cyakusa_cr As Single '1(2)着馬とのタイム差にクラス間補正をしたもの
     Public Property agarisa As Single '上りの差の補正値
 
     Private m_tukajun(3) As Short '1-4角通過順
@@ -43,10 +45,36 @@ Public Class KekkaClass
         zogen = 0
         cyokyosi = ""
         ninki = -1
-        cyakusa = DMY_VAL
+        cyakusa_raw = DMY_VAL
+        cyakusa_cr = DMY_VAL
         agarisa = DMY_VAL
         uma_href = ""
     End Sub
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return New KekkaClass With {
+       .rec_id = Me.rec_id,
+       .race_id = Me.race_id,
+       .cyakujun = Me.cyakujun,
+       .umaban = Me.umaban,
+       .bamei = Me.bamei,
+       .sex = Me.sex,
+       .age = Me.age,
+       .hutan = Me.hutan,
+       .kisyu = Me.kisyu,
+       .tokei = Me.tokei,
+       .m_tukajun = Me.m_tukajun,
+       .agari = Me.agari,
+       .w = Me.w,
+       .zogen = Me.zogen,
+       .cyokyosi = Me.cyokyosi,
+       .ninki = Me.ninki,
+       .cyakusa_raw = Me.cyakusa_raw,
+       .cyakusa_cr = Me.cyakusa_cr,
+       .agarisa = Me.agarisa,
+       .uma_href = Me.uma_href
+        }
+    End Function
 
     Public Property tukajun(ByVal corner As Integer) As Short
         Get
@@ -125,8 +153,8 @@ Public Class KekkaClass
                     .tokei = r("secs")
                     .unpackTukajun(r("tocyu"))
                     .agari = r("agari")
-                    .agarisa = r("agarisa")
-                    .cyakusa = r("cyakusa")
+                    .agarisa = DMY_VAL
+                    .cyakusa_raw = r("cyakusa")
                     .w = r("w")
                     .zogen = r("zogen")
                     .cyokyosi = r("cyokyosi")
@@ -161,7 +189,7 @@ Public Class KekkaClass
             cmd.Parameters.AddWithValue("@tocyu", packTukajun())
             cmd.Parameters.AddWithValue("@agari", agari)
             cmd.Parameters.AddWithValue("@agarisa", agarisa)
-            cmd.Parameters.AddWithValue("@cyakusa", cyakusa)
+            cmd.Parameters.AddWithValue("@cyakusa", cyakusa_raw)
             cmd.Parameters.AddWithValue("@w", w)
             cmd.Parameters.AddWithValue("@zogen", zogen)
             cmd.Parameters.AddWithValue("@cyokyosi", cyokyosi)
@@ -179,7 +207,7 @@ Public Class KekkaClass
         Try
             cmd.Parameters.Clear()
             cmd.CommandText = "UPDATE Kekka SET cyakusa=@cyakusa WHERE id=@id"
-            cmd.Parameters.AddWithValue("@cyakusa", cyakusa)
+            cmd.Parameters.AddWithValue("@cyakusa", cyakusa_raw)
             cmd.Parameters.AddWithValue("@id", rec_id)
             cmd.ExecuteNonQuery()
             Return ""

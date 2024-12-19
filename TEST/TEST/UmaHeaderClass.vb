@@ -2,6 +2,7 @@
 
 Public Class UmaHeaderClass
     '馬ヘッダー
+    Implements ICloneable
 
     Public Property rec_id As Integer
     Public Property bamei As String
@@ -27,6 +28,19 @@ Public Class UmaHeaderClass
         dt_update = DMY_DATE
         dirtyFlag = False
     End Sub
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return New UmaHeaderClass With {
+            .rec_id = Me.rec_id,
+            .bamei = Me.bamei,
+            .father = Me.father,
+            .mother = Me.mother,
+            .seibetu = Me.seibetu,
+            .birthday = Me.birthday,
+            .dt_update = Me.dt_update,
+            .dirtyFlag = Me.dirtyFlag
+        }
+    End Function
 
     '既存の馬か？
     Public Function IsExist(ByVal cmd As SQLiteCommand, ByRef exist_flag As Boolean) As String

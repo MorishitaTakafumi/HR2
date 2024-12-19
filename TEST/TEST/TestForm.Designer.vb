@@ -24,7 +24,6 @@ Partial Class TestForm
     Private Sub InitializeComponent()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
@@ -57,15 +56,6 @@ Partial Class TestForm
         Me.Button2.TabIndex = 1
         Me.Button2.Text = "UmaHist.hrefから" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "レース結果の取り込み"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.Location = New System.Drawing.Point(12, 120)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(179, 44)
-        Me.Button3.TabIndex = 2
-        Me.Button3.Text = "AnaVal生成テスト"
-        Me.Button3.UseVisualStyleBackColor = True
         '
         'ListBox1
         '
@@ -202,7 +192,6 @@ Partial Class TestForm
         Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.ListBox1)
-        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
         Me.Name = "TestForm"
@@ -214,7 +203,6 @@ Partial Class TestForm
 
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
-    Friend WithEvents Button3 As Button
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents Button4 As Button
     Friend WithEvents Button5 As Button

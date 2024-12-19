@@ -2,6 +2,7 @@
 
 Public Class UmaHistClass
     '競走馬レース履歴
+    Implements ICloneable
 
     Public Property rec_id As Integer
     Public Property race_id As Integer
@@ -23,7 +24,6 @@ Public Class UmaHistClass
     Public Property href As String
     Public Property jo_code As Integer
     Public Property type_code As Integer
-
 
     Public Sub New()
         rec_id = -1
@@ -47,6 +47,31 @@ Public Class UmaHistClass
         bamei = ""
         href = ""
     End Sub
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return New UmaHistClass With {
+            .rec_id = Me.rec_id,
+            .race_id = Me.race_id,
+            .dt = Me.dt,
+            .keibajo = Me.keibajo,
+            .jo_code = Me.jo_code,
+            .racename = Me.racename,
+            .grade = Me.grade,
+            .distance = Me.distance,
+            .syubetu = Me.syubetu,
+            .type_code = Me.type_code,
+            .baba = Me.baba,
+            .tosu = Me.tosu,
+            .ninki = Me.ninki,
+            .cyakujun = Me.cyakujun,
+            .kisyu = Me.kisyu,
+            .hutan = Me.hutan,
+            .w = Me.w,
+            .tokei = Me.tokei,
+            .bamei = Me.bamei,
+            .href = Me.href
+        }
+    End Function
 
     Public Function CyakujunStr() As String
         Return cyakujunDecode(cyakujun)

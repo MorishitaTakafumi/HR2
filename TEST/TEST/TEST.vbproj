@@ -148,6 +148,7 @@
     <Compile Include="DebufForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="KekkaStoreClass.vb" />
     <Compile Include="ParamReviewForm.Designer.vb">
       <DependentUpon>ParamReviewForm.vb</DependentUpon>
     </Compile>
@@ -245,6 +246,7 @@
     <Compile Include="UmaHistClass.vb" />
     <Compile Include="umaHistListClass.vb" />
     <Compile Include="umaInfoParseMode.vb" />
+    <Compile Include="UmaStoreClass.vb" />
     <Compile Include="WebMod.vb" />
     <Compile Include="WinRateForm.Designer.vb">
       <DependentUpon>WinRateForm.vb</DependentUpon>

@@ -2,6 +2,7 @@
 
 Public Class umaHistListClass
     '競走馬レース履歴
+    Implements ICloneable
 
     Private m_bf As New List(Of UmaHistClass)
     Public umaHeader As New UmaHeaderClass
@@ -12,6 +13,15 @@ Public Class umaHistListClass
             Return m_bf.Count
         End Get
     End Property
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return New umaHistListClass With {
+            .m_bf = Me.m_bf.Select(Function(f) DirectCast(f.Clone(), UmaHistClass)).ToList(),
+            .umaHeader = Me.umaHeader.Clone(),
+            .WebContents = Me.WebContents
+        }
+    End Function
+
 
     Public Sub init()
         m_bf.Clear()

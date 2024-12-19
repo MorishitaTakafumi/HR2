@@ -89,7 +89,7 @@ Public Class Form1
                 Next
                 xx(FlxCol.agari) = oKekka.agari
                 xx(FlxCol.ninki) = oKekka.ninki
-                xx(FlxCol.cyakusa) = oKekka.agarisa.ToString("F1") & vbLf & "(" & oKekka.cyakusa.ToString("F1") & ")"
+                xx(FlxCol.cyakusa) = oKekka.agarisa.ToString("F1") & vbLf & "(" & oKekka.cyakusa_cr.ToString("F1") & ")"
             Else
                 xx(FlxCol.cyakusa) = ""
                 xx(FlxCol.agari) = ""

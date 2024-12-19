@@ -545,7 +545,7 @@ Public Class raceReviewForm
                                 Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
                                 If oK IsNot Nothing Then
                                     agarisa(cnt) = oK.agarisa
-                                    cyakusa(cnt) = oK.cyakusa
+                                    cyakusa(cnt) = oK.cyakusa_cr
                                     cnt += 1
                                     If cnt > 3 Then
                                         Exit For

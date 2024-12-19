@@ -2,6 +2,7 @@
 
 Public Class RaceHeaderClass
     'レースヘッダー
+    Implements ICloneable
 
     Public Property id As Integer
     Public Property dt As Date
@@ -18,6 +19,7 @@ Public Class RaceHeaderClass
 
     Public Property type_code As Short '1=芝,2=ダート,3=障害
     Private m_syubetu As String
+
     Public Property syubetu As String
         Get
             Return m_syubetu
@@ -76,6 +78,24 @@ Public Class RaceHeaderClass
         tosu = 0
         grade = ""
     End Sub
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Return New RaceHeaderClass With {
+            .id = Me.id,
+            .dt = Me.dt,
+            .class_code = Me.class_code,
+            .class_name = Me.class_name,
+            .type_code = Me.type_code,
+            .syubetu = Me.syubetu,
+            .kyori = Me.kyori,
+            .jo_code = Me.jo_code,
+            .keibajo = Me.keibajo,
+            .race_name = Me.race_name,
+            .race_no = Me.race_no,
+            .tosu = Me.tosu,
+            .grade = Me.grade
+        }
+    End Function
 
     Public Sub New()
         init()
@@ -351,41 +371,6 @@ Public Class RaceHeaderClass
         Catch ex As Exception
             Return "raceHeaderClass.loadByDateAndName() " & ex.Message
         End Try
-    End Function
-
-    'レース名の照合
-    Private Function IsRaceNameMatch(ByVal fullName As String, ByVal shortname As String) As Boolean
-        If shortname.Trim.Length = 0 Then
-            Return False
-        End If
-        If fullName = shortname Then
-            Return True
-        End If
-        Dim front3c As String
-        If shortname.Length > 3 Then
-            front3c = shortname.Substring(0, 3)
-        ElseIf shortname.Length = 3 Then
-            If shortname.Substring(2, 1).ToUpper = "S" Then
-                front3c = shortname.Substring(0, 2) & "ス"
-            Else
-                front3c = shortname
-            End If
-        Else
-            front3c = shortname
-        End If
-        If InStr(fullName, front3c) > 0 Then
-            Return True
-        Else
-            If InStr(shortname, fullName) > 0 Then '農林水産省章典○○みたいな名前は昔は○○だけだった
-                Return True
-            Else
-                If InStr(fullName, "セントライト記念") > 0 AndAlso InStr(shortname, "セントライト記念") Then
-                    Return True '冠名が無い／朝日杯／ラジオ日本賞の3通りある
-                Else
-                    Return False
-                End If
-            End If
-        End If
     End Function
 
     'UmaHistを指定してロード

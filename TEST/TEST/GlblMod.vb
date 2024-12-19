@@ -6,6 +6,43 @@
     Public RaceSyubetuMei() As String = {"", "芝", "ダート", "障害"}
     Public oTC As New TimeCorrectionClass 'クラス間のタイム補正用
     Public oParam As New ParamSetClass '適合度計算用のパラメータ
+    Public UmaStore As New UmaStoreClass '馬情報のキャッシュ
+    Public kekkaStore As New KekkaStoreClass 'レース結果のキャッシュ
+
+    'レース名の照合
+    Public Function IsRaceNameMatch(ByVal fullName As String, ByVal shortname As String) As Boolean
+        If shortname.Trim.Length = 0 Then
+            Return False
+        End If
+        If fullName = shortname Then
+            Return True
+        End If
+        Dim front3c As String
+        If shortname.Length > 3 Then
+            front3c = shortname.Substring(0, 3)
+        ElseIf shortname.Length = 3 Then
+            If shortname.Substring(2, 1).ToUpper = "S" Then
+                front3c = shortname.Substring(0, 2) & "ス"
+            Else
+                front3c = shortname
+            End If
+        Else
+            front3c = shortname
+        End If
+        If InStr(fullName, front3c) > 0 Then
+            Return True
+        Else
+            If InStr(shortname, fullName) > 0 Then '農林水産省章典○○みたいな名前は昔は○○だけだった
+                Return True
+            Else
+                If InStr(fullName, "セントライト記念") > 0 AndAlso InStr(shortname, "セントライト記念") Then
+                    Return True '冠名が無い／朝日杯／ラジオ日本賞の3通りある
+                Else
+                    Return False
+                End If
+            End If
+        End If
+    End Function
 
     Public Function GetKeibajoCode(ByVal keibajo As String) As Short
         For j As Integer = 0 To JoMei.Length - 1
