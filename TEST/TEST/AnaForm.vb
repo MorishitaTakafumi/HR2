@@ -50,6 +50,7 @@ Public Class AnaForm
                 RbURL.Checked = True
             End If
         End If
+        ShowParam()
     End Sub
 
     Public Sub autoRun(ByVal syutubaFileName As String)
@@ -65,15 +66,34 @@ Public Class AnaForm
         autoModeResult = ""
         Dim cnt As Integer = 0
         Dim jrow As Integer = flx.Rows.Fixed
-        While 1 = 1
-            If jrow >= flx.Rows.Count OrElse
-                    (cnt > 4 AndAlso flx.Item(jrow, FlxCol.dof_total).ToString <> flx.Item(jrow - 1, FlxCol.dof_total).ToString) Then
+        Dim flg(3) As Integer
+        While jrow < flx.Rows.Count
+            If (cnt > 4 AndAlso flx.Item(jrow, FlxCol.dof_total).ToString <> flx.Item(jrow - 1, FlxCol.dof_total).ToString) Then
                 Exit While
             End If
             autoModeResult &= flx.Item(jrow, FlxCol.chk).ToString & "," & flx.Item(jrow, FlxCol.ninki).ToString & "," & flx.Item(jrow, FlxCol.dof_total).ToString & vbLf
+            If IsNumeric(flx.Item(jrow, FlxCol.chk)) Then
+                Dim cyakujun As Integer = flx.Item(jrow, FlxCol.chk)
+                If cyakujun >= 1 AndAlso cyakujun <= 3 Then
+                    flg(cyakujun) = 1
+                End If
+            End If
             cnt += 1
             jrow += 1
         End While
+        If flg(1) <> 1 OrElse flg(2) <> 1 OrElse flg(3) <> 1 Then
+            autoModeResult &= "*" & vbLf
+            jrow = flx.Rows.Fixed
+            While jrow < flx.Rows.Count
+                If IsNumeric(flx.Item(jrow, FlxCol.chk)) Then
+                    Dim cyakujun As Integer = flx.Item(jrow, FlxCol.chk)
+                    If cyakujun >= 1 AndAlso cyakujun <= 3 AndAlso flg(cyakujun) <> 1 Then
+                        autoModeResult &= flx.Item(jrow, FlxCol.chk).ToString & "," & flx.Item(jrow, FlxCol.ninki).ToString & "," & flx.Item(jrow, FlxCol.dof_total).ToString & vbLf
+                    End If
+                End If
+                jrow += 1
+            End While
+        End If
     End Sub
 
     '一覧グリッド書式設定
@@ -296,8 +316,17 @@ Public Class AnaForm
         Next
     End Sub
 
+    Private Sub ShowParam()
+        lb_param.Text = "現在のパラメータ：" & oParam.remarks
+    End Sub
+
     '解析実行
     Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
+        If oParam.remarks = "" Then
+            MsgBox("パラメータを選択してください！", MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+
         If Not autoMode Then
             ClearWebPageAccessCounter()
         End If
@@ -382,7 +411,7 @@ Public Class AnaForm
                         Dim oS As UmaHistClass = umaHistList.GetBodyRef(i)
                         Dim shortname As String = oS.racename
                         oS.racename = oShortRaceName.GetLongName(oS.racename)
-                        Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS.dt, oS.racename)
+                        Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS)
                         Dim oRaceHead As RaceHeaderClass
                         If kekkaList Is Nothing Then
                             kekka.init()
@@ -802,7 +831,7 @@ Public Class AnaForm
                 If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                     Dim shortname As String = oS.racename
                     oS.racename = oShortRaceName.GetLongName(oS.racename)
-                    Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS.dt, oS.racename)
+                    Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS)
                     Dim oRaceHead As RaceHeaderClass
                     If kekkaList Is Nothing Then
                         kekka.init()
@@ -1224,4 +1253,14 @@ Public Class AnaForm
             txtJo.Text = a.SelectedJoText
         End If
     End Sub
+
+    Private Sub BtnSelectPara_Click(sender As Object, e As EventArgs) Handles BtnSelectPara.Click
+        Dim a As New SelectParamForm
+        a.entry()
+        If a.SaveFlag Then
+            ShowParam()
+        End If
+        a.Dispose()
+    End Sub
+
 End Class

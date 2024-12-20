@@ -51,17 +51,24 @@ Partial Class ParamReviewForm
         Me.BtnAutoSet = New System.Windows.Forms.Button()
         Me.BtnSave = New System.Windows.Forms.Button()
         Me.BtnLoad = New System.Windows.Forms.Button()
+        Me.LstTestParam2 = New System.Windows.Forms.ListBox()
+        Me.BtnGoTestParam2 = New System.Windows.Forms.Button()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.BtnStdSet = New System.Windows.Forms.Button()
+        Me.txtParamRemarks = New System.Windows.Forms.TextBox()
+        Me.BtnClsAll = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'BtnFile
         '
+        Me.BtnFile.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnFile.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnFile.Location = New System.Drawing.Point(550, 6)
         Me.BtnFile.Name = "BtnFile"
         Me.BtnFile.Size = New System.Drawing.Size(72, 31)
         Me.BtnFile.TabIndex = 51
         Me.BtnFile.Text = "参照"
-        Me.BtnFile.UseVisualStyleBackColor = True
+        Me.BtnFile.UseVisualStyleBackColor = False
         '
         'txtFile
         '
@@ -78,7 +85,7 @@ Partial Class ParamReviewForm
         Me.LstRaceHeader.ItemHeight = 15
         Me.LstRaceHeader.Location = New System.Drawing.Point(14, 48)
         Me.LstRaceHeader.Name = "LstRaceHeader"
-        Me.LstRaceHeader.Size = New System.Drawing.Size(288, 199)
+        Me.LstRaceHeader.Size = New System.Drawing.Size(263, 199)
         Me.LstRaceHeader.TabIndex = 49
         '
         'Label1
@@ -93,7 +100,7 @@ Partial Class ParamReviewForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(317, 58)
+        Me.Label2.Location = New System.Drawing.Point(292, 58)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(73, 12)
         Me.Label2.TabIndex = 53
@@ -101,22 +108,23 @@ Partial Class ParamReviewForm
         '
         'BtnGoStd
         '
+        Me.BtnGoStd.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnGoStd.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnGoStd.Location = New System.Drawing.Point(396, 48)
+        Me.BtnGoStd.Location = New System.Drawing.Point(371, 48)
         Me.BtnGoStd.Name = "BtnGoStd"
         Me.BtnGoStd.Size = New System.Drawing.Size(72, 31)
         Me.BtnGoStd.TabIndex = 54
         Me.BtnGoStd.Text = "Go"
-        Me.BtnGoStd.UseVisualStyleBackColor = True
+        Me.BtnGoStd.UseVisualStyleBackColor = False
         '
         'LstStdParam
         '
         Me.LstStdParam.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.LstStdParam.FormattingEnabled = True
         Me.LstStdParam.ItemHeight = 15
-        Me.LstStdParam.Location = New System.Drawing.Point(319, 85)
+        Me.LstStdParam.Location = New System.Drawing.Point(294, 85)
         Me.LstStdParam.Name = "LstStdParam"
-        Me.LstStdParam.Size = New System.Drawing.Size(214, 274)
+        Me.LstStdParam.Size = New System.Drawing.Size(149, 274)
         Me.LstStdParam.TabIndex = 55
         '
         'LstTestParam
@@ -124,29 +132,30 @@ Partial Class ParamReviewForm
         Me.LstTestParam.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.LstTestParam.FormattingEnabled = True
         Me.LstTestParam.ItemHeight = 15
-        Me.LstTestParam.Location = New System.Drawing.Point(559, 85)
+        Me.LstTestParam.Location = New System.Drawing.Point(461, 85)
         Me.LstTestParam.Name = "LstTestParam"
-        Me.LstTestParam.Size = New System.Drawing.Size(214, 274)
+        Me.LstTestParam.Size = New System.Drawing.Size(149, 274)
         Me.LstTestParam.TabIndex = 58
         '
         'BtnGoTestParam
         '
+        Me.BtnGoTestParam.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnGoTestParam.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnGoTestParam.Location = New System.Drawing.Point(636, 48)
+        Me.BtnGoTestParam.Location = New System.Drawing.Point(538, 48)
         Me.BtnGoTestParam.Name = "BtnGoTestParam"
         Me.BtnGoTestParam.Size = New System.Drawing.Size(72, 31)
         Me.BtnGoTestParam.TabIndex = 57
         Me.BtnGoTestParam.Text = "Go"
-        Me.BtnGoTestParam.UseVisualStyleBackColor = True
+        Me.BtnGoTestParam.UseVisualStyleBackColor = False
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(557, 58)
+        Me.Label3.Location = New System.Drawing.Point(453, 58)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(73, 12)
+        Me.Label3.Size = New System.Drawing.Size(79, 12)
         Me.Label3.TabIndex = 56
-        Me.Label3.Text = "試験パラメータ"
+        Me.Label3.Text = "試験パラメータ1"
         '
         'Label4
         '
@@ -271,39 +280,108 @@ Partial Class ParamReviewForm
         '
         'BtnAutoSet
         '
+        Me.BtnAutoSet.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnAutoSet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnAutoSet.Location = New System.Drawing.Point(15, 395)
         Me.BtnAutoSet.Name = "BtnAutoSet"
         Me.BtnAutoSet.Size = New System.Drawing.Size(72, 31)
         Me.BtnAutoSet.TabIndex = 74
         Me.BtnAutoSet.Text = "自動発生"
-        Me.BtnAutoSet.UseVisualStyleBackColor = True
+        Me.BtnAutoSet.UseVisualStyleBackColor = False
         '
         'BtnSave
         '
+        Me.BtnSave.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnSave.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnSave.Location = New System.Drawing.Point(15, 518)
         Me.BtnSave.Name = "BtnSave"
         Me.BtnSave.Size = New System.Drawing.Size(142, 31)
         Me.BtnSave.TabIndex = 75
         Me.BtnSave.Text = "このパラメータを登録"
-        Me.BtnSave.UseVisualStyleBackColor = True
+        Me.BtnSave.UseVisualStyleBackColor = False
         '
         'BtnLoad
         '
+        Me.BtnLoad.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.BtnLoad.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnLoad.Location = New System.Drawing.Point(163, 518)
         Me.BtnLoad.Name = "BtnLoad"
         Me.BtnLoad.Size = New System.Drawing.Size(191, 31)
         Me.BtnLoad.TabIndex = 76
         Me.BtnLoad.Text = "パラメータをファイルから読み込む"
-        Me.BtnLoad.UseVisualStyleBackColor = True
+        Me.BtnLoad.UseVisualStyleBackColor = False
+        '
+        'LstTestParam2
+        '
+        Me.LstTestParam2.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.LstTestParam2.FormattingEnabled = True
+        Me.LstTestParam2.ItemHeight = 15
+        Me.LstTestParam2.Location = New System.Drawing.Point(628, 85)
+        Me.LstTestParam2.Name = "LstTestParam2"
+        Me.LstTestParam2.Size = New System.Drawing.Size(149, 274)
+        Me.LstTestParam2.TabIndex = 79
+        '
+        'BtnGoTestParam2
+        '
+        Me.BtnGoTestParam2.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BtnGoTestParam2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGoTestParam2.Location = New System.Drawing.Point(705, 48)
+        Me.BtnGoTestParam2.Name = "BtnGoTestParam2"
+        Me.BtnGoTestParam2.Size = New System.Drawing.Size(72, 31)
+        Me.BtnGoTestParam2.TabIndex = 78
+        Me.BtnGoTestParam2.Text = "Go"
+        Me.BtnGoTestParam2.UseVisualStyleBackColor = False
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(620, 58)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(79, 12)
+        Me.Label12.TabIndex = 77
+        Me.Label12.Text = "試験パラメータ2"
+        '
+        'BtnStdSet
+        '
+        Me.BtnStdSet.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BtnStdSet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnStdSet.Location = New System.Drawing.Point(14, 432)
+        Me.BtnStdSet.Name = "BtnStdSet"
+        Me.BtnStdSet.Size = New System.Drawing.Size(72, 31)
+        Me.BtnStdSet.TabIndex = 80
+        Me.BtnStdSet.Text = "標準値"
+        Me.BtnStdSet.UseVisualStyleBackColor = False
+        '
+        'txtParamRemarks
+        '
+        Me.txtParamRemarks.Location = New System.Drawing.Point(104, 370)
+        Me.txtParamRemarks.Name = "txtParamRemarks"
+        Me.txtParamRemarks.Size = New System.Drawing.Size(741, 19)
+        Me.txtParamRemarks.TabIndex = 81
+        '
+        'BtnClsAll
+        '
+        Me.BtnClsAll.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BtnClsAll.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnClsAll.Location = New System.Drawing.Point(818, 6)
+        Me.BtnClsAll.Name = "BtnClsAll"
+        Me.BtnClsAll.Size = New System.Drawing.Size(54, 50)
+        Me.BtnClsAll.TabIndex = 82
+        Me.BtnClsAll.Text = "すべて消去"
+        Me.BtnClsAll.UseVisualStyleBackColor = False
         '
         'ParamReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(884, 561)
+        Me.Controls.Add(Me.BtnClsAll)
+        Me.Controls.Add(Me.txtParamRemarks)
+        Me.Controls.Add(Me.BtnStdSet)
+        Me.Controls.Add(Me.LstTestParam2)
+        Me.Controls.Add(Me.BtnGoTestParam2)
+        Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.BtnLoad)
         Me.Controls.Add(Me.BtnSave)
         Me.Controls.Add(Me.BtnAutoSet)
@@ -369,4 +447,10 @@ Partial Class ParamReviewForm
     Friend WithEvents BtnAutoSet As Button
     Friend WithEvents BtnSave As Button
     Friend WithEvents BtnLoad As Button
+    Friend WithEvents LstTestParam2 As ListBox
+    Friend WithEvents BtnGoTestParam2 As Button
+    Friend WithEvents Label12 As Label
+    Friend WithEvents BtnStdSet As Button
+    Friend WithEvents txtParamRemarks As TextBox
+    Friend WithEvents BtnClsAll As Button
 End Class

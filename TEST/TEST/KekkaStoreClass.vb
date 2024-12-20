@@ -11,9 +11,13 @@
         End If
     End Sub
 
-    Public Function GetData(ByVal dt As Date, ByVal race_name As String) As KekkaListClass
+    Public Function GetData(ByVal orh As UmaHistClass) As KekkaListClass
         For Each item In KekkaQ
-            If dt.Date = item.raceHeader.dt.Date AndAlso IsRaceNameMatch(item.raceHeader.race_name, race_name) Then
+            If orh.dt.Date = item.raceHeader.dt.Date AndAlso
+               orh.jo_code = item.raceHeader.jo_code AndAlso
+               orh.distance = item.raceHeader.kyori AndAlso
+               orh.type_code = item.raceHeader.type_code AndAlso
+               IsRaceNameMatch(item.raceHeader.race_name, orh.racename) Then
                 Return item.Clone()
             End If
         Next

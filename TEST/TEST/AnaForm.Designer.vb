@@ -58,6 +58,8 @@ Partial Class AnaForm
         Me.BtnSelectJo = New System.Windows.Forms.Button()
         Me.txtJo = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.BtnSelectPara = New System.Windows.Forms.Button()
+        Me.lb_param = New System.Windows.Forms.Label()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -65,11 +67,13 @@ Partial Class AnaForm
         'BtnGo
         '
         Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnGo.Location = New System.Drawing.Point(787, 10)
+        Me.BtnGo.Image = CType(resources.GetObject("BtnGo.Image"), System.Drawing.Image)
+        Me.BtnGo.ImageAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.BtnGo.Location = New System.Drawing.Point(773, 10)
         Me.BtnGo.Name = "BtnGo"
-        Me.BtnGo.Size = New System.Drawing.Size(131, 67)
+        Me.BtnGo.Size = New System.Drawing.Size(88, 67)
         Me.BtnGo.TabIndex = 0
-        Me.BtnGo.Text = "解析実行"
+        Me.BtnGo.Text = "解析" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "実行"
         Me.BtnGo.UseVisualStyleBackColor = True
         '
         'txtURL
@@ -204,9 +208,9 @@ Partial Class AnaForm
         'BtnHistGet
         '
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnHistGet.Location = New System.Drawing.Point(248, 478)
+        Me.BtnHistGet.Location = New System.Drawing.Point(240, 460)
         Me.BtnHistGet.Name = "BtnHistGet"
-        Me.BtnHistGet.Size = New System.Drawing.Size(42, 42)
+        Me.BtnHistGet.Size = New System.Drawing.Size(50, 52)
         Me.BtnHistGet.TabIndex = 17
         Me.BtnHistGet.Text = "検索実行"
         Me.BtnHistGet.UseVisualStyleBackColor = True
@@ -246,20 +250,20 @@ Partial Class AnaForm
         '
         'BtnWinRate
         '
-        Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnWinRate.Location = New System.Drawing.Point(248, 362)
+        Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnWinRate.Location = New System.Drawing.Point(205, 357)
         Me.BtnWinRate.Name = "BtnWinRate"
-        Me.BtnWinRate.Size = New System.Drawing.Size(42, 44)
+        Me.BtnWinRate.Size = New System.Drawing.Size(92, 19)
         Me.BtnWinRate.TabIndex = 40
         Me.BtnWinRate.Text = "勝率検索"
         Me.BtnWinRate.UseVisualStyleBackColor = True
         '
         'Button1
         '
-        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button1.Location = New System.Drawing.Point(964, 10)
+        Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.Button1.Location = New System.Drawing.Point(194, 332)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(76, 67)
+        Me.Button1.Size = New System.Drawing.Size(103, 19)
         Me.Button1.TabIndex = 41
         Me.Button1.Text = "過去レース検討"
         Me.Button1.UseVisualStyleBackColor = True
@@ -267,7 +271,7 @@ Partial Class AnaForm
         'BtnDof
         '
         Me.BtnDof.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnDof.Location = New System.Drawing.Point(1046, 10)
+        Me.BtnDof.Location = New System.Drawing.Point(889, 6)
         Me.BtnDof.Name = "BtnDof"
         Me.BtnDof.Size = New System.Drawing.Size(76, 30)
         Me.BtnDof.TabIndex = 42
@@ -327,6 +331,8 @@ Partial Class AnaForm
         'BtnFile
         '
         Me.BtnFile.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnFile.Image = CType(resources.GetObject("BtnFile.Image"), System.Drawing.Image)
+        Me.BtnFile.ImageAlign = System.Drawing.ContentAlignment.TopLeft
         Me.BtnFile.Location = New System.Drawing.Point(652, 46)
         Me.BtnFile.Name = "BtnFile"
         Me.BtnFile.Size = New System.Drawing.Size(115, 31)
@@ -339,7 +345,7 @@ Partial Class AnaForm
         Me.CbCyakujun2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbCyakujun2.FormattingEnabled = True
         Me.CbCyakujun2.Items.AddRange(New Object() {"1着", "2着以内", "3着以内"})
-        Me.CbCyakujun2.Location = New System.Drawing.Point(1127, 14)
+        Me.CbCyakujun2.Location = New System.Drawing.Point(970, 10)
         Me.CbCyakujun2.Margin = New System.Windows.Forms.Padding(2)
         Me.CbCyakujun2.Name = "CbCyakujun2"
         Me.CbCyakujun2.Size = New System.Drawing.Size(92, 20)
@@ -389,10 +395,10 @@ Partial Class AnaForm
         '
         'BtnGetCount
         '
-        Me.BtnGetCount.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnGetCount.Location = New System.Drawing.Point(248, 412)
+        Me.BtnGetCount.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnGetCount.Location = New System.Drawing.Point(240, 401)
         Me.BtnGetCount.Name = "BtnGetCount"
-        Me.BtnGetCount.Size = New System.Drawing.Size(42, 59)
+        Me.BtnGetCount.Size = New System.Drawing.Size(50, 50)
         Me.BtnGetCount.TabIndex = 54
         Me.BtnGetCount.Text = "該当件数取得"
         Me.BtnGetCount.UseVisualStyleBackColor = True
@@ -424,11 +430,34 @@ Partial Class AnaForm
         Me.Label5.TabIndex = 55
         Me.Label5.Text = "競馬場"
         '
+        'BtnSelectPara
+        '
+        Me.BtnSelectPara.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnSelectPara.Location = New System.Drawing.Point(889, 42)
+        Me.BtnSelectPara.Name = "BtnSelectPara"
+        Me.BtnSelectPara.Size = New System.Drawing.Size(61, 35)
+        Me.BtnSelectPara.TabIndex = 58
+        Me.BtnSelectPara.Text = "パラメータ選択"
+        Me.BtnSelectPara.UseVisualStyleBackColor = True
+        '
+        'lb_param
+        '
+        Me.lb_param.AutoSize = True
+        Me.lb_param.BackColor = System.Drawing.Color.Aqua
+        Me.lb_param.Location = New System.Drawing.Point(955, 54)
+        Me.lb_param.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.lb_param.Name = "lb_param"
+        Me.lb_param.Size = New System.Drawing.Size(89, 12)
+        Me.lb_param.TabIndex = 59
+        Me.lb_param.Text = "現在のパラメータ："
+        '
         'AnaForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.lb_param)
+        Me.Controls.Add(Me.BtnSelectPara)
         Me.Controls.Add(Me.BtnSelectJo)
         Me.Controls.Add(Me.txtJo)
         Me.Controls.Add(Me.Label5)
@@ -510,4 +539,6 @@ Partial Class AnaForm
     Friend WithEvents BtnSelectJo As Button
     Friend WithEvents txtJo As TextBox
     Friend WithEvents Label5 As Label
+    Friend WithEvents BtnSelectPara As Button
+    Friend WithEvents lb_param As Label
 End Class

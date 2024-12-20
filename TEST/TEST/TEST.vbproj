@@ -219,6 +219,12 @@
     <Compile Include="SelectJoForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SelectParamForm.Designer.vb">
+      <DependentUpon>SelectParamForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SelectParamForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ShortRaceNameClass.vb" />
     <Compile Include="StoreAnaValForm.Designer.vb">
       <DependentUpon>StoreAnaValForm.vb</DependentUpon>
@@ -289,6 +295,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectJoForm.resx">
       <DependentUpon>SelectJoForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectParamForm.resx">
+      <DependentUpon>SelectParamForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StoreAnaValForm.resx">
       <DependentUpon>StoreAnaValForm.vb</DependentUpon>
