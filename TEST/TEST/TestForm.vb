@@ -269,6 +269,16 @@ Public Class TestForm
                     ListBox1.Items.Add(ss)
                 End While
                 r.Close()
+                '
+                cmd.CommandText = "SELECT A.id, A.dt, A.race_name FROM RaceHeader A LEFT JOIN
+                                   Kekka B ON A.id=B.race_header_id WHERE B.id IS NULL"
+                r = cmd.ExecuteReader
+                While r.Read
+                    ss = "ID:" & CInt(r("id")).ToString & " dt=" & CDate(r("dt")).ToString("yyyy/M/d") &
+                        "  レース名=" & CStr(r("race_name"))
+                    ListBox1.Items.Add(ss)
+                End While
+                r.Close()
                 lb_msg.Text = "処理完了！"
             Catch ex As Exception
                 MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
@@ -282,11 +292,18 @@ Public Class TestForm
             Dim cmd As SQLiteCommand = con.CreateCommand
             Try
                 con.Open()
-                cmd.CommandText = "SELECT A.id, A.dt, A.race_name, A.tosu, B.cnt FROM RaceHeader A INNER JOIN
+                cmd.CommandText = "SELECT A.id FROM RaceHeader A INNER JOIN
                                   (SELECT race_header_id, COUNT(*) AS cnt FROM Kekka Group By race_header_id) AS B
                                    ON A.id=B.race_header_id WHERE A.tosu<>B.cnt"
                 Dim r As SQLiteDataReader = cmd.ExecuteReader
                 Dim ss As String = ""
+                While r.Read
+                    ss &= CInt(r("id")).ToString & ","
+                End While
+                r.Close()
+                '
+                cmd.CommandText = "SELECT A.id FROM RaceHeader A LEFT JOIN Kekka B ON A.id=B.race_header_id WHERE B.id IS NULL"
+                r = cmd.ExecuteReader
                 While r.Read
                     ss &= CInt(r("id")).ToString & ","
                 End While
