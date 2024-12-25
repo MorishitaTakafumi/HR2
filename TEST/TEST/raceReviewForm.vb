@@ -512,6 +512,7 @@ Public Class raceReviewForm
                                 oRaceHead.class_code = oRaceHead.GetClassCode()
                                 oRaceHead.tosu = kekkaList.cnt
                                 oS.racename = oRaceHead.race_name
+                                oRaceHead.push()
                                 errmsg = oRaceHead.loadByUmaHist(cmd, oS)
                                 If errmsg.Length > 0 Then
                                     Return errmsg
@@ -524,6 +525,8 @@ Public Class raceReviewForm
                                             Return errmsg
                                         End If
                                     End If
+                                Else
+                                    oRaceHead.pop()
                                 End If
                             End If
                             If oRaceHead.race_name.Trim.Length > 0 Then

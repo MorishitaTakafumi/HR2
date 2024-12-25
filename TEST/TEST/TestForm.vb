@@ -371,12 +371,17 @@ Public Class TestForm
                 cmd.CommandText = "select R.dt, R.race_name, K.cyakujun, k.bamei, k.href
                                     from raceheader R inner join kekka K on R.id=K.race_header_id 
                                     Left JOIN UmaHeader U on K.bamei=U.name
-                                    where K.cyakujun>0 AND K.cyakujun<2 AND U.id IS NULL"
+                                    where R.dt>@dt AND R.class_code=1 AND K.cyakujun>0 AND U.id IS NULL"
+                cmd.Parameters.AddWithValue("@dt", DateSerial(2024, 6, 1))
                 Dim r As SQLiteDataReader = cmd.ExecuteReader
                 Dim cnt As Integer = 0
+                Dim bameis As New List(Of String)
                 While r.Read
-                    cnt += 1
-                    ListBox1.Items.Add(cnt.ToString & " : " & CDate(r("dt")).ToString & " " & r("race_name") & " " & r("bamei"))
+                    If Not bameis.Contains(r("bamei")) Then
+                        cnt += 1
+                        ListBox1.Items.Add(cnt.ToString & " : " & CDate(r("dt")).ToString & " " & r("race_name") & " " & r("bamei"))
+                        bameis.Add(r("bamei"))
+                    End If
                 End While
                 r.Close()
                 lb_msg.Text = "処理完了！"
@@ -401,7 +406,8 @@ Public Class TestForm
                 cmd.CommandText = "select k.href
                                     from raceheader R inner join kekka K on R.id=K.race_header_id 
                                     Left JOIN UmaHeader U on K.bamei=U.name
-                                    where K.cyakujun>0 AND K.cyakujun<2 AND U.id IS NULL"
+                                    where R.dt>@dt AND R.class_code=1 AND K.cyakujun>0 AND U.id IS NULL"
+                cmd.Parameters.AddWithValue("@dt", DateSerial(2024, 6, 1))
                 Dim r As SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
                     Dim ss As String = r("href")
@@ -416,14 +422,10 @@ Public Class TestForm
                     If (j Mod 10) = 0 Then
                         lb_msg.Text = j.ToString & "/" & umaHref.Count.ToString
                         Application.DoEvents()
-                        Sleep(1000)
                     End If
                     errmsg = umaHistList.GetUmaInfo(umaHref(j), "", Today, True)
                     If errmsg.Length > 0 Then
                         Exit Try
-                    End If
-                    If j > 100 Then
-                        Exit For
                     End If
                 Next
                 lb_msg.Text = "処理完了！"
@@ -435,5 +437,192 @@ Public Class TestForm
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
         End If
         showWebPageAccessCounter()
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Dim ss As String = InputBox("調査する着順を入力してください")
+        If Not IsNumeric(ss) Then
+            Return
+        End If
+        Dim cyakujun As Integer = CInt(ss)
+        ListBox1.Items.Clear()
+        ListBox1.Items.Add (cyakujun.ToString & "着馬の分布")
+        Dim dtList As New List(Of Date)
+        Dim uidList As New List(Of Integer)
+        Dim errmsg As String = ""
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT R.dt, U.id
+                                    FROM (raceheader R INNER JOIN kekka K ON R.id=K.race_header_id) 
+                                    INNER JOIN UmaHeader U ON K.bamei=U.name
+                                    WHERE R.dt>@dt AND R.type_code<>3 AND R.class_code>=2 AND K.cyakujun=" & cyakujun.ToString
+                cmd.Parameters.AddWithValue("@dt", DateSerial(2024, 6, 1))
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                While r.Read
+                    dtList.Add(r("dt"))
+                    uidList.Add(r("id"))
+                End While
+                r.Close()
+
+                Dim umaHistList As New umaHistListClass
+                Dim rA As New raceAnanClass
+                Dim spanCount(70) As Integer
+                Dim dateCount(70) As Integer
+                For j As Integer = 0 To dtList.Count - 1
+                    If (j Mod 10) = 0 Then
+                        lb_msg.Text = j.ToString & "/" & dtList.Count.ToString
+                        Application.DoEvents()
+                        Sleep(1000)
+                    End If
+                    errmsg = umaHistList.load(cmd, uidList(j), dtList(j))
+                    If errmsg.Length > 0 Then
+                        Exit Try
+                    End If
+                    rA.spanScore = umaHistList.GetSpanScore(dtList(j), rA.spanVal)
+                    rA.dateScore = umaHistList.GetSameDateSameKyoriScore(dtList(j), 999, "", rA.kyoriScore)
+                    If rA.spanScore <= 0 Then
+                        spanCount(0) += 1
+                    ElseIf rA.spanScore = 1000000 Then
+                        spanCount(60) += 1
+                    Else
+                        spanCount(1 + 10 * Math.Log10(rA.spanScore)) += 1
+                    End If
+                    If rA.dateScore <= 0 Then
+                        dateCount(0) += 1
+                    ElseIf rA.dateScore = 1000000 Then
+                        dateCount(60) += 1
+                    Else
+                        dateCount(1 + 10 * Math.Log10(rA.dateScore)) += 1
+                    End If
+                Next
+
+                For j As Integer = 0 To 70
+                    ss = GetBarString(spanCount(j), dtList.Count)
+                    ListBox1.Items.Add("s" & j.ToString("D2") & ":" & ss)
+                Next
+                For j As Integer = 0 To 70
+                    ss = GetBarString(dateCount(j), dtList.Count)
+                    ListBox1.Items.Add("d" & j.ToString("D2") & ":" & ss)
+                Next
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+    End Sub
+
+    Private Function GetBarString(ByVal cnt As Integer, ByVal ttlcnt As Integer) As String
+        Dim c_s As Integer
+        If ttlcnt > 10000 Then
+            c_s = cnt / 100
+        ElseIf ttlcnt > 1000 Then
+            c_s = cnt / 10
+        ElseIf ttlcnt > 100 Then
+            c_s = cnt / 3
+        Else
+            c_s = cnt
+        End If
+        Dim ss As String = ""
+        For j As Integer = 0 To c_s
+            ss &= "*"
+        Next
+        Return ss & cnt.ToString
+    End Function
+
+    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click
+        Dim ss As String = InputBox("調査する着順を入力してください")
+        If Not IsNumeric(ss) Then
+            Return
+        End If
+        Dim cyakujun As Integer = CInt(ss)
+        ListBox1.Items.Clear()
+        Dim dtList As New List(Of Date)
+        Dim uidList As New List(Of Integer)
+        Dim errmsg As String = ""
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "SELECT K.bamei, U.id
+                                    FROM (RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id)  
+                                    LEFT JOIN UmaHeader U ON K.bamei=U.name 
+                                    WHERE R.dt>@dt AND R.type_code<>3 AND R.class_code>=2 AND K.cyakujun=" & cyakujun.ToString
+                cmd.Parameters.AddWithValue("@dt", DateSerial(2024, 6, 1))
+                Dim r As SQLiteDataReader = cmd.ExecuteReader
+                Dim cnt As Integer = 0
+                Dim dd As String
+                Dim ngcnt As Integer = 0
+                While r.Read
+                    cnt += 1
+                    If IsDBNull(r("id")) Then
+                        ngcnt += 1
+                        dd = ngcnt.ToString & " : " & r("bamei")
+                        ListBox1.Items.Add(dd)
+                    End If
+                End While
+                ListBox1.Items.Add("cnt=" & cnt.ToString)
+                'While r.Read
+                '    dtList.Add(r("dt"))
+                '    uidList.Add(r("id"))
+                'End While
+                r.Close()
+                If 1 > 0 Then
+                    Return
+                End If
+
+                Dim umaHistList As New umaHistListClass
+                Dim rA As New raceAnanClass
+                Dim spanCount(70) As Integer
+                Dim dateCount(70) As Integer
+                For j As Integer = 0 To dtList.Count - 1
+                    If (j Mod 10) = 0 Then
+                        lb_msg.Text = j.ToString & "/" & dtList.Count.ToString
+                        Application.DoEvents()
+                        Sleep(1000)
+                    End If
+                    errmsg = umaHistList.load(cmd, uidList(j), dtList(j))
+                    If errmsg.Length > 0 Then
+                        Exit Try
+                    End If
+                    rA.spanScore = umaHistList.GetSpanScore(dtList(j), rA.spanVal)
+                    rA.dateScore = umaHistList.GetSameDateSameKyoriScore(dtList(j), 999, "", rA.kyoriScore)
+                    If rA.spanScore <= 0 Then
+                        spanCount(0) += 1
+                    ElseIf rA.spanScore = 1000000 Then
+                        spanCount(60) += 1
+                    Else
+                        spanCount(1 + 10 * Math.Log10(rA.spanScore)) += 1
+                    End If
+                    If rA.dateScore <= 0 Then
+                        dateCount(0) += 1
+                    ElseIf rA.dateScore = 1000000 Then
+                        dateCount(60) += 1
+                    Else
+                        dateCount(1 + 10 * Math.Log10(rA.dateScore)) += 1
+                    End If
+                Next
+
+                For j As Integer = 0 To 70
+                    ss = GetBarString(spanCount(j), dtList.Count)
+                    ListBox1.Items.Add("s" & j.ToString("D2") & ":" & ss)
+                Next
+                For j As Integer = 0 To 70
+                    ss = GetBarString(dateCount(j), dtList.Count)
+                    ListBox1.Items.Add("d" & j.ToString("D2") & ":" & ss)
+                Next
+                lb_msg.Text = "処理完了！"
+            Catch ex As Exception
+                errmsg = ex.Message
+            End Try
+        End Using
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+
     End Sub
 End Class

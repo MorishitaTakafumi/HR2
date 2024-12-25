@@ -37,6 +37,8 @@ Partial Class TestForm
         Me.Button12 = New System.Windows.Forms.Button()
         Me.Button13 = New System.Windows.Forms.Button()
         Me.Button14 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button15 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button1
@@ -59,16 +61,18 @@ Partial Class TestForm
         '
         'ListBox1
         '
+        Me.ListBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(223, 12)
+        Me.ListBox1.Location = New System.Drawing.Point(197, 62)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(846, 420)
+        Me.ListBox1.Size = New System.Drawing.Size(872, 537)
         Me.ListBox1.TabIndex = 3
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(12, 170)
+        Me.Button4.Location = New System.Drawing.Point(10, 120)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(179, 44)
         Me.Button4.TabIndex = 4
@@ -77,7 +81,7 @@ Partial Class TestForm
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(12, 220)
+        Me.Button5.Location = New System.Drawing.Point(10, 170)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(179, 44)
         Me.Button5.TabIndex = 5
@@ -95,7 +99,7 @@ Partial Class TestForm
         '
         'Button6
         '
-        Me.Button6.Location = New System.Drawing.Point(14, 270)
+        Me.Button6.Location = New System.Drawing.Point(12, 220)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(179, 44)
         Me.Button6.TabIndex = 7
@@ -104,7 +108,7 @@ Partial Class TestForm
         '
         'Button7
         '
-        Me.Button7.Location = New System.Drawing.Point(14, 320)
+        Me.Button7.Location = New System.Drawing.Point(12, 270)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(179, 44)
         Me.Button7.TabIndex = 8
@@ -113,7 +117,7 @@ Partial Class TestForm
         '
         'Button8
         '
-        Me.Button8.Location = New System.Drawing.Point(14, 370)
+        Me.Button8.Location = New System.Drawing.Point(12, 320)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(179, 44)
         Me.Button8.TabIndex = 9
@@ -122,7 +126,7 @@ Partial Class TestForm
         '
         'Button9
         '
-        Me.Button9.Location = New System.Drawing.Point(14, 420)
+        Me.Button9.Location = New System.Drawing.Point(12, 370)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(179, 44)
         Me.Button9.TabIndex = 10
@@ -131,7 +135,7 @@ Partial Class TestForm
         '
         'Button10
         '
-        Me.Button10.Location = New System.Drawing.Point(14, 470)
+        Me.Button10.Location = New System.Drawing.Point(12, 420)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(179, 44)
         Me.Button10.TabIndex = 11
@@ -140,45 +144,65 @@ Partial Class TestForm
         '
         'Button11
         '
-        Me.Button11.Location = New System.Drawing.Point(14, 520)
+        Me.Button11.Location = New System.Drawing.Point(845, 12)
         Me.Button11.Name = "Button11"
-        Me.Button11.Size = New System.Drawing.Size(179, 44)
+        Me.Button11.Size = New System.Drawing.Size(119, 44)
         Me.Button11.TabIndex = 12
         Me.Button11.Text = "クラス間補正値表示"
         Me.Button11.UseVisualStyleBackColor = True
         '
         'Button12
         '
-        Me.Button12.Location = New System.Drawing.Point(199, 520)
+        Me.Button12.Location = New System.Drawing.Point(197, 12)
         Me.Button12.Name = "Button12"
-        Me.Button12.Size = New System.Drawing.Size(179, 44)
+        Me.Button12.Size = New System.Drawing.Size(121, 44)
         Me.Button12.TabIndex = 13
         Me.Button12.Text = "着差を生値に戻す"
         Me.Button12.UseVisualStyleBackColor = True
         '
         'Button13
         '
-        Me.Button13.Location = New System.Drawing.Point(384, 520)
+        Me.Button13.Location = New System.Drawing.Point(324, 12)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(179, 44)
         Me.Button13.TabIndex = 14
-        Me.Button13.Text = "レースの連帯馬で未登録馬の検索"
+        Me.Button13.Text = "レース結果登録馬で未登録馬の検索"
         Me.Button13.UseVisualStyleBackColor = True
         '
         'Button14
         '
-        Me.Button14.Location = New System.Drawing.Point(569, 520)
+        Me.Button14.Location = New System.Drawing.Point(509, 12)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(179, 44)
         Me.Button14.TabIndex = 15
-        Me.Button14.Text = "レースの連帯馬で未登録馬の登録"
+        Me.Button14.Text = "レース結果登録馬で未登録馬の登録"
         Me.Button14.UseVisualStyleBackColor = True
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(694, 12)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(145, 44)
+        Me.Button3.TabIndex = 16
+        Me.Button3.Text = "spanScoreの分布調査"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'Button15
+        '
+        Me.Button15.Location = New System.Drawing.Point(992, 12)
+        Me.Button15.Name = "Button15"
+        Me.Button15.Size = New System.Drawing.Size(77, 44)
+        Me.Button15.TabIndex = 17
+        Me.Button15.Text = "TEST"
+        Me.Button15.UseVisualStyleBackColor = True
         '
         'TestForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1081, 608)
+        Me.Controls.Add(Me.Button15)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button14)
         Me.Controls.Add(Me.Button13)
         Me.Controls.Add(Me.Button12)
@@ -216,4 +240,6 @@ Partial Class TestForm
     Friend WithEvents Button12 As Button
     Friend WithEvents Button13 As Button
     Friend WithEvents Button14 As Button
+    Friend WithEvents Button3 As Button
+    Friend WithEvents Button15 As Button
 End Class

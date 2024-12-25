@@ -81,3 +81,4 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.SelectParamForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.ParamReviewForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.SelectJoForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.SelectParamForm.resources
+C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache
