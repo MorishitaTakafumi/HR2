@@ -5,8 +5,10 @@ Public Class ParamSetClass
 
     Public Property remarks As String
 
-    '*** spanScore/dateScore/distancrScoreによる係数 ***
+    '*** spanScoreによる係数 ***
     Public scoreP(3) As Double '4着以下,3着,2着,1着の順 GlblMod.GetScoreCoefficient()
+    '*** dateScoreによる係数 ***
+    Public scoreP2(3) As Double '4着以下,3着,2着,1着の順 GlblMod.GetScoreCoefficient()
 
     '*** 上り差／着差の適合度を得点化するための係数 ***
     Public timeR1 As Double 'myTimeがcmpTimeより良いとき満点からの減量を決める係数
@@ -25,6 +27,10 @@ Public Class ParamSetClass
         scoreP(1) = 0.01
         scoreP(2) = 0.025
         scoreP(3) = 0.05
+        scoreP2(0) = 0.003
+        scoreP2(1) = 0.01
+        scoreP2(2) = 0.025
+        scoreP2(3) = 0.05
         timeR1 = 0.05
         timeR2 = 0.15
         timeP(0) = 1
@@ -48,6 +54,16 @@ Public Class ParamSetClass
         timeP(3) = makeRandomValue(0.85, 1)
         'タイムゾーンに応じた係数 0.01～0.1
         timeZoneCoef = makeRandomValue(0.01, 0.1)
+        'spanScoreに応じた係数
+        scoreP(0) = makeRandomValue(-0.05, 0.05) '4着以下
+        scoreP(1) = makeRandomValue(0, 0.05)
+        scoreP(2) = makeRandomValue(0, 0.05)
+        scoreP(3) = makeRandomValue(0, 0.05) '1着
+        'dateScoreに応じた係数
+        scoreP2(0) = makeRandomValue(-0.05, 0.05) '4着以下
+        scoreP2(1) = makeRandomValue(0, 0.05)
+        scoreP2(2) = makeRandomValue(0, 0.05)
+        scoreP2(3) = makeRandomValue(0, 0.05) '1着
     End Sub
 
     Private Function makeRandomValue(ByVal minv As Double, ByVal maxv As Double) As Double
@@ -63,7 +79,15 @@ Public Class ParamSetClass
                "timeP1:" & timeP(1).ToString("F3") & "," &
                "timeP2:" & timeP(2).ToString("F3") & "," &
                "timeP3:" & timeP(3).ToString("F3") & "," &
-               "timeZoneCoef:" & timeZoneCoef.ToString("F3")
+               "timeZoneCoef:" & timeZoneCoef.ToString("F3") & "," &
+               "scoreP0:" & scoreP(0).ToString("F3") & "," &
+               "scoreP1:" & scoreP(1).ToString("F3") & "," &
+               "scoreP2:" & scoreP(2).ToString("F3") & "," &
+               "scoreP3:" & scoreP(3).ToString("F3") & "," &
+               "scoreP20:" & scoreP2(0).ToString("F3") & "," &
+               "scoreP21:" & scoreP2(1).ToString("F3") & "," &
+               "scoreP22:" & scoreP2(2).ToString("F3") & "," &
+               "scoreP23:" & scoreP2(3).ToString("F3")
     End Function
 
     Private Sub unpackParams(ByVal str_params As String)
@@ -86,6 +110,22 @@ Public Class ParamSetClass
                         timeP(3) = CDbl(sbf(j).Substring(ip))
                     Case "timeZoneCoef"
                         timeZoneCoef = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP0"
+                        scoreP(0) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP1"
+                        scoreP(1) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP2"
+                        scoreP(2) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP3"
+                        scoreP(3) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP20"
+                        scoreP2(0) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP21"
+                        scoreP2(1) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP22"
+                        scoreP2(2) = CDbl(sbf(j).Substring(ip))
+                    Case "scoreP23"
+                        scoreP2(3) = CDbl(sbf(j).Substring(ip))
                 End Select
             End If
         Next

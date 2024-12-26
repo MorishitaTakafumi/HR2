@@ -20,6 +20,14 @@ Public Class ParamReviewForm
         txtTimeP2.Text = oParam.timeP(2).ToString("F3")
         txtTimeP3.Text = oParam.timeP(3).ToString("F3")
         txtTimeZone.Text = oParam.timeZoneCoef.ToString("F3")
+        txtScoreP0.Text = oParam.scoreP(0).ToString("F3")
+        txtScoreP1.Text = oParam.scoreP(1).ToString("F3")
+        txtScoreP2.Text = oParam.scoreP(2).ToString("F3")
+        txtScoreP3.Text = oParam.scoreP(3).ToString("F3")
+        txtScoreP20.Text = oParam.scoreP2(0).ToString("F3")
+        txtScoreP21.Text = oParam.scoreP2(1).ToString("F3")
+        txtScoreP22.Text = oParam.scoreP2(2).ToString("F3")
+        txtScoreP23.Text = oParam.scoreP2(3).ToString("F3")
     End Sub
 
     Private Sub torikomi()
@@ -43,6 +51,30 @@ Public Class ParamReviewForm
         End If
         If IsNumeric(txtTimeZone.Text) Then
             oParam.timeZoneCoef = CSng(txtTimeZone.Text)
+        End If
+        If IsNumeric(txtScoreP0.Text) Then
+            oParam.scoreP(0) = CSng(txtScoreP0.Text)
+        End If
+        If IsNumeric(txtScoreP1.Text) Then
+            oParam.scoreP(1) = CSng(txtScoreP1.Text)
+        End If
+        If IsNumeric(txtScoreP2.Text) Then
+            oParam.scoreP(2) = CSng(txtScoreP2.Text)
+        End If
+        If IsNumeric(txtScoreP3.Text) Then
+            oParam.scoreP(3) = CSng(txtScoreP3.Text)
+        End If
+        If IsNumeric(txtScoreP20.Text) Then
+            oParam.scoreP2(0) = CSng(txtScoreP20.Text)
+        End If
+        If IsNumeric(txtScoreP21.Text) Then
+            oParam.scoreP2(1) = CSng(txtScoreP21.Text)
+        End If
+        If IsNumeric(txtScoreP22.Text) Then
+            oParam.scoreP2(2) = CSng(txtScoreP22.Text)
+        End If
+        If IsNumeric(txtScoreP23.Text) Then
+            oParam.scoreP2(3) = CSng(txtScoreP23.Text)
         End If
     End Sub
 
@@ -68,6 +100,7 @@ Public Class ParamReviewForm
             LstRaceHeader.Items.Add(a.ListBox1.Items(j))
         Next
         param_lstbox.Items.Clear()
+        param_lstbox.Items.Add(txtParamRemarks.Text)
         param_lstbox.Items.Add("timeR1:" & txtTimeR1.Text)
         param_lstbox.Items.Add("timeR2:" & txtTimeR2.Text)
         param_lstbox.Items.Add("timeP0:" & txtTimeP0.Text)
@@ -75,7 +108,14 @@ Public Class ParamReviewForm
         param_lstbox.Items.Add("timeP2:" & txtTimeP2.Text)
         param_lstbox.Items.Add("timeP3:" & txtTimeP3.Text)
         param_lstbox.Items.Add("tiZone:" & txtTimeZone.Text)
-        param_lstbox.Items.Add("")
+        param_lstbox.Items.Add("scoreP0:" & txtScoreP0.Text)
+        param_lstbox.Items.Add("scoreP1:" & txtScoreP1.Text)
+        param_lstbox.Items.Add("scoreP2:" & txtScoreP2.Text)
+        param_lstbox.Items.Add("scoreP3:" & txtScoreP3.Text)
+        param_lstbox.Items.Add("scoreP20:" & txtScoreP20.Text)
+        param_lstbox.Items.Add("scoreP21:" & txtScoreP21.Text)
+        param_lstbox.Items.Add("scoreP22:" & txtScoreP22.Text)
+        param_lstbox.Items.Add("scoreP23:" & txtScoreP23.Text)
         param_lstbox.Items.Add("No:着順,人気,得点")
         Dim sbf() As String = Split(a.autoModeResult, vbLf)
         For j As Integer = 0 To sbf.Length - 1

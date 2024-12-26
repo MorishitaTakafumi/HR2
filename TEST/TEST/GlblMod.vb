@@ -259,15 +259,28 @@
         Return Int(psum)
     End Function
 
-    'spanScore/dateScore/distancrScoreによる係数
+    'spanScoreによる係数
     'Return 係数
-    Public Function GetScoreCoefficient(ByVal myScore As Integer) As Double
+    Public Function GetSpanScoreCoefficient(ByVal myScore As Integer) As Double
         '1着,2着,3着,4着以下の４区分で
         'Σ各着の回数×係数（パラメータ）
         Dim psum As Double = 1
         For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
             Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
             psum += myp * oParam.scoreP(j)
+        Next
+        Return psum
+    End Function
+
+    'dateScoreによる係数
+    'Return 係数
+    Public Function GetDateScoreCoefficient(ByVal myScore As Integer) As Double
+        '1着,2着,3着,4着以下の４区分で
+        'Σ各着の回数×係数（パラメータ）
+        Dim psum As Double = 1
+        For j As Integer = 0 To 3 '何着か （注）4着以下,3着,2着,1着の順になっている
+            Dim myp As Integer = (myScore \ (100 ^ j)) Mod 100
+            psum += myp * oParam.scoreP2(j)
         Next
         Return psum
     End Function
