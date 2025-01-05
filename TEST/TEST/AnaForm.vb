@@ -11,8 +11,9 @@ Public Class AnaForm
         bamei = 2
         chk = 3
         ninki = 4
-        spanVal = 5
-        histStart = 6
+        hutan
+        spanVal
+        histStart
         kyoriScore = histStart + HIS_CNT
         dateScore
         coef_span
@@ -108,12 +109,13 @@ Public Class AnaForm
             .Item(0, FlxCol.bamei) = "馬名"
             .Item(0, FlxCol.chk) = "印"
             .Item(0, FlxCol.ninki) = "人気"
+            .Item(0, FlxCol.hutan) = "負担"
             .Item(0, FlxCol.spanVal) = "前走間隔" & vbLf & "±７日"
             For j As Integer = 0 To 5
                 .Item(0, FlxCol.histStart + j) = (j + 1).ToString & "走前"
             Next
-            .Item(0, FlxCol.kyoriScore) = "今回距離" & vbLf & "成績"
-            .Item(0, FlxCol.dateScore) = "今回日付" & vbLf & "±７日" & vbLf & "成績"
+            .Item(0, FlxCol.kyoriScore) = "今回" & vbLf & "距離" & vbLf & "成績"
+            .Item(0, FlxCol.dateScore) = "今回" & vbLf & "日付" & vbLf & "±７日" & vbLf & "成績"
             .Item(0, FlxCol.coef_span) = "span" & vbLf & "係数"
             .Item(0, FlxCol.coef_date) = "date" & vbLf & "係数"
             .Item(0, FlxCol.dof_agarisa) = "上差" & vbLf & "適合度"
@@ -234,6 +236,7 @@ Public Class AnaForm
                 Else
                     xx(FlxCol.ninki) = ""
                 End If
+                xx(FlxCol.hutan) = oUma.hutan
             Else
                 xx(FlxCol.waku) = ""
                 xx(FlxCol.umaban) = ""
@@ -385,6 +388,7 @@ Public Class AnaForm
                     rA.umaban = o.umaban
                     rA.bamei = o.bamei
                     rA.ninki = o.ninki
+                    rA.hutan = o.hutan
                     Dim umaHistList As umaHistListClass = UmaStore.GetData(o.bamei)
                     If umaHistList Is Nothing Then
                         umaHists.init()
@@ -679,16 +683,20 @@ Public Class AnaForm
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
-                cmd.CommandText &= " ORDER BY R.id"
+                cmd.CommandText &= " ORDER BY R.dt DESC"
 
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 Dim bameiList As New List(Of String)
                 Dim cyakujunList As New List(Of Integer)
                 Dim dtList As New List(Of Date)
+
                 While r.Read
                     bameiList.Add(r("bamei"))
                     cyakujunList.Add(r("cyakujun"))
                     dtList.Add(r("dt"))
+                    If bameiList.Count >= 100 Then 'たくさん見てもあまり結果は変わらない
+                        Exit While
+                    End If
                 End While
                 r.Close()
                 For j As Integer = 0 To bameiList.Count - 1

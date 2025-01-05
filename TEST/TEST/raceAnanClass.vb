@@ -5,6 +5,7 @@
     Public Property umaban As Short
     Public Property bamei As String
     Public Property ninki As Short
+    Public Property hutan As Single
     Public Property spanVal As String
 
     Private m_hist(5) As String
@@ -18,6 +19,7 @@
         waku = -1
         umaban = -1
         ninki = -1
+        hutan = 0
         bamei = ""
         spanVal = ""
         For j As Integer = 0 To 5

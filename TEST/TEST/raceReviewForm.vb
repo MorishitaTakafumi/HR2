@@ -11,6 +11,7 @@ Public Class raceReviewForm
         cyakujun = 3
         ninki = 4
         sa
+        hutan
         spanVal
         histStart
         kyoriScore = histStart + HIS_CNT * 2
@@ -131,6 +132,7 @@ Public Class raceReviewForm
             .Item(0, FlxCol.cyakujun) = "着順 "
             .Item(0, FlxCol.ninki) = "人気"
             .Item(0, FlxCol.sa) = "人気-着順"
+            .Item(0, FlxCol.hutan) = "負担"
             .Item(0, FlxCol.spanVal) = "前走間隔" & vbLf & "±７日"
             For j As Integer = 0 To HIS_CNT - 1
                 .Item(0, FlxCol.histStart + 2 * j + 0) = (j + 1).ToString & "走前"
@@ -283,7 +285,7 @@ Public Class raceReviewForm
                 If errmsg.Length > 0 Then
                     Exit Try
                 End If
-                cmd.CommandText = "SELECT R.dt, R.kyori, R.type_code, R.race_name, K.cyakujun, K.bamei, K.ninki FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id WHERE K.cyakujun>0"
+                cmd.CommandText = "SELECT R.dt, R.kyori, R.type_code, R.race_name, K.cyakujun, K.bamei, K.ninki, K.hutan FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id WHERE K.cyakujun>0"
                 Dim sql As String = ""
                 If txtJo.Text.Trim.Length > 0 Then
                     Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
@@ -325,7 +327,7 @@ Public Class raceReviewForm
                 flx.Redraw = False
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
-                    errmsg = GetAgarisaCyakusa(cmd2, r("bamei"), r("cyakujun"), r("ninki"), r("dt"), r("race_name"), r("kyori"), GetRaceTypeName(r("type_code")))
+                    errmsg = GetAgarisaCyakusa(cmd2, r("bamei"), r("cyakujun"), r("ninki"), r("hutan"), r("dt"), r("race_name"), r("kyori"), GetRaceTypeName(r("type_code")))
                     If errmsg.Length > 0 Then
                         Exit While
                     End If
@@ -471,6 +473,7 @@ Public Class raceReviewForm
                                        ByVal arg_bamei As String,
                                        ByVal arg_cyakujun As Integer,
                                        ByVal arg_ninki As Integer,
+                                       ByVal arg_hutan As Single,
                                        ByVal arg_dt_race As Date,
                                        ByVal arg_racename As String,
                                        ByVal arg_kyori As Integer,
@@ -572,6 +575,7 @@ Public Class raceReviewForm
                         Else
                             xx(FlxCol.sa) = sa.ToString("D2")
                         End If
+                        xx(FlxCol.hutan) = arg_hutan.ToString("F1")
                         xx(FlxCol.spanVal) = AnaValClass.Score2String(rA.spanScore)
                         For i As Integer = 0 To HIS_CNT - 1
                             xx(FlxCol.histStart + 2 * i + 0) = time2str(agarisa(i)) 'agarisa1～4
