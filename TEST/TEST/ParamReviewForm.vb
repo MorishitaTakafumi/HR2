@@ -176,4 +176,13 @@ Public Class ParamReviewForm
         LstTestParam.Items.Clear()
         LstTestParam2.Items.Clear()
     End Sub
+
+    Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
+        torikomi()
+        oParam.remarks = txtParamRemarks.Text.Trim
+        Dim errmsg As String = oParam.update()
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+        End If
+    End Sub
 End Class

@@ -3,6 +3,7 @@
 Public Class ParamSetClass
     '適合度計算のためのパラメータセット
 
+    Public Property rec_id As Integer
     Public Property remarks As String
 
     '*** spanScoreによる係数 ***
@@ -19,10 +20,12 @@ Public Class ParamSetClass
     Private rand As New Random()
 
     Public Sub New()
+        rec_id = -1
         remarks = ""
     End Sub
 
     Public Sub setDefValue()
+        rec_id = 0
         scoreP(0) = 0.003
         scoreP(1) = 0.01
         scoreP(2) = 0.025
@@ -42,6 +45,7 @@ Public Class ParamSetClass
     End Sub
 
     Public Sub shiftValue()
+        rec_id = -1
         remarks = "自動発生" & Now.ToString("D")
         'myTimeがcmpTimeより良いとき満点からの減量を決める係数 -0.05～+0.25
         timeR1 = makeRandomValue(-0.05, 0.25)
@@ -140,6 +144,7 @@ Public Class ParamSetClass
                 cmd.Parameters.AddWithValue("@id", arg_id)
                 Dim r As SQLiteDataReader = cmd.ExecuteReader
                 If r.Read Then
+                    rec_id = r("id")
                     remarks = r("remarks")
                     unpackParams(r("params"))
                 End If
@@ -160,6 +165,14 @@ Public Class ParamSetClass
                 cmd.Parameters.AddWithValue("@remarks", remarks)
                 cmd.Parameters.AddWithValue("@params", packParams())
                 cmd.ExecuteNonQuery()
+                '
+                cmd.Parameters.Clear()
+                cmd.CommandText = "SELECT last_insert_rowid() As new_id"
+                Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+                If r.Read Then
+                    rec_id = r("new_id")
+                End If
+                r.Close()
                 Return ""
             Catch ex As Exception
                 Return "ParamSetClass.addNew() " & ex.Message
@@ -167,4 +180,24 @@ Public Class ParamSetClass
         End Using
     End Function
 
+    Public Function update() As String
+        If rec_id <= 0 Then
+            Return "未登録なので上書きできません！"
+        End If
+
+        Using con As New SQLiteConnection(GetDbConnectionString)
+            Dim cmd As SQLiteCommand = con.CreateCommand
+            Try
+                con.Open()
+                cmd.CommandText = "UPDATE Param SET remarks=@remarks, params=@params WHERE id=@id"
+                cmd.Parameters.AddWithValue("@remarks", remarks)
+                cmd.Parameters.AddWithValue("@params", packParams())
+                cmd.Parameters.AddWithValue("@id", rec_id)
+                cmd.ExecuteNonQuery()
+                Return ""
+            Catch ex As Exception
+                Return "ParamSetClass.update() " & ex.Message
+            End Try
+        End Using
+    End Function
 End Class

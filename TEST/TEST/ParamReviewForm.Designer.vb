@@ -74,6 +74,7 @@ Partial Class ParamReviewForm
         Me.txtScoreP20 = New System.Windows.Forms.TextBox()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.Label21 = New System.Windows.Forms.Label()
+        Me.BtnUpdate = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'BtnFile
@@ -314,7 +315,7 @@ Partial Class ParamReviewForm
         Me.BtnSave.Name = "BtnSave"
         Me.BtnSave.Size = New System.Drawing.Size(142, 31)
         Me.BtnSave.TabIndex = 75
-        Me.BtnSave.Text = "このパラメータを登録"
+        Me.BtnSave.Text = "名前を付けて登録"
         Me.BtnSave.UseVisualStyleBackColor = False
         '
         'BtnLoad
@@ -524,12 +525,24 @@ Partial Class ParamReviewForm
         Me.Label21.TabIndex = 99
         Me.Label21.Text = "パラメータ値"
         '
+        'BtnUpdate
+        '
+        Me.BtnUpdate.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BtnUpdate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnUpdate.Location = New System.Drawing.Point(657, 553)
+        Me.BtnUpdate.Name = "BtnUpdate"
+        Me.BtnUpdate.Size = New System.Drawing.Size(142, 31)
+        Me.BtnUpdate.TabIndex = 100
+        Me.BtnUpdate.Text = "上書き保存"
+        Me.BtnUpdate.UseVisualStyleBackColor = False
+        '
         'ParamReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1178, 596)
+        Me.Controls.Add(Me.BtnUpdate)
         Me.Controls.Add(Me.Label21)
         Me.Controls.Add(Me.txtScoreP23)
         Me.Controls.Add(Me.Label17)
@@ -641,4 +654,5 @@ Partial Class ParamReviewForm
     Friend WithEvents txtScoreP20 As TextBox
     Friend WithEvents Label20 As Label
     Friend WithEvents Label21 As Label
+    Friend WithEvents BtnUpdate As Button
 End Class

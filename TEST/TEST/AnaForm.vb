@@ -694,7 +694,7 @@ Public Class AnaForm
                     bameiList.Add(r("bamei"))
                     cyakujunList.Add(r("cyakujun"))
                     dtList.Add(r("dt"))
-                    If bameiList.Count >= 100 Then 'たくさん見てもあまり結果は変わらない
+                    If bameiList.Count >= 50 Then 'たくさん見てもあまり結果は変わらない
                         Exit While
                     End If
                 End While
