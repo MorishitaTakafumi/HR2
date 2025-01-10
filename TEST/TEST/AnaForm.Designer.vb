@@ -69,10 +69,9 @@ Partial Class AnaForm
         Me.BtnGo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnGo.Image = CType(resources.GetObject("BtnGo.Image"), System.Drawing.Image)
         Me.BtnGo.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.BtnGo.Location = New System.Drawing.Point(1031, 12)
-        Me.BtnGo.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnGo.Location = New System.Drawing.Point(773, 10)
         Me.BtnGo.Name = "BtnGo"
-        Me.BtnGo.Size = New System.Drawing.Size(117, 84)
+        Me.BtnGo.Size = New System.Drawing.Size(88, 67)
         Me.BtnGo.TabIndex = 0
         Me.BtnGo.Text = "解析" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "実行"
         Me.BtnGo.UseVisualStyleBackColor = True
@@ -80,10 +79,9 @@ Partial Class AnaForm
         'txtURL
         '
         Me.txtURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.txtURL.Location = New System.Drawing.Point(101, 20)
-        Me.txtURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtURL.Location = New System.Drawing.Point(76, 16)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(751, 24)
+        Me.txtURL.Size = New System.Drawing.Size(564, 20)
         Me.txtURL.TabIndex = 1
         Me.txtURL.Text = "https://www.jra.go.jp/JRADB/accessD.html?CNAME=pw01dde0105202404081120241027/54"
         '
@@ -91,11 +89,10 @@ Partial Class AnaForm
         '
         Me.ListBox1.Font = New System.Drawing.Font("ＭＳ ゴシック", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.ItemHeight = 19
-        Me.ListBox1.Location = New System.Drawing.Point(13, 159)
-        Me.ListBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ListBox1.ItemHeight = 15
+        Me.ListBox1.Location = New System.Drawing.Point(10, 127)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(383, 232)
+        Me.ListBox1.Size = New System.Drawing.Size(288, 184)
         Me.ListBox1.TabIndex = 4
         '
         'flx
@@ -105,30 +102,29 @@ Partial Class AnaForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.flx.ColumnInfo = resources.GetString("flx.ColumnInfo")
         Me.flx.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.flx.Location = New System.Drawing.Point(404, 118)
-        Me.flx.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.flx.Location = New System.Drawing.Point(303, 94)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 18
-        Me.flx.Size = New System.Drawing.Size(1450, 618)
+        Me.flx.Size = New System.Drawing.Size(1088, 495)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 5
         '
         'lb_msg
         '
         Me.lb_msg.AutoSize = True
-        Me.lb_msg.Location = New System.Drawing.Point(15, 424)
+        Me.lb_msg.Location = New System.Drawing.Point(11, 339)
+        Me.lb_msg.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lb_msg.Name = "lb_msg"
-        Me.lb_msg.Size = New System.Drawing.Size(31, 15)
+        Me.lb_msg.Size = New System.Drawing.Size(23, 12)
         Me.lb_msg.TabIndex = 6
         Me.lb_msg.Text = "***"
         '
         'BtnURL
         '
         Me.BtnURL.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnURL.Location = New System.Drawing.Point(869, 12)
-        Me.BtnURL.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnURL.Location = New System.Drawing.Point(652, 10)
         Me.BtnURL.Name = "BtnURL"
-        Me.BtnURL.Size = New System.Drawing.Size(153, 39)
+        Me.BtnURL.Size = New System.Drawing.Size(115, 31)
         Me.BtnURL.TabIndex = 7
         Me.BtnURL.Text = "URL貼り付け"
         Me.BtnURL.UseVisualStyleBackColor = True
@@ -137,9 +133,10 @@ Partial Class AnaForm
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Label2.Location = New System.Drawing.Point(13, 121)
+        Me.Label2.Location = New System.Drawing.Point(10, 97)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(178, 17)
+        Me.Label2.Size = New System.Drawing.Size(137, 13)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "上がり強調表示基準値："
         '
@@ -148,22 +145,21 @@ Partial Class AnaForm
         Me.NumericUpDown1.DecimalPlaces = 1
         Me.NumericUpDown1.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.NumericUpDown1.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.NumericUpDown1.Location = New System.Drawing.Point(203, 112)
-        Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(152, 90)
+        Me.NumericUpDown1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
         Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(87, 30)
+        Me.NumericUpDown1.Size = New System.Drawing.Size(65, 26)
         Me.NumericUpDown1.TabIndex = 9
         Me.NumericUpDown1.Value = New Decimal(New Integer() {3, 0, 0, 65536})
         '
         'BtnRedisp
         '
         Me.BtnRedisp.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnRedisp.Location = New System.Drawing.Point(297, 112)
-        Me.BtnRedisp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnRedisp.Location = New System.Drawing.Point(223, 90)
         Me.BtnRedisp.Name = "BtnRedisp"
-        Me.BtnRedisp.Size = New System.Drawing.Size(99, 38)
+        Me.BtnRedisp.Size = New System.Drawing.Size(74, 30)
         Me.BtnRedisp.TabIndex = 10
         Me.BtnRedisp.Text = "再表示"
         Me.BtnRedisp.UseVisualStyleBackColor = True
@@ -171,10 +167,9 @@ Partial Class AnaForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(17, 462)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label3.Location = New System.Drawing.Point(13, 370)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(188, 15)
+        Me.Label3.Size = New System.Drawing.Size(151, 12)
         Me.Label3.TabIndex = 11
         Me.Label3.Text = "過去レース解析値の検索条件"
         '
@@ -183,10 +178,9 @@ Partial Class AnaForm
         Me.chkKyori.AutoSize = True
         Me.chkKyori.Checked = True
         Me.chkKyori.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkKyori.Location = New System.Drawing.Point(20, 536)
-        Me.chkKyori.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkKyori.Location = New System.Drawing.Point(15, 429)
         Me.chkKyori.Name = "chkKyori"
-        Me.chkKyori.Size = New System.Drawing.Size(89, 19)
+        Me.chkKyori.Size = New System.Drawing.Size(72, 16)
         Me.chkKyori.TabIndex = 13
         Me.chkKyori.Text = "同一距離"
         Me.chkKyori.UseVisualStyleBackColor = True
@@ -194,10 +188,11 @@ Partial Class AnaForm
         'chkRacename
         '
         Me.chkRacename.AutoSize = True
-        Me.chkRacename.Location = New System.Drawing.Point(20, 570)
-        Me.chkRacename.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkRacename.Checked = True
+        Me.chkRacename.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkRacename.Location = New System.Drawing.Point(15, 456)
         Me.chkRacename.Name = "chkRacename"
-        Me.chkRacename.Size = New System.Drawing.Size(108, 19)
+        Me.chkRacename.Size = New System.Drawing.Size(88, 16)
         Me.chkRacename.TabIndex = 14
         Me.chkRacename.Text = "同一レース名"
         Me.chkRacename.UseVisualStyleBackColor = True
@@ -205,10 +200,11 @@ Partial Class AnaForm
         'chkMonth
         '
         Me.chkMonth.AutoSize = True
-        Me.chkMonth.Location = New System.Drawing.Point(20, 638)
-        Me.chkMonth.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkMonth.Checked = True
+        Me.chkMonth.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMonth.Location = New System.Drawing.Point(15, 510)
         Me.chkMonth.Name = "chkMonth"
-        Me.chkMonth.Size = New System.Drawing.Size(74, 19)
+        Me.chkMonth.Size = New System.Drawing.Size(60, 16)
         Me.chkMonth.TabIndex = 16
         Me.chkMonth.Text = "同一月"
         Me.chkMonth.UseVisualStyleBackColor = True
@@ -216,10 +212,9 @@ Partial Class AnaForm
         'BtnHistGet
         '
         Me.BtnHistGet.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnHistGet.Location = New System.Drawing.Point(320, 575)
-        Me.BtnHistGet.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnHistGet.Location = New System.Drawing.Point(240, 460)
         Me.BtnHistGet.Name = "BtnHistGet"
-        Me.BtnHistGet.Size = New System.Drawing.Size(67, 65)
+        Me.BtnHistGet.Size = New System.Drawing.Size(50, 52)
         Me.BtnHistGet.TabIndex = 17
         Me.BtnHistGet.Text = "検索実行"
         Me.BtnHistGet.UseVisualStyleBackColor = True
@@ -230,11 +225,10 @@ Partial Class AnaForm
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ListBox2.Font = New System.Drawing.Font("ＭＳ ゴシック", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ListBox2.FormattingEnabled = True
-        Me.ListBox2.ItemHeight = 17
-        Me.ListBox2.Location = New System.Drawing.Point(20, 736)
-        Me.ListBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ListBox2.ItemHeight = 14
+        Me.ListBox2.Location = New System.Drawing.Point(15, 589)
         Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(383, 4)
+        Me.ListBox2.Size = New System.Drawing.Size(288, 4)
         Me.ListBox2.TabIndex = 18
         '
         'CbCyakujun
@@ -242,19 +236,18 @@ Partial Class AnaForm
         Me.CbCyakujun.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbCyakujun.FormattingEnabled = True
         Me.CbCyakujun.Items.AddRange(New Object() {"ALL", "1着のみ", "2着以内", "3着以内", "4着以下"})
-        Me.CbCyakujun.Location = New System.Drawing.Point(160, 541)
-        Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.CbCyakujun.Location = New System.Drawing.Point(120, 433)
+        Me.CbCyakujun.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.CbCyakujun.Name = "CbCyakujun"
-        Me.CbCyakujun.Size = New System.Drawing.Size(121, 23)
+        Me.CbCyakujun.Size = New System.Drawing.Size(92, 20)
         Me.CbCyakujun.TabIndex = 19
         '
         'chkDosu
         '
         Me.chkDosu.AutoSize = True
-        Me.chkDosu.Location = New System.Drawing.Point(20, 705)
-        Me.chkDosu.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkDosu.Location = New System.Drawing.Point(15, 564)
         Me.chkDosu.Name = "chkDosu"
-        Me.chkDosu.Size = New System.Drawing.Size(233, 19)
+        Me.chkDosu.Size = New System.Drawing.Size(187, 16)
         Me.chkDosu.TabIndex = 20
         Me.chkDosu.Text = "spanScoreの度数分布を表示する"
         Me.chkDosu.UseVisualStyleBackColor = True
@@ -262,10 +255,9 @@ Partial Class AnaForm
         'BtnWinRate
         '
         Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnWinRate.Location = New System.Drawing.Point(273, 446)
-        Me.BtnWinRate.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnWinRate.Location = New System.Drawing.Point(205, 357)
         Me.BtnWinRate.Name = "BtnWinRate"
-        Me.BtnWinRate.Size = New System.Drawing.Size(123, 24)
+        Me.BtnWinRate.Size = New System.Drawing.Size(92, 19)
         Me.BtnWinRate.TabIndex = 40
         Me.BtnWinRate.Text = "勝率検索"
         Me.BtnWinRate.UseVisualStyleBackColor = True
@@ -273,10 +265,9 @@ Partial Class AnaForm
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.Button1.Location = New System.Drawing.Point(259, 415)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Button1.Location = New System.Drawing.Point(194, 332)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(137, 24)
+        Me.Button1.Size = New System.Drawing.Size(103, 19)
         Me.Button1.TabIndex = 41
         Me.Button1.Text = "過去レース検討"
         Me.Button1.UseVisualStyleBackColor = True
@@ -284,10 +275,9 @@ Partial Class AnaForm
         'BtnDof
         '
         Me.BtnDof.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnDof.Location = New System.Drawing.Point(1185, 8)
-        Me.BtnDof.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnDof.Location = New System.Drawing.Point(889, 6)
         Me.BtnDof.Name = "BtnDof"
-        Me.BtnDof.Size = New System.Drawing.Size(101, 38)
+        Me.BtnDof.Size = New System.Drawing.Size(76, 30)
         Me.BtnDof.TabIndex = 42
         Me.BtnDof.Text = "適合度"
         Me.BtnDof.UseVisualStyleBackColor = True
@@ -295,30 +285,29 @@ Partial Class AnaForm
         'chkRacename2
         '
         Me.chkRacename2.AutoSize = True
-        Me.chkRacename2.Location = New System.Drawing.Point(20, 671)
-        Me.chkRacename2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkRacename2.Location = New System.Drawing.Point(15, 537)
         Me.chkRacename2.Name = "chkRacename2"
-        Me.chkRacename2.Size = New System.Drawing.Size(138, 19)
+        Me.chkRacename2.Size = New System.Drawing.Size(112, 16)
         Me.chkRacename2.TabIndex = 43
         Me.chkRacename2.Text = "レース名一部指定"
         Me.chkRacename2.UseVisualStyleBackColor = True
         '
         'txtRacename
         '
-        Me.txtRacename.Location = New System.Drawing.Point(176, 669)
-        Me.txtRacename.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.txtRacename.Location = New System.Drawing.Point(132, 535)
+        Me.txtRacename.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtRacename.Name = "txtRacename"
-        Me.txtRacename.Size = New System.Drawing.Size(201, 22)
+        Me.txtRacename.Size = New System.Drawing.Size(152, 19)
         Me.txtRacename.TabIndex = 44
         '
         'RbURL
         '
         Me.RbURL.AutoSize = True
         Me.RbURL.Checked = True
-        Me.RbURL.Location = New System.Drawing.Point(19, 22)
-        Me.RbURL.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.RbURL.Location = New System.Drawing.Point(14, 18)
+        Me.RbURL.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.RbURL.Name = "RbURL"
-        Me.RbURL.Size = New System.Drawing.Size(55, 19)
+        Me.RbURL.Size = New System.Drawing.Size(45, 16)
         Me.RbURL.TabIndex = 45
         Me.RbURL.TabStop = True
         Me.RbURL.Text = "URL"
@@ -327,10 +316,10 @@ Partial Class AnaForm
         'RbFile
         '
         Me.RbFile.AutoSize = True
-        Me.RbFile.Location = New System.Drawing.Point(19, 65)
-        Me.RbFile.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.RbFile.Location = New System.Drawing.Point(14, 52)
+        Me.RbFile.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.RbFile.Name = "RbFile"
-        Me.RbFile.Size = New System.Drawing.Size(50, 19)
+        Me.RbFile.Size = New System.Drawing.Size(42, 16)
         Me.RbFile.TabIndex = 46
         Me.RbFile.Text = "File"
         Me.RbFile.UseVisualStyleBackColor = True
@@ -338,10 +327,9 @@ Partial Class AnaForm
         'txtFile
         '
         Me.txtFile.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.txtFile.Location = New System.Drawing.Point(101, 62)
-        Me.txtFile.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtFile.Location = New System.Drawing.Point(76, 50)
         Me.txtFile.Name = "txtFile"
-        Me.txtFile.Size = New System.Drawing.Size(751, 24)
+        Me.txtFile.Size = New System.Drawing.Size(564, 20)
         Me.txtFile.TabIndex = 47
         '
         'BtnFile
@@ -349,10 +337,9 @@ Partial Class AnaForm
         Me.BtnFile.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.BtnFile.Image = CType(resources.GetObject("BtnFile.Image"), System.Drawing.Image)
         Me.BtnFile.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.BtnFile.Location = New System.Drawing.Point(869, 58)
-        Me.BtnFile.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnFile.Location = New System.Drawing.Point(652, 46)
         Me.BtnFile.Name = "BtnFile"
-        Me.BtnFile.Size = New System.Drawing.Size(153, 39)
+        Me.BtnFile.Size = New System.Drawing.Size(115, 31)
         Me.BtnFile.TabIndex = 48
         Me.BtnFile.Text = "参照"
         Me.BtnFile.UseVisualStyleBackColor = True
@@ -362,10 +349,10 @@ Partial Class AnaForm
         Me.CbCyakujun2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbCyakujun2.FormattingEnabled = True
         Me.CbCyakujun2.Items.AddRange(New Object() {"1着", "2着以内", "3着以内"})
-        Me.CbCyakujun2.Location = New System.Drawing.Point(1293, 12)
-        Me.CbCyakujun2.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.CbCyakujun2.Location = New System.Drawing.Point(970, 10)
+        Me.CbCyakujun2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.CbCyakujun2.Name = "CbCyakujun2"
-        Me.CbCyakujun2.Size = New System.Drawing.Size(121, 23)
+        Me.CbCyakujun2.Size = New System.Drawing.Size(92, 20)
         Me.CbCyakujun2.TabIndex = 49
         '
         'CbGradeL
@@ -373,10 +360,10 @@ Partial Class AnaForm
         Me.CbGradeL.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbGradeL.FormattingEnabled = True
         Me.CbGradeL.Items.AddRange(New Object() {"0勝", "1勝", "2勝", "3勝", "Op", "G3", "G2", "G1"})
-        Me.CbGradeL.Location = New System.Drawing.Point(17, 598)
-        Me.CbGradeL.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.CbGradeL.Location = New System.Drawing.Point(13, 478)
+        Me.CbGradeL.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.CbGradeL.Name = "CbGradeL"
-        Me.CbGradeL.Size = New System.Drawing.Size(95, 23)
+        Me.CbGradeL.Size = New System.Drawing.Size(72, 20)
         Me.CbGradeL.TabIndex = 50
         '
         'CbGradeH
@@ -384,37 +371,38 @@ Partial Class AnaForm
         Me.CbGradeH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbGradeH.FormattingEnabled = True
         Me.CbGradeH.Items.AddRange(New Object() {"0勝", "1勝", "2勝", "3勝", "Op", "G3", "G2", "G1"})
-        Me.CbGradeH.Location = New System.Drawing.Point(160, 598)
-        Me.CbGradeH.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.CbGradeH.Location = New System.Drawing.Point(120, 478)
+        Me.CbGradeH.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.CbGradeH.Name = "CbGradeH"
-        Me.CbGradeH.Size = New System.Drawing.Size(95, 23)
+        Me.CbGradeH.Size = New System.Drawing.Size(72, 20)
         Me.CbGradeH.TabIndex = 51
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(116, 601)
+        Me.Label1.Location = New System.Drawing.Point(87, 481)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(37, 15)
+        Me.Label1.Size = New System.Drawing.Size(29, 12)
         Me.Label1.TabIndex = 52
         Me.Label1.Text = "以上"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(261, 601)
+        Me.Label4.Location = New System.Drawing.Point(196, 481)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(37, 15)
+        Me.Label4.Size = New System.Drawing.Size(29, 12)
         Me.Label4.TabIndex = 53
         Me.Label4.Text = "以下"
         '
         'BtnGetCount
         '
         Me.BtnGetCount.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnGetCount.Location = New System.Drawing.Point(320, 501)
-        Me.BtnGetCount.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnGetCount.Location = New System.Drawing.Point(240, 401)
         Me.BtnGetCount.Name = "BtnGetCount"
-        Me.BtnGetCount.Size = New System.Drawing.Size(67, 62)
+        Me.BtnGetCount.Size = New System.Drawing.Size(50, 50)
         Me.BtnGetCount.TabIndex = 54
         Me.BtnGetCount.Text = "該当件数取得"
         Me.BtnGetCount.UseVisualStyleBackColor = True
@@ -422,38 +410,36 @@ Partial Class AnaForm
         'BtnSelectJo
         '
         Me.BtnSelectJo.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnSelectJo.Location = New System.Drawing.Point(223, 491)
-        Me.BtnSelectJo.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnSelectJo.Location = New System.Drawing.Point(167, 393)
         Me.BtnSelectJo.Name = "BtnSelectJo"
-        Me.BtnSelectJo.Size = New System.Drawing.Size(47, 40)
+        Me.BtnSelectJo.Size = New System.Drawing.Size(35, 32)
         Me.BtnSelectJo.TabIndex = 57
         Me.BtnSelectJo.Text = "･･･"
         Me.BtnSelectJo.UseVisualStyleBackColor = True
         '
         'txtJo
         '
-        Me.txtJo.Location = New System.Drawing.Point(81, 501)
-        Me.txtJo.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtJo.Location = New System.Drawing.Point(61, 401)
         Me.txtJo.Name = "txtJo"
-        Me.txtJo.Size = New System.Drawing.Size(132, 22)
+        Me.txtJo.Size = New System.Drawing.Size(100, 19)
         Me.txtJo.TabIndex = 56
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(20, 505)
+        Me.Label5.Location = New System.Drawing.Point(15, 404)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(52, 15)
+        Me.Label5.Size = New System.Drawing.Size(41, 12)
         Me.Label5.TabIndex = 55
         Me.Label5.Text = "競馬場"
         '
         'BtnSelectPara
         '
         Me.BtnSelectPara.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnSelectPara.Location = New System.Drawing.Point(1185, 52)
-        Me.BtnSelectPara.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.BtnSelectPara.Location = New System.Drawing.Point(889, 42)
         Me.BtnSelectPara.Name = "BtnSelectPara"
-        Me.BtnSelectPara.Size = New System.Drawing.Size(81, 44)
+        Me.BtnSelectPara.Size = New System.Drawing.Size(61, 35)
         Me.BtnSelectPara.TabIndex = 58
         Me.BtnSelectPara.Text = "パラメータ選択"
         Me.BtnSelectPara.UseVisualStyleBackColor = True
@@ -462,17 +448,18 @@ Partial Class AnaForm
         '
         Me.lb_param.AutoSize = True
         Me.lb_param.BackColor = System.Drawing.Color.Aqua
-        Me.lb_param.Location = New System.Drawing.Point(1273, 68)
+        Me.lb_param.Location = New System.Drawing.Point(955, 54)
+        Me.lb_param.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lb_param.Name = "lb_param"
-        Me.lb_param.Size = New System.Drawing.Size(111, 15)
+        Me.lb_param.Size = New System.Drawing.Size(89, 12)
         Me.lb_param.TabIndex = 59
         Me.lb_param.Text = "現在のパラメータ："
         '
         'AnaForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1883, 789)
+        Me.ClientSize = New System.Drawing.Size(1412, 631)
         Me.Controls.Add(Me.lb_param)
         Me.Controls.Add(Me.BtnSelectPara)
         Me.Controls.Add(Me.BtnSelectJo)
@@ -511,7 +498,6 @@ Partial Class AnaForm
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.BtnGo)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "AnaForm"
         Me.Text = "レース解析"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
