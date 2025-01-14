@@ -17,6 +17,26 @@
         If fullName = shortname Then
             Return True
         End If
+
+        Dim ip1 As Integer = InStr(fullName, "勝クラス")
+        If ip1 > 0 Then
+            Dim ip2 As Integer = InStr(shortname, "勝クラス")
+            If ip2 > 0 Then
+                If fullName.Substring(ip1 - 2, 1) = shortname.Substring(ip2 - 2, 1) Then '勝数比較
+                    If fullName.Substring(0, 1) = shortname.Substring(0, 1) Then '歳比較
+                        Return True
+                    Else
+                        Return False
+                    End If
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End If
+
+
         Dim front3c As String
         If shortname.Length > 3 Then
             front3c = shortname.Substring(0, 3)

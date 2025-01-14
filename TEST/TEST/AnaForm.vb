@@ -415,6 +415,7 @@ Public Class AnaForm
                         Dim oS As UmaHistClass = umaHistList.GetBodyRef(i)
                         Dim shortname As String = oS.racename
                         oS.racename = oShortRaceName.GetLongName(oS.racename)
+                        oS.bamei = o.bamei
                         Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS)
                         Dim oRaceHead As RaceHeaderClass
                         If kekkaList Is Nothing Then
@@ -426,7 +427,7 @@ Public Class AnaForm
                             End If
                             If oRaceHead.id < 0 Then
                                 Dim existFlag As Boolean
-                                errmsg = kekka.GetRaceKekka(cmd, makeJRAurl(oS.href), existFlag, oS.dt.ToString("yyyy/MM/dd"), oS.racename, oS.jo_code, oS.type_code, oS.distance, True)
+                                errmsg = kekka.GetRaceKekka(cmd, makeJRAurl(oS.href), existFlag, oS.dt.ToString("yyyy/MM/dd"), oS.racename, oS.jo_code, oS.type_code, oS.distance, oS.bamei, True)
                                 If errmsg.Length > 0 Then
                                     Exit Try
                                 End If
@@ -870,6 +871,7 @@ Public Class AnaForm
                             If oS.jo_code < 0 Then
                                 oS.jo_code = oRaceHead.jo_code
                             End If
+                            oS.bamei = arg_bamei
                             oRaceHead.push()
                             errmsg = oRaceHead.loadByUmaHist(cmd, oS)
                             If errmsg.Length > 0 Then

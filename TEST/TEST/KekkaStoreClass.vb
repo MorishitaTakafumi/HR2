@@ -17,7 +17,8 @@
                orh.jo_code = item.raceHeader.jo_code AndAlso
                orh.distance = item.raceHeader.kyori AndAlso
                orh.type_code = item.raceHeader.type_code AndAlso
-               IsRaceNameMatch(item.raceHeader.race_name, orh.racename) Then
+               item.GetBodyRefByBamei(orh.bamei) IsNot Nothing AndAlso
+                IsRaceNameMatch(item.raceHeader.race_name, orh.racename) Then
                 Return item.Clone()
             End If
         Next

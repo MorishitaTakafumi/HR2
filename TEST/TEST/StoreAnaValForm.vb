@@ -230,7 +230,7 @@ Public Class StoreAnaValForm
         Dim kekkaList As New KekkaListClass
         Dim kekkaListSub As New KekkaListClass
         Dim existFlag As Boolean
-        Dim errmsg As String = kekkaList.GetRaceKekka(url, existFlag, "", "", -1, -1, -1, True)
+        Dim errmsg As String = kekkaList.GetRaceKekka(url, existFlag, "", "", -1, -1, -1, "", True)
         If errmsg.Length > 0 Then
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
             Return False
@@ -270,7 +270,7 @@ Public Class StoreAnaValForm
                         If oRaceHeader.dt > oUmaHist.dt AndAlso oUmaHist.href.Trim.Length > 0 Then
                             raceURLque.Enqueue(makeJRAurl(oUmaHist.href))
                             raceNameque.Enqueue(oUmaHist.racename)
-                            errmsg = kekkaListSub.GetRaceKekka(oUmaHist.href, existFlag, "", "", -1, -1, -1, True)
+                            errmsg = kekkaListSub.GetRaceKekka(oUmaHist.href, existFlag, "", "", -1, -1, -1, "", True)
                             If errmsg.Length > 0 Then
                                 Return False
                             End If

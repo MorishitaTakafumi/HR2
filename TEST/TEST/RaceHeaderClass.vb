@@ -331,24 +331,30 @@ Public Class RaceHeaderClass
                                       ByVal racename As String,
                                       Optional ByVal arg_jo_code As Integer = -1,
                                       Optional ByVal arg_type_code As Integer = -1,
-                                      Optional ByVal arg_kyori As Integer = -1) As String
+                                      Optional ByVal arg_kyori As Integer = -1,
+                                      Optional ByVal arg_bamei As String = ""
+                                      ) As String
         '初期化は呼び出し側責任とする init()
         Try
             cmd.Parameters.Clear()
-            cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND race_name=@race_name"
+            cmd.CommandText = "SELECT R.* FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id WHERE R.dt=@dt AND R.race_name=@race_name"
             cmd.Parameters.AddWithValue("@dt", dt_race)
             cmd.Parameters.AddWithValue("@race_name", racename)
             If arg_jo_code >= 0 Then
-                cmd.CommandText &= " AND jo_code=@jo_code"
+                cmd.CommandText &= " AND R.jo_code=@jo_code"
                 cmd.Parameters.AddWithValue("@jo_code", arg_jo_code)
             End If
             If arg_type_code >= 0 Then
-                cmd.CommandText &= " AND type_code=@type_code"
+                cmd.CommandText &= " AND R.type_code=@type_code"
                 cmd.Parameters.AddWithValue("@type_code", arg_type_code)
             End If
             If arg_kyori >= 0 Then
-                cmd.CommandText &= " AND kyori=@kyori"
+                cmd.CommandText &= " AND R.kyori=@kyori"
                 cmd.Parameters.AddWithValue("@kyori", arg_kyori)
+            End If
+            If arg_bamei.Length > 0 Then
+                cmd.CommandText &= " AND K.bamei=@bamei"
+                cmd.Parameters.AddWithValue("@bamei", arg_bamei)
             End If
 
             Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
@@ -380,11 +386,14 @@ Public Class RaceHeaderClass
         init()
         Try
             cmd.Parameters.Clear()
-            cmd.CommandText = "SELECT * FROM RaceHeader WHERE dt=@dt AND jo_code=@jo_code AND type_code=@type_code AND kyori=@kyori"
+            cmd.CommandText = "SELECT R.* FROM RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id 
+                               WHERE R.dt=@dt AND R.jo_code=@jo_code AND R.type_code=@type_code AND R.kyori=@kyori
+                               AND K.bamei=@bamei"
             cmd.Parameters.AddWithValue("@dt", oUmaHist.dt)
             cmd.Parameters.AddWithValue("@jo_code", oUmaHist.jo_code)
             cmd.Parameters.AddWithValue("@type_code", oUmaHist.type_code)
             cmd.Parameters.AddWithValue("@kyori", oUmaHist.distance)
+            cmd.Parameters.AddWithValue("@bamei", oUmaHist.bamei)
             Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
             While r.Read
                 If IsRaceNameMatch(r("race_name"), oUmaHist.racename) Then
