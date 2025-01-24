@@ -81,4 +81,5 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.CopyComplete
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.exe
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.xml
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.pdb
+C:\学習\HR2\TEST\TEST\obj\Debug\TEST.SelectTukiForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache

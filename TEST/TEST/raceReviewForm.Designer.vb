@@ -39,7 +39,6 @@ Partial Class raceReviewForm
         Me.Label5 = New System.Windows.Forms.Label()
         Me.CbGrade = New System.Windows.Forms.ComboBox()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.CbMonth = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -51,10 +50,11 @@ Partial Class raceReviewForm
         Me.RbIka = New System.Windows.Forms.RadioButton()
         Me.BtnWinRate = New System.Windows.Forms.Button()
         Me.BtnFilterClear = New System.Windows.Forms.Button()
-        Me.BtnCoefReview = New System.Windows.Forms.Button()
         Me.BtnGetCount = New System.Windows.Forms.Button()
         Me.txtJo = New System.Windows.Forms.TextBox()
         Me.BtnSelectJo = New System.Windows.Forms.Button()
+        Me.BtnSelectTuki = New System.Windows.Forms.Button()
+        Me.txtTuki = New System.Windows.Forms.TextBox()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -236,16 +236,6 @@ Partial Class raceReviewForm
         Me.Label6.TabIndex = 27
         Me.Label6.Text = "グレード"
         '
-        'CbMonth
-        '
-        Me.CbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CbMonth.FormattingEnabled = True
-        Me.CbMonth.Location = New System.Drawing.Point(63, 218)
-        Me.CbMonth.Margin = New System.Windows.Forms.Padding(2)
-        Me.CbMonth.Name = "CbMonth"
-        Me.CbMonth.Size = New System.Drawing.Size(92, 20)
-        Me.CbMonth.TabIndex = 5
-        '
         'Label7
         '
         Me.Label7.AutoSize = True
@@ -346,7 +336,7 @@ Partial Class raceReviewForm
         'BtnWinRate
         '
         Me.BtnWinRate.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnWinRate.Location = New System.Drawing.Point(162, 211)
+        Me.BtnWinRate.Location = New System.Drawing.Point(1019, 7)
         Me.BtnWinRate.Name = "BtnWinRate"
         Me.BtnWinRate.Size = New System.Drawing.Size(47, 37)
         Me.BtnWinRate.TabIndex = 39
@@ -362,16 +352,6 @@ Partial Class raceReviewForm
         Me.BtnFilterClear.TabIndex = 40
         Me.BtnFilterClear.Text = "フィルタークリア"
         Me.BtnFilterClear.UseVisualStyleBackColor = True
-        '
-        'BtnCoefReview
-        '
-        Me.BtnCoefReview.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnCoefReview.Location = New System.Drawing.Point(215, 211)
-        Me.BtnCoefReview.Name = "BtnCoefReview"
-        Me.BtnCoefReview.Size = New System.Drawing.Size(47, 37)
-        Me.BtnCoefReview.TabIndex = 41
-        Me.BtnCoefReview.Text = "係数検証"
-        Me.BtnCoefReview.UseVisualStyleBackColor = True
         '
         'BtnGetCount
         '
@@ -402,15 +382,33 @@ Partial Class raceReviewForm
         Me.BtnSelectJo.Text = "･･･"
         Me.BtnSelectJo.UseVisualStyleBackColor = True
         '
+        'BtnSelectTuki
+        '
+        Me.BtnSelectTuki.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.BtnSelectTuki.Location = New System.Drawing.Point(169, 210)
+        Me.BtnSelectTuki.Name = "BtnSelectTuki"
+        Me.BtnSelectTuki.Size = New System.Drawing.Size(35, 32)
+        Me.BtnSelectTuki.TabIndex = 46
+        Me.BtnSelectTuki.Text = "･･･"
+        Me.BtnSelectTuki.UseVisualStyleBackColor = True
+        '
+        'txtTuki
+        '
+        Me.txtTuki.Location = New System.Drawing.Point(63, 218)
+        Me.txtTuki.Name = "txtTuki"
+        Me.txtTuki.Size = New System.Drawing.Size(100, 19)
+        Me.txtTuki.TabIndex = 45
+        '
         'raceReviewForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1412, 631)
+        Me.Controls.Add(Me.BtnSelectTuki)
+        Me.Controls.Add(Me.txtTuki)
         Me.Controls.Add(Me.BtnSelectJo)
         Me.Controls.Add(Me.txtJo)
         Me.Controls.Add(Me.BtnGetCount)
-        Me.Controls.Add(Me.BtnCoefReview)
         Me.Controls.Add(Me.BtnFilterClear)
         Me.Controls.Add(Me.BtnWinRate)
         Me.Controls.Add(Me.RbIka)
@@ -421,7 +419,6 @@ Partial Class raceReviewForm
         Me.Controls.Add(Me.CbRacename)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.CbMonth)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.CbGrade)
         Me.Controls.Add(Me.Label6)
@@ -466,7 +463,6 @@ Partial Class raceReviewForm
     Friend WithEvents Label5 As Label
     Friend WithEvents CbGrade As ComboBox
     Friend WithEvents Label6 As Label
-    Friend WithEvents CbMonth As ComboBox
     Friend WithEvents Label7 As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents Label9 As Label
@@ -478,8 +474,9 @@ Partial Class raceReviewForm
     Friend WithEvents RbIka As RadioButton
     Friend WithEvents BtnWinRate As Button
     Friend WithEvents BtnFilterClear As Button
-    Friend WithEvents BtnCoefReview As Button
     Friend WithEvents BtnGetCount As Button
     Friend WithEvents txtJo As TextBox
     Friend WithEvents BtnSelectJo As Button
+    Friend WithEvents BtnSelectTuki As Button
+    Friend WithEvents txtTuki As TextBox
 End Class

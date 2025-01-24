@@ -71,14 +71,6 @@ Public Class raceReviewForm
             Next
             .SelectedIndex = 1
         End With
-        With CbMonth
-            .Items.Clear()
-            .Items.Add("All")
-            For j As Integer = 1 To 12
-                .Items.Add(j.ToString & "月")
-            Next
-            .SelectedIndex = 0
-        End With
         '距離とレース名はDBから選択肢を取得する
         Dim errmsg As String = ""
         Using conn As New SQLiteConnection(GetDbConnectionString)
@@ -278,7 +270,6 @@ Public Class raceReviewForm
 
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = conn.CreateCommand
-            Dim cmd2 As SQLiteCommand = conn.CreateCommand
             Try
                 conn.Open()
                 errmsg = oShortRaceName.load(cmd)
@@ -316,23 +307,53 @@ Public Class raceReviewForm
                     End If
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
                 End If
-                If CbMonth.SelectedIndex > 0 Then
-                    sql &= " AND strftime('%m', R.dt) = @tuki"
-                    cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
-                End If
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
                 cmd.CommandText &= " ORDER BY R.race_name, R.dt"
                 flx.Redraw = False
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
+
+                Dim lstTuki As New List(Of Integer)
+                If txtTuki.Text.Trim.Length > 0 Then
+                    Dim sbf() As String = Split(txtTuki.Text.Trim, ",")
+                    For Each txt As String In sbf
+                        If IsNumeric(txt) AndAlso CInt(txt) >= 1 AndAlso CInt(txt) <= 12 Then
+                            lstTuki.Add(CInt(txt))
+                        End If
+                    Next
+                End If
+                Dim bamei As New List(Of String)
+                Dim cyakujun As New List(Of Integer)
+                Dim ninki As New List(Of Integer)
+                Dim hutan As New List(Of Single)
+                Dim dt As New List(Of Date)
+                Dim race_name As New List(Of String)
+                Dim kyori As New List(Of Integer)
+                Dim type_code As New List(Of Integer)
+
                 While r.Read
-                    errmsg = GetAgarisaCyakusa(cmd2, r("bamei"), r("cyakujun"), r("ninki"), r("hutan"), r("dt"), r("race_name"), r("kyori"), GetRaceTypeName(r("type_code")))
-                    If errmsg.Length > 0 Then
-                        Exit While
+                    If lstTuki.Count = 0 OrElse lstTuki.Contains(CDate(r("dt")).Month) Then
+                        bamei.Add(r("bamei"))
+                        cyakujun.Add(r("cyakujun"))
+                        ninki.Add(r("ninki"))
+                        hutan.Add(r("hutan"))
+                        dt.Add(r("dt"))
+                        race_name.Add(r("race_name"))
+                        kyori.Add(r("kyori"))
+                        type_code.Add(r("type_code"))
                     End If
                 End While
                 r.Close()
+                For j As Integer = 0 To bamei.Count - 1
+                    errmsg = GetAgarisaCyakusa(cmd, bamei(j), cyakujun(j), ninki(j), hutan(j), dt(j), race_name(j), kyori(j), GetRaceTypeName(type_code(j)))
+                    If errmsg.Length > 0 Then
+                        Exit For
+                    End If
+                Next
+                PaintTable()
+                flx.AutoSizeCols()
+                flx.AutoSizeRows()
                 flx.Redraw = True
             Catch ex As Exception
                 errmsg = ex.Message
@@ -460,9 +481,6 @@ Public Class raceReviewForm
                 ListBox2.Items.Add("0-0-1-1：" & cnt7.ToString)
                 ListBox2.Items.Add("0-0-0-2～10：" & cnt8.ToString)
             End If
-            PaintTable()
-            flx.AutoSizeCols()
-            flx.AutoSizeRows()
         End If
         showWebPageAccessCounter()
     End Sub
@@ -500,6 +518,7 @@ Public Class raceReviewForm
                             kekkaList.init()
                             Dim oRaceHead As RaceHeaderClass = kekkaList.raceHeader
                             oS.racename = oShortRaceName.GetLongName(shortname)
+                            oS.bamei = arg_bamei
                             errmsg = oRaceHead.loadByUmaHist(cmd, oS)
                             If errmsg.Length > 0 Then
                                 Return errmsg
@@ -662,10 +681,10 @@ Public Class raceReviewForm
 
     Private Sub BtnJokenCls_Click(sender As Object, e As EventArgs) Handles BtnJokenCls.Click
         txtJo.Text = ""
+        txtTuki.Text = ""
         CbSyubetu.SelectedIndex = 0
         CbKyori.SelectedIndex = 0
         CbGrade.SelectedIndex = 0
-        CbMonth.SelectedIndex = 0
         CbCyakujun.SelectedIndex = 1
         CbRacename.SelectedIndex = 0
     End Sub
@@ -694,169 +713,6 @@ Public Class raceReviewForm
         End With
     End Sub
 
-    ''係数検証
-    'Private Sub BtnCoefReview_Click(sender As Object, e As EventArgs) Handles BtnCoefReview.Click
-    '    Dim spanCoefRankCnt(10, 2) As Integer
-    '    Dim dateCoefRankCnt(10, 2) As Integer
-    '    Dim distCoefRankCnt(10, 2) As Integer
-    '    Dim errmsg As String = ""
-
-    '    Using conn As New SQLiteConnection(GetDbConnectionString)
-    '        Dim cmd As SQLiteCommand = conn.CreateCommand
-    '        conn.Open()
-    '        Try
-    '            cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE A.cyakujun>0"
-    '            Dim sql As String = ""
-    '            If CbJo.SelectedIndex > 0 Then
-    '                sql &= " AND R.jo_code=@jo_code"
-    '                cmd.Parameters.AddWithValue("@jo_code", GetKeibajoCode(CbJo.Text))
-    '            End If
-    '            If CbKyori.SelectedIndex > 0 Then
-    '                sql &= " AND R.kyori=@kyori"
-    '                cmd.Parameters.AddWithValue("@kyori", CInt(CbKyori.Text))
-    '            End If
-    '            If CbSyubetu.SelectedIndex > 0 Then
-    '                sql &= " AND R.type_code=@type_code"
-    '                cmd.Parameters.AddWithValue("@type_code", CbSyubetu.SelectedIndex)
-    '            End If
-    '            If CbRacename.SelectedIndex > 0 Then
-    '                sql &= " AND R.race_name=@race_name"
-    '                cmd.Parameters.AddWithValue("@race_name", CbRacename.Text)
-    '            End If
-    '            If CbGrade.SelectedIndex > 0 Then
-    '                sql &= " AND R.class_code=@class_code"
-    '                cmd.Parameters.AddWithValue("@class_code", CbGrade.SelectedIndex - 1)
-    '            End If
-    '            If CbCyakujun.SelectedIndex > 0 Then
-    '                If RbInai.Checked Then
-    '                    sql &= " AND A.cyakujun<=@cyakujun"
-    '                Else
-    '                    sql &= " AND A.cyakujun>=@cyakujun"
-    '                End If
-    '                cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
-    '            End If
-    '            If CbMonth.SelectedIndex > 0 Then
-    '                sql &= " AND strftime('%m', R.dt) = @tuki"
-    '                cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
-    '            End If
-    '            If sql.Length > 0 Then
-    '                cmd.CommandText &= sql
-    '            End If
-    '            Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
-    '            Dim CyakujunNinkiSa As Integer
-    '            Dim CyakujunNinkiSaIdx As Integer
-    '            Dim rank As Integer
-    '            While r.Read
-    '                'CyakujunNinkiSa = CInt(r("cyakujun")) - CInt(r("ninki"))
-    '                'CyakujunNinkiSaIdx = GetCyakujunNinkiSaIndex(CyakujunNinkiSa)
-    '                Select Case CInt(r("cyakujun"))
-    '                    Case 1, 2
-    '                        CyakujunNinkiSaIdx = 0
-    '                    Case 3
-    '                        CyakujunNinkiSaIdx = 1
-    '                    Case Else
-    '                        CyakujunNinkiSaIdx = 2
-    '                End Select
-
-    '                rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
-    '                spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
-    '                rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
-    '                dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
-    '                rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
-    '                distCoefRankCnt(rank, CyakujunNinkiSaIdx) += 1
-
-    '                'CyakujunNinkiSa = NinkiCyakujunPoint(CInt(r("cyakujun")), CInt(r("ninki")))
-    '                'rank = GetCoefRank(GetScoreCoefficient(r("spanScore")))
-    '                'spanCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
-    '                'rank = GetCoefRank(GetScoreCoefficient(r("dateScore")))
-    '                'dateCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
-    '                'rank = GetCoefRank(GetScoreCoefficient(r("kyoriScore")))
-    '                'distCoefRankCnt(rank, CyakujunNinkiSaIdx) += CyakujunNinkiSa
-    '            End While
-    '            r.Close()
-    '        Catch ex As Exception
-    '            errmsg = ex.Message
-    '        End Try
-    '    End Using
-    '    If errmsg.Length > 0 Then
-    '        MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
-    '    Else
-    '        Dim a As New CoefReviewForm
-    '        a.entry(spanCoefRankCnt, dateCoefRankCnt, distCoefRankCnt)
-    '    End If
-    'End Sub
-
-    '人気と着順から得点を決める
-    Private Function NinkiCyakujunPoint(ByVal ninki As Integer, ByVal cyakujun As Integer) As Integer
-        Select Case ninki
-            Case 1
-                Select Case cyakujun
-                    Case 1
-                        Return 2
-                    Case 2, 3
-                        Return 1
-                    Case 4, 5
-                        Return -2
-                    Case 6, 7, 8, 9
-                        Return -3
-                    Case Else
-                        Return -4
-                End Select
-            Case 2, 3
-                Select Case cyakujun
-                    Case 1
-                        Return 3
-                    Case 2, 3
-                        Return 1
-                    Case 4, 5
-                        Return -1
-                    Case 6, 7, 8, 9
-                        Return -2
-                    Case Else
-                        Return -3
-                End Select
-            Case 4, 5
-                Select Case cyakujun
-                    Case 1
-                        Return 4
-                    Case 2, 3
-                        Return 2
-                    Case 4, 5
-                        Return 0
-                    Case 6, 7, 8, 9
-                        Return -1
-                    Case Else
-                        Return -2
-                End Select
-            Case 6, 7, 8, 9
-                Select Case cyakujun
-                    Case 1
-                        Return 5
-                    Case 2, 3
-                        Return 2
-                    Case 4, 5
-                        Return 1
-                    Case 6, 7, 8, 9
-                        Return 0
-                    Case Else
-                        Return -1
-                End Select
-            Case Else
-                Select Case cyakujun
-                    Case 1
-                        Return 6
-                    Case 2, 3
-                        Return 3
-                    Case 4, 5
-                        Return 1
-                    Case 6, 7, 8, 9
-                        Return 0
-                    Case Else
-                        Return 0
-                End Select
-        End Select
-    End Function
-
     Private Function GetCyakujunNinkiSaIndex(ByVal CyakujunNinkiSa As Integer) As Integer
         If CyakujunNinkiSa < 0 Then
             Return 0
@@ -864,38 +720,6 @@ Public Class raceReviewForm
             Return 1
         Else
             Return 2
-        End If
-    End Function
-
-    Private Function GetCoefRank(ByVal coef As Double) As Integer
-        If coef = 1 Then
-            Return 5
-        ElseIf coef > 1 Then
-            Dim sa As Double = coef - 1
-            If sa < 0.075 Then
-                Return 4
-            ElseIf sa < 0.15 Then
-                Return 3
-            ElseIf sa < 0.225 Then
-                Return 2
-            ElseIf sa < 0.3 Then
-                Return 1
-            Else
-                Return 0
-            End If
-        Else
-            Dim sa As Double = 1 - coef
-            If sa < 0.0251 Then
-                Return 6
-            ElseIf sa < 0.051 Then
-                Return 7
-            ElseIf sa < 0.0751 Then
-                Return 8
-            ElseIf sa < 0.1001 Then
-                Return 9
-            Else
-                Return 10
-            End If
         End If
     End Function
 
@@ -942,10 +766,7 @@ Public Class raceReviewForm
                     End If
                     cmd.Parameters.AddWithValue("@cyakujun", CbCyakujun.SelectedIndex)
                 End If
-                If CbMonth.SelectedIndex > 0 Then
-                    sql &= " AND strftime('%m', R.dt) = @tuki"
-                    cmd.Parameters.AddWithValue("@tuki", CbMonth.SelectedIndex.ToString("D2"))
-                End If
+
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
@@ -953,9 +774,22 @@ Public Class raceReviewForm
                 flx.Redraw = False
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 Dim cnt As Integer = 0
+                Dim dt As Date
+                Dim lstTuki As New List(Of Integer)
+                If txtTuki.Text.Trim.Length > 0 Then
+                    Dim sbf() As String = Split(txtTuki.Text.Trim, ",")
+                    For Each txt As String In sbf
+                        If IsNumeric(txt) AndAlso CInt(txt) >= 1 AndAlso CInt(txt) <= 12 Then
+                            lstTuki.Add(CInt(txt))
+                        End If
+                    Next
+                End If
                 While r.Read
-                    cnt += 1
-                    ListBox2.Items.Add(cnt.ToString("D2") & ":" & CDate(r("dt")).Year & " " & r("race_name"))
+                    dt = CDate(r("dt"))
+                    If lstTuki.Count = 0 OrElse lstTuki.Contains(dt.Month) Then
+                        cnt += 1
+                        ListBox2.Items.Add(cnt.ToString("D2") & ":" & dt.ToString("yyyy/MM") & " " & r("race_name"))
+                    End If
                 End While
                 r.Close()
                 flx.Redraw = True
@@ -974,6 +808,14 @@ Public Class raceReviewForm
         a.entry(txtJo.Text, Me.Left + BtnSelectJo.Left, Me.Top + BtnSelectJo.Top)
         If a.SaveFlag Then
             txtJo.Text = a.SelectedJoText
+        End If
+    End Sub
+
+    Private Sub BtnSelectTuki_Click(sender As Object, e As EventArgs) Handles BtnSelectTuki.Click
+        Dim a As New SelectTukiForm
+        a.entry(txtTuki.Text, Me.Left + BtnSelectJo.Left, Me.Top + BtnSelectJo.Top)
+        If a.SaveFlag Then
+            txtTuki.Text = a.SelectedTukiText
         End If
     End Sub
 End Class

@@ -557,7 +557,7 @@ Public Class AnaForm
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             Try
                 conn.Open()
-                cmd.CommandText = "SELECT COUNT(R.id) AS cnt FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
+                cmd.CommandText = "SELECT R.dt FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
                 cmd.Parameters.AddWithValue("@dt", oHead.dt)
                 Dim sql As String = ""
                 If txtJo.Text.Trim.Length > 0 Then
@@ -592,22 +592,29 @@ Public Class AnaForm
                 Else
                     sql &= " AND A.cyakujun>0 AND A.cyakujun<=20 "
                 End If
-
-                If chkMonth.Checked Then
-                    sql &= " AND strftime('%m', R.dt) = @tuki"
-                    cmd.Parameters.AddWithValue("@tuki", oHead.dt.Month.ToString("D2"))
-                End If
-
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
 
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
-                If r.Read Then
-                    lb_msg.Text = CInt(r("cnt")).ToString
-                Else
-                    lb_msg.Text = "***"
+                Dim cnt As Integer = 0
+                Dim dt As Date
+                Dim lstTuki As New List(Of Integer)
+                If txtTuki.Text.Trim.Length > 0 Then
+                    Dim sbf() As String = Split(txtTuki.Text.Trim, ",")
+                    For Each txt As String In sbf
+                        If IsNumeric(txt) AndAlso CInt(txt) >= 1 AndAlso CInt(txt) <= 12 Then
+                            lstTuki.Add(CInt(txt))
+                        End If
+                    Next
                 End If
+                While r.Read
+                    dt = CDate(r("dt"))
+                    If lstTuki.Count = 0 OrElse lstTuki.Contains(dt.Month) Then
+                        cnt += 1
+                    End If
+                End While
+                lb_msg.Text = cnt.ToString
                 r.Close()
             Catch ex As Exception
                 errmsg = ex.Message
@@ -675,12 +682,6 @@ Public Class AnaForm
                 Else
                     sql &= " AND A.cyakujun>0 AND A.cyakujun<=20 "
                 End If
-
-                If chkMonth.Checked Then
-                    sql &= " AND strftime('%m', R.dt) = @tuki"
-                    cmd.Parameters.AddWithValue("@tuki", oHead.dt.Month.ToString("D2"))
-                End If
-
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
@@ -691,12 +692,26 @@ Public Class AnaForm
                 Dim cyakujunList As New List(Of Integer)
                 Dim dtList As New List(Of Date)
 
+                Dim dt As Date
+                Dim lstTuki As New List(Of Integer)
+                If txtTuki.Text.Trim.Length > 0 Then
+                    Dim sbf() As String = Split(txtTuki.Text.Trim, ",")
+                    For Each txt As String In sbf
+                        If IsNumeric(txt) AndAlso CInt(txt) >= 1 AndAlso CInt(txt) <= 12 Then
+                            lstTuki.Add(CInt(txt))
+                        End If
+                    Next
+                End If
+
                 While r.Read
-                    bameiList.Add(r("bamei"))
-                    cyakujunList.Add(r("cyakujun"))
-                    dtList.Add(r("dt"))
-                    If bameiList.Count >= 50 Then 'たくさん見てもあまり結果は変わらない
-                        Exit While
+                    dt = CDate(r("dt"))
+                    If lstTuki.Count = 0 OrElse lstTuki.Contains(dt.Month) Then
+                        bameiList.Add(r("bamei"))
+                        cyakujunList.Add(r("cyakujun"))
+                        dtList.Add(dt)
+                        If bameiList.Count >= 50 Then 'たくさん見てもあまり結果は変わらない
+                            Exit While
+                        End If
                     End If
                 End While
                 r.Close()
@@ -768,12 +783,6 @@ Public Class AnaForm
                 Else
                     sql &= " AND A.cyakujun>0 AND A.cyakujun<=20 "
                 End If
-
-                If chkMonth.Checked Then
-                    sql &= " AND strftime('%m', R.dt) = @tuki"
-                    cmd.Parameters.AddWithValue("@tuki", oHead.dt.Month.ToString("D2"))
-                End If
-
                 If sql.Length > 0 Then
                     cmd.CommandText &= sql
                 End If
@@ -1273,4 +1282,11 @@ Public Class AnaForm
         a.Dispose()
     End Sub
 
+    Private Sub BtnSelectTuki_Click(sender As Object, e As EventArgs) Handles BtnSelectTuki.Click
+        Dim a As New SelectTukiForm
+        a.entry(txtTuki.Text, Me.Left + BtnSelectJo.Left, Me.Top + BtnSelectJo.Top)
+        If a.SaveFlag Then
+            txtTuki.Text = a.SelectedTukiText
+        End If
+    End Sub
 End Class
