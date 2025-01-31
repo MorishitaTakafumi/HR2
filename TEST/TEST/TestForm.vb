@@ -535,86 +535,139 @@ Public Class TestForm
     End Function
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click
-        Dim ss As String = InputBox("調査する着順を入力してください")
-        If Not IsNumeric(ss) Then
-            Return
-        End If
-        Dim cyakujun As Integer = CInt(ss)
         ListBox1.Items.Clear()
-        Dim dtList As New List(Of Date)
-        Dim uidList As New List(Of Integer)
         Dim errmsg As String = ""
         Using con As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = con.CreateCommand
             Try
                 con.Open()
-                cmd.CommandText = "SELECT K.bamei, U.id
-                                    FROM (RaceHeader R INNER JOIN Kekka K ON R.id=K.race_header_id)  
-                                    LEFT JOIN UmaHeader U ON K.bamei=U.name 
-                                    WHERE R.dt>@dt AND R.type_code<>3 AND R.class_code>=2 AND K.cyakujun=" & cyakujun.ToString
-                cmd.Parameters.AddWithValue("@dt", DateSerial(2024, 6, 1))
-                Dim r As SQLiteDataReader = cmd.ExecuteReader
-                Dim cnt As Integer = 0
-                Dim dd As String
-                Dim ngcnt As Integer = 0
-                While r.Read
-                    cnt += 1
-                    If IsDBNull(r("id")) Then
-                        ngcnt += 1
-                        dd = ngcnt.ToString & " : " & r("bamei")
-                        ListBox1.Items.Add(dd)
-                    End If
-                End While
-                ListBox1.Items.Add("cnt=" & cnt.ToString)
-                'While r.Read
-                '    dtList.Add(r("dt"))
-                '    uidList.Add(r("id"))
-                'End While
-                r.Close()
-                If 1 > 0 Then
-                    Return
-                End If
-
-                Dim umaHistList As New umaHistListClass
-                Dim rA As New raceAnanClass
-                Dim spanCount(70) As Integer
-                Dim dateCount(70) As Integer
-                For j As Integer = 0 To dtList.Count - 1
-                    If (j Mod 10) = 0 Then
-                        lb_msg.Text = j.ToString & "/" & dtList.Count.ToString
-                        Application.DoEvents()
-                        Sleep(1000)
-                    End If
-                    errmsg = umaHistList.load(cmd, uidList(j), dtList(j))
+                Dim a As New umaHistListClass
+                Dim scoreA(3) As Integer
+                Dim scoreB(3) As Integer
+                Dim scoreC(3) As Integer
+                Dim Ecnt(2) As Integer
+                Dim Gcnt(2) As Integer
+                Dim Icnt(2) As Integer
+                For uma_id As Integer = 1 To 9700
+                    errmsg = a.load(cmd, uma_id)
                     If errmsg.Length > 0 Then
                         Exit Try
                     End If
-                    rA.spanScore = umaHistList.GetSpanScore(dtList(j), rA.spanVal)
-                    rA.dateScore = umaHistList.GetSameDateSameKyoriScore(dtList(j), 999, "", rA.kyoriScore)
-                    If rA.spanScore <= 0 Then
-                        spanCount(0) += 1
-                    ElseIf rA.spanScore = 1000000 Then
-                        spanCount(60) += 1
-                    Else
-                        spanCount(1 + 10 * Math.Log10(rA.spanScore)) += 1
-                    End If
-                    If rA.dateScore <= 0 Then
-                        dateCount(0) += 1
-                    ElseIf rA.dateScore = 1000000 Then
-                        dateCount(60) += 1
-                    Else
-                        dateCount(1 + 10 * Math.Log10(rA.dateScore)) += 1
-                    End If
-                Next
+                    If a.cnt > 0 Then
+                        Dim o As UmaHistClass
+                        Dim idx As Integer
+                        Dim flgA As Boolean = False
+                        Dim flgB As Boolean = False
+                        Dim flgC As Boolean = False
+                        Dim flgCzan As Integer = 0
+                        Dim Acnt As Integer = 0
+                        Dim Asub(1) As Integer
+                        Dim Bcnt As Integer = 0
+                        Dim Bsub(1) As Integer
+                        Dim Ccnt As Integer = 0
+                        Dim Csub(1) As Integer
+                        For j As Integer = a.cnt - 1 To 0 Step -1
+                            o = a.GetBodyRef(j)
+                            If o.cyakujun > 0 Then
+                                If o.cyakujun > 3 Then
+                                    idx = 3
+                                Else
+                                    idx = o.cyakujun - 1
+                                End If
+                                If flgA Then
+                                    scoreA(idx) += 1
+                                    If idx = 3 Then
+                                        Asub(0) += 1
+                                    Else
+                                        Asub(1) += 1
+                                    End If
+                                    flgA = False
+                                End If
+                                If flgB Then
+                                    scoreB(idx) += 1
+                                    If idx = 3 Then
+                                        Bsub(0) += 1
+                                    Else
+                                        Bsub(1) += 1
+                                    End If
+                                    flgB = False
+                                End If
+                                If flgC Then
+                                    If flgCzan = 1 Then
+                                        flgCzan = 0
+                                    Else
+                                        scoreC(idx) += 1
+                                        If idx = 3 Then
+                                            Csub(0) += 1
+                                        Else
+                                            Csub(1) += 1
+                                        End If
+                                        flgC = False
+                                    End If
+                                End If
 
-                For j As Integer = 0 To 70
-                    ss = GetBarString(spanCount(j), dtList.Count)
-                    ListBox1.Items.Add("s" & j.ToString("D2") & ":" & ss)
+                                If o.ninki <> 1 AndAlso o.cyakujun = 1 Then
+                                    flgA = True
+                                    Acnt += 1
+                                End If
+                                If o.ninki = 1 AndAlso o.cyakujun > 1 Then
+                                    flgB = True
+                                    flgC = True
+                                    flgCzan = 1
+                                    Bcnt += 1
+                                    Ccnt += 1
+                                End If
+                            Else
+                                flgA = False
+                                flgB = False
+                                flgC = False
+                                flgCzan = 0
+                            End If
+                        Next
+                        If Acnt >= 2 Then
+                            Ecnt(0) += 1
+                            If Asub(0) = Acnt Then
+                                Ecnt(1) += 1
+                            ElseIf Asub(1) = Acnt Then
+                                Ecnt(2) += 1
+                            End If
+                        End If
+                        If Bcnt >= 2 Then
+                            Gcnt(0) += 1
+                            If Bsub(0) = Bcnt Then
+                                Gcnt(1) += 1
+                            ElseIf Bsub(1) = Bcnt Then
+                                Gcnt(2) += 1
+                            End If
+                        End If
+                        If Ccnt >= 2 Then
+                            Icnt(0) += 1
+                            If Csub(0) = Ccnt Then
+                                Icnt(1) += 1
+                            ElseIf Csub(1) = Bcnt Then
+                                Icnt(2) += 1
+                            End If
+                        End If
+                    End If
                 Next
-                For j As Integer = 0 To 70
-                    ss = GetBarString(dateCount(j), dtList.Count)
-                    ListBox1.Items.Add("d" & j.ToString("D2") & ":" & ss)
-                Next
+                ListBox1.Items.Add("A:１番人気ではなく１着になった馬の次レースの成績")
+                ListBox1.Items.Add(scoreA(0).ToString & "-" & scoreA(1).ToString & "-" & scoreA(2).ToString & "-" & scoreA(3).ToString)
+                ListBox1.Items.Add("B:１番人気で２着以下になった馬の次レースの成績")
+                ListBox1.Items.Add(scoreB(0).ToString & "-" & scoreB(1).ToString & "-" & scoreB(2).ToString & "-" & scoreB(3).ToString)
+                ListBox1.Items.Add("C:１番人気で２着以下になった馬の次次レースの成績")
+                ListBox1.Items.Add(scoreC(0).ToString & "-" & scoreC(1).ToString & "-" & scoreC(2).ToString & "-" & scoreC(3).ToString)
+                ListBox1.Items.Add("")
+                ListBox1.Items.Add("D:Aが2回以上あった馬の数：" & Ecnt(0))
+                ListBox1.Items.Add("E:Aが2回以上あった馬でAが常に４着以下だった馬の数：" & Ecnt(1))
+                ListBox1.Items.Add("E':Aが2回以上あった馬でAが常に３着以内だった馬の数：" & Ecnt(2))
+                ListBox1.Items.Add("")
+                ListBox1.Items.Add("F:Bが2回以上あった馬の数：" & Gcnt(0))
+                ListBox1.Items.Add("G:Bが2回以上あった馬でBが常に４着以下だった馬の数：" & Gcnt(1))
+                ListBox1.Items.Add("G':Bが2回以上あった馬でBが常に３着以内だった馬の数：" & Gcnt(2))
+                ListBox1.Items.Add("")
+                ListBox1.Items.Add("H:Cが2回以上あった馬の数：" & Icnt(0))
+                ListBox1.Items.Add("I:Cが2回以上あった馬でCが常に４着以下だった馬の数：" & Icnt(1))
+                ListBox1.Items.Add("I':Cが2回以上あった馬でCが常に３着以内だった馬の数：" & Icnt(2))
                 lb_msg.Text = "処理完了！"
             Catch ex As Exception
                 errmsg = ex.Message
@@ -623,6 +676,5 @@ Public Class TestForm
         If errmsg.Length > 0 Then
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
         End If
-
     End Sub
 End Class

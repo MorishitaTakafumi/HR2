@@ -175,6 +175,11 @@
         If strScore Is Nothing OrElse strScore.Length = 0 Then
             Return DMY_VAL
         End If
+
+        If InStr(strScore, "[") > 0 Then '異種レースは対象外とする
+            Return DMY_VAL
+        End If
+
         strScore = Replace(Replace(strScore, "[", ""), "]", "")
 
         Dim ip As Integer = InStr(strScore, "(")
@@ -324,8 +329,8 @@
         End If
 
         Dim fullPoint As Integer = 100 '満点
-        Dim myZone As Integer = GetTimeZone12(myTime)
-        Dim cmpZone As Integer = GetTimeZone12(cmpTime)
+        Dim myZone As Integer = GetTimeZoneN(myTime, 0.2, 24) ' GetTimeZone12(myTime)
+        Dim cmpZone As Integer = GetTimeZoneN(cmpTime, 0.2, 24) 'GetTimeZone12(cmpTime)
         Dim coef As Single
 
         If myZone = cmpZone Then
@@ -344,9 +349,22 @@
         Return (1 - myZone * oParam.timeZoneCoef)
     End Function
 
+    'S秒間隔でN個ゾーンを作る
+    '①-∞～-1.0/ ②-1.0～-0.8/ ③-0.8～-0.6/・・・/⑫1.0～+∞
+    Public Function GetTimeZoneN(ByVal tmpTime As Single, ByVal S As Single, ByVal N As Integer) As Integer
+        Dim idx As Integer = Int(tmpTime / S) + N \ 2
+        If idx < 0 Then
+            Return 0
+        ElseIf idx >= N Then
+            Return N - 1
+        Else
+            Return idx
+        End If
+    End Function
+
     '0.2秒間隔で12個ゾーンを作る
     '①-∞～-1.0/ ②-1.0～-0.8/ ③-0.8～-0.6/・・・/⑫1.0～+∞
-    Private Function GetTimeZone12(ByVal tmpTime As Single) As Integer
+    Public Function GetTimeZone12(ByVal tmpTime As Single) As Integer
         Dim idx As Integer = Int(tmpTime / 0.2) + 6
         If idx < 0 Then
             Return 0

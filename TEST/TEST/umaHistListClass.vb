@@ -162,6 +162,56 @@ Public Class umaHistListClass
         Return makeScore(dateScore)
     End Function
 
+    '履歴からみたお試しポイント
+    Public Function GetExtraPoint() As Integer
+        If cnt > 0 Then
+            If m_bf(0).cyakujun = 1 AndAlso m_bf(0).ninki > 1 Then '前走が1番人気以外で１着
+                Dim tmpcnt(2) As Integer
+                For j As Integer = cnt - 1 To 1 Step -1
+                    If m_bf(j).cyakujun = 1 AndAlso m_bf(j).ninki > 1 Then
+                        tmpcnt(0) += 1
+                        If m_bf(j - 1).cyakujun > 3 Then
+                            tmpcnt(1) += 1
+                        ElseIf m_bf(j - 1).cyakujun > 0 Then
+                            tmpcnt(2) += 1
+                        End If
+                    End If
+                Next
+                If tmpcnt(0) > 1 Then
+                    If tmpcnt(0) = tmpcnt(2) Then
+                        Return 10
+                    Else
+                        Return -10
+                    End If
+                Else
+                    Return -5
+                End If
+            ElseIf m_bf(0).cyakujun > 2 AndAlso m_bf(0).ninki = 1 Then '前走が1番人気で２着以下
+                Dim tmpcnt(2) As Integer
+                For j As Integer = cnt - 1 To 1 Step -1
+                    If m_bf(j).cyakujun > 2 AndAlso m_bf(j).ninki = 1 Then
+                        tmpcnt(0) += 1
+                        If m_bf(j - 1).cyakujun > 3 Then
+                            tmpcnt(1) += 1
+                        ElseIf m_bf(j - 1).cyakujun > 0 Then
+                            tmpcnt(2) += 1
+                        End If
+                    End If
+                Next
+                If tmpcnt(0) > 1 Then
+                    If tmpcnt(0) = tmpcnt(2) Then
+                        Return -10
+                    Else
+                        Return 10
+                    End If
+                Else
+                    Return 5
+                End If
+            End If
+        End If
+        Return 0
+    End Function
+
     Private Function makeScore(ByVal score() As Short) As Integer
         Return score(0) * 10 ^ 6 + score(1) * 10 ^ 4 + score(2) * 10 ^ 2 + score(3)
     End Function

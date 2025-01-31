@@ -189,11 +189,11 @@ Partial Class TestForm
         '
         'Button15
         '
-        Me.Button15.Location = New System.Drawing.Point(992, 12)
+        Me.Button15.Location = New System.Drawing.Point(12, 470)
         Me.Button15.Name = "Button15"
-        Me.Button15.Size = New System.Drawing.Size(77, 44)
+        Me.Button15.Size = New System.Drawing.Size(177, 44)
         Me.Button15.TabIndex = 17
-        Me.Button15.Text = "TEST"
+        Me.Button15.Text = "1番人気に関する調査"
         Me.Button15.UseVisualStyleBackColor = True
         '
         'TestForm

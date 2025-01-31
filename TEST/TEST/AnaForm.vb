@@ -4,7 +4,7 @@ Imports System.IO
 
 Public Class AnaForm
 
-    Private Const HIS_CNT As Integer = 6
+    Private Const HIS_CNT As Integer = 5
     Private Enum FlxCol
         waku = 0
         umaban = 1
@@ -15,18 +15,22 @@ Public Class AnaForm
         spanVal
         histStart
         kyoriScore = histStart + HIS_CNT
+        agarisaRank
+        cyakusaRank
         dateScore
         coef_span
         coef_date
         dof_agarisa
         dof_cyakusa
         dof_total
-        cols = dof_total + 1
+        test_point
+        g_total
+        cols = g_total + 1
     End Enum
 
     Private oShortRaceName As New ShortRaceNameClass
     Private anaList As New raceAnaListClass
-    Private oHead As RaceHeaderClass
+    Private cRaceHeader As RaceHeaderClass
     Private spanScore As New List(Of Integer)
     Private cyakujun As New List(Of Integer)
     Private agarisa1 As New List(Of Single)
@@ -111,9 +115,11 @@ Public Class AnaForm
             .Item(0, FlxCol.ninki) = "人気"
             .Item(0, FlxCol.hutan) = "負担"
             .Item(0, FlxCol.spanVal) = "前走間隔" & vbLf & "±７日"
-            For j As Integer = 0 To 5
+            For j As Integer = 0 To HIS_CNT - 1
                 .Item(0, FlxCol.histStart + j) = (j + 1).ToString & "走前"
             Next
+            .Item(0, FlxCol.agarisaRank) = "上差" & vbLf & "優秀性"
+            .Item(0, FlxCol.cyakusaRank) = "着差" & vbLf & "優秀性"
             .Item(0, FlxCol.kyoriScore) = "今回" & vbLf & "距離" & vbLf & "成績"
             .Item(0, FlxCol.dateScore) = "今回" & vbLf & "日付" & vbLf & "±７日" & vbLf & "成績"
             .Item(0, FlxCol.coef_span) = "span" & vbLf & "係数"
@@ -121,6 +127,8 @@ Public Class AnaForm
             .Item(0, FlxCol.dof_agarisa) = "上差" & vbLf & "適合度"
             .Item(0, FlxCol.dof_cyakusa) = "着差" & vbLf & "適合度"
             .Item(0, FlxCol.dof_total) = "適合度" & vbLf & "合計"
+            .Item(0, FlxCol.test_point) = "お試し" & vbLf & "得失"
+            .Item(0, FlxCol.g_total) = "総計"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
             .Styles.Fixed.TextAlign = TextAlignEnum.CenterCenter
@@ -148,16 +156,26 @@ Public Class AnaForm
                 End If
             Next
 
-            If Not .Styles.Contains("agari0") Then
-                Dim cs As CellStyle = .Styles.Add("agari0")
+            If Not .Styles.Contains("agariGood") Then
+                Dim cs As CellStyle = .Styles.Add("agariGood")
+                cs.BackColor = Color.Gold
+                '
+                cs = .Styles.Add("cyakusaGood")
+                cs.BackColor = Color.Orange
+                '
+                cs = .Styles.Add("wGood")
                 cs.BackColor = Color.Yellow
+                '
+                cs = .Styles.Add("otherType")
+                cs.BackColor = Color.WhiteSmoke
                 '
                 cs = .Styles.Add("normal")
                 cs.BackColor = Color.White
                 cs.ForeColor = Color.Black
                 '
                 cs = .Styles.Add("span7")
-                cs.BackColor = Color.Gold
+                cs.ForeColor = Color.Red
+                cs.BackColor = Color.White
                 '
                 cs = .Styles.Add("torikesi")
                 cs.BackColor = Color.LightGray
@@ -250,11 +268,14 @@ Public Class AnaForm
                 Next
             Else
                 xx(FlxCol.spanVal) = AnaValClass.Score2String(oUma.spanScore) 'oUma.spanVal
-                For i As Integer = 0 To 5
+                For i As Integer = 0 To HIS_CNT - 1
                     xx(FlxCol.histStart + i) = oUma.hist(i)
                 Next
                 xx(FlxCol.kyoriScore) = AnaValClass.Score2String(oUma.kyoriScore)
                 xx(FlxCol.dateScore) = AnaValClass.Score2String(oUma.dateScore)
+                xx(FlxCol.agarisaRank) = oUma.agarisaRank
+                xx(FlxCol.cyakusaRank) = oUma.cyakusaRank
+                xx(FlxCol.test_point) = oUma.extraPoint
             End If
             flx.AddItem(xx)
         Next
@@ -290,11 +311,18 @@ Public Class AnaForm
                     flx.SetCellStyle(jrow, FlxCol.spanVal, "normal")
                 End If
                 For i As Integer = 0 To 5
-                    If oUma.isGoodHist(i, NumericUpDown1.Value) Then
-                        flx.SetCellStyle(jrow, FlxCol.histStart + i, "agari0")
-                    Else
-                        flx.SetCellStyle(jrow, FlxCol.histStart + i, "normal")
-                    End If
+                    Select Case oUma.isGoodHist(i, NumericUpDown1.Value)
+                        Case 1
+                            flx.SetCellStyle(jrow, FlxCol.histStart + i, "agariGood")
+                        Case 2
+                            flx.SetCellStyle(jrow, FlxCol.histStart + i, "cyakusaGood")
+                        Case 3
+                            flx.SetCellStyle(jrow, FlxCol.histStart + i, "wGood")
+                        Case 4
+                            flx.SetCellStyle(jrow, FlxCol.histStart + i, "otherType")
+                        Case Else
+                            flx.SetCellStyle(jrow, FlxCol.histStart + i, "normal")
+                    End Select
                 Next
             End If
 
@@ -355,22 +383,22 @@ Public Class AnaForm
         Dim oUmaHeader As UmaHeaderClass
 
         ListBox1.Items.Clear()
-        oHead = fm3.oRaceHeader
-        CbGradeL.SelectedIndex = oHead.GetClassCode
+        cRaceHeader = fm3.oRaceHeader
+        CbGradeL.SelectedIndex = cRaceHeader.GetClassCode
         CbGradeH.SelectedIndex = CbGradeL.SelectedIndex
 
-        ListBox1.Items.Add("競馬場：" & oHead.keibajo)
-        ListBox1.Items.Add("開催日：" & oHead.dt.ToString("yyyy年MM月dd日"))
+        ListBox1.Items.Add("競馬場：" & cRaceHeader.keibajo)
+        ListBox1.Items.Add("開催日：" & cRaceHeader.dt.ToString("yyyy年MM月dd日"))
 
-        ListBox1.Items.Add("レース名：" & oHead.race_name)
-        ListBox1.Items.Add("グレード：" & oHead.grade)
+        ListBox1.Items.Add("レース名：" & cRaceHeader.race_name)
+        ListBox1.Items.Add("グレード：" & cRaceHeader.grade)
 
-        ListBox1.Items.Add("距離：" & oHead.kyori.ToString)
-        ListBox1.Items.Add("種別：" & oHead.syubetu)
-        ListBox1.Items.Add("クラス：" & oHead.class_name)
-        oHead.class_code = oHead.GetClassCode()
+        ListBox1.Items.Add("距離：" & cRaceHeader.kyori.ToString)
+        ListBox1.Items.Add("種別：" & cRaceHeader.syubetu)
+        ListBox1.Items.Add("クラス：" & cRaceHeader.class_name)
+        cRaceHeader.class_code = cRaceHeader.GetClassCode()
         anaList.init()
-        txtJo.Text = oHead.keibajo
+        txtJo.Text = cRaceHeader.keibajo
         Dim errmsg As String = ""
         Using con As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = con.CreateCommand
@@ -389,23 +417,23 @@ Public Class AnaForm
                     rA.bamei = o.bamei
                     rA.ninki = o.ninki
                     rA.hutan = o.hutan
+
                     Dim umaHistList As umaHistListClass = UmaStore.GetData(o.bamei)
                     If umaHistList Is Nothing Then
                         umaHists.init()
-                        errmsg = umaHists.GetUmaInfo(cmd, makeJRAurl(o.href), o.bamei, oHead.dt, True)
+                        errmsg = umaHists.GetUmaInfo(cmd, makeJRAurl(o.href), o.bamei, cRaceHeader.dt, True)
                         If errmsg.Length > 0 Then
                             Exit Try
                         End If
                         umaHistList = umaHists
                         UmaStore.add1(umaHists.Clone)
-                    Else
-                        Dim a As Int16 = 0
                     End If
                     oUmaHeader = umaHistList.umaHeader
-                    rA.spanScore = umaHistList.GetSpanScore(oHead.dt, rA.spanVal)
-                    rA.dateScore = umaHistList.GetSameDateSameKyoriScore(oHead.dt, oHead.kyori, oHead.syubetu, rA.kyoriScore)
+                    rA.spanScore = umaHistList.GetSpanScore(cRaceHeader.dt, rA.spanVal)
+                    rA.dateScore = umaHistList.GetSameDateSameKyoriScore(cRaceHeader.dt, cRaceHeader.kyori, cRaceHeader.syubetu, rA.kyoriScore)
+                    rA.extraPoint = umaHistList.GetExtraPoint()
                     For i As Integer = 0 To umaHistList.cnt - 1
-                        If i > 5 Then
+                        If i = HIS_CNT Then
                             Exit For
                         End If
 
@@ -462,9 +490,10 @@ Public Class AnaForm
                         End If
 
                         If oRaceHead.id > 0 AndAlso kekkaList.cnt > 0 Then
-                            rA.hist(i) = kekkaList.GetAgarisa(o.bamei, oHead.syubetu)
+                            rA.hist(i) = kekkaList.GetAgarisa(o.bamei, cRaceHeader.syubetu)
                         End If
                     Next
+                    rA.SetTimeRank(oParam)
                     anaList.add1(rA)
                 Next
             Catch ex As Exception
@@ -517,8 +546,8 @@ Public Class AnaForm
             Try
                 cmd.CommandText = "SELECT A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id 
                                     WHERE R.dt=@dt AND R.race_name=@race_name"
-                cmd.Parameters.AddWithValue("@dt", oHead.dt)
-                cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                cmd.Parameters.AddWithValue("@dt", cRaceHeader.dt)
+                cmd.Parameters.AddWithValue("@race_name", cRaceHeader.race_name)
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
                 While r.Read
                     Dim bamei As String = CStr(r("bamei"))
@@ -558,7 +587,7 @@ Public Class AnaForm
             Try
                 conn.Open()
                 cmd.CommandText = "SELECT R.dt FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
-                cmd.Parameters.AddWithValue("@dt", oHead.dt)
+                cmd.Parameters.AddWithValue("@dt", cRaceHeader.dt)
                 Dim sql As String = ""
                 If txtJo.Text.Trim.Length > 0 Then
                     Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
@@ -566,12 +595,12 @@ Public Class AnaForm
                 End If
                 If chkKyori.Checked Then
                     sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
-                    cmd.Parameters.AddWithValue("@kyori", oHead.kyori)
-                    cmd.Parameters.AddWithValue("@type_code", oHead.type_code)
+                    cmd.Parameters.AddWithValue("@kyori", cRaceHeader.kyori)
+                    cmd.Parameters.AddWithValue("@type_code", cRaceHeader.type_code)
                 End If
                 If chkRacename.Checked Then
                     sql &= " AND R.race_name=@race_name"
-                    cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                    cmd.Parameters.AddWithValue("@race_name", cRaceHeader.race_name)
                 ElseIf chkRacename2.Checked Then
                     sql &= " AND R.race_name like @race_name"
                     cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
@@ -648,7 +677,7 @@ Public Class AnaForm
                 End If
 
                 cmd.CommandText = "SELECT R.dt, A.cyakujun, A.bamei FROM RaceHeader R INNER JOIN Kekka A ON R.id=A.race_header_id WHERE R.dt<@dt"
-                cmd.Parameters.AddWithValue("@dt", oHead.dt)
+                cmd.Parameters.AddWithValue("@dt", cRaceHeader.dt)
                 Dim sql As String = ""
                 If txtJo.Text.Trim.Length > 0 Then
                     Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
@@ -656,12 +685,12 @@ Public Class AnaForm
                 End If
                 If chkKyori.Checked Then
                     sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
-                    cmd.Parameters.AddWithValue("@kyori", oHead.kyori)
-                    cmd.Parameters.AddWithValue("@type_code", oHead.type_code)
+                    cmd.Parameters.AddWithValue("@kyori", cRaceHeader.kyori)
+                    cmd.Parameters.AddWithValue("@type_code", cRaceHeader.type_code)
                 End If
                 If chkRacename.Checked Then
                     sql &= " AND R.race_name=@race_name"
-                    cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                    cmd.Parameters.AddWithValue("@race_name", cRaceHeader.race_name)
                 ElseIf chkRacename2.Checked Then
                     sql &= " AND R.race_name like @race_name"
                     cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
@@ -753,7 +782,7 @@ Public Class AnaForm
             conn.Open()
             Try
                 cmd.CommandText = "SELECT A.* FROM RaceHeader R INNER JOIN AnaVal A ON R.id=A.rhead_id WHERE R.dt<@dt"
-                cmd.Parameters.AddWithValue("@dt", oHead.dt)
+                cmd.Parameters.AddWithValue("@dt", cRaceHeader.dt)
                 Dim sql As String = ""
                 If txtJo.Text.Trim.Length > 0 Then
                     Dim ss As String = SelectJoForm.JoText2JoCode(txtJo.Text.Trim)
@@ -761,19 +790,19 @@ Public Class AnaForm
                 End If
                 If chkKyori.Checked Then
                     sql &= " AND R.kyori=@kyori AND R.type_code=@type_code"
-                    cmd.Parameters.AddWithValue("@kyori", oHead.kyori)
-                    cmd.Parameters.AddWithValue("@type_code", oHead.type_code)
+                    cmd.Parameters.AddWithValue("@kyori", cRaceHeader.kyori)
+                    cmd.Parameters.AddWithValue("@type_code", cRaceHeader.type_code)
                 End If
                 If chkRacename.Checked Then
                     sql &= " AND R.race_name=@race_name"
-                    cmd.Parameters.AddWithValue("@race_name", oHead.race_name)
+                    cmd.Parameters.AddWithValue("@race_name", cRaceHeader.race_name)
                 ElseIf chkRacename2.Checked Then
                     sql &= " AND R.race_name like @race_name"
                     cmd.Parameters.AddWithValue("@race_name", "%" & txtRacename.Text & "%")
                 End If
                 'If chkGrade.Checked Then
                 '    sql &= " AND R.class_code=@class_code"
-                '    cmd.Parameters.AddWithValue("@class_code", oHead.class_code)
+                '    cmd.Parameters.AddWithValue("@class_code", cRaceHeader.class_code)
                 'End If
                 If CbCyakujun.SelectedIndex >= 1 AndAlso CbCyakujun.SelectedIndex <= 3 Then
                     sql &= " AND A.cyakujun<=@cyakujun AND A.cyakujun>0"
@@ -843,10 +872,14 @@ Public Class AnaForm
             rA.spanScore = oUmaHist.GetSpanScore(dt_max, rA.spanVal)
             Dim agarisa(3) As Single
             Dim cyakusa(3) As Single
+            For j As Integer = 0 To 3 '適合度計算で無効となる値を初期値とする
+                agarisa(j) = DMY_VAL
+                cyakusa(j) = DMY_VAL
+            Next
             Dim cnt As Integer = 0
             For j As Integer = 0 To oUmaHist.cnt - 1
                 Dim oS As UmaHistClass = oUmaHist.GetBodyRef(j)
-                If DateDiff(DateInterval.Day, oS.dt, oHead.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
+                If DateDiff(DateInterval.Day, oS.dt, cRaceHeader.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                     Dim shortname As String = oS.racename
                     oS.racename = oShortRaceName.GetLongName(oS.racename)
                     Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS)
@@ -914,14 +947,14 @@ Public Class AnaForm
                         kekkaList.setAgarisa(oRaceHead)
                         Dim oK As KekkaClass = kekkaList.GetBodyRefByBamei(arg_bamei)
                         If oK IsNot Nothing Then
-                            agarisa(cnt) = oK.agarisa
-                            cyakusa(cnt) = oK.cyakusa_cr
+                            If oRaceHead.type_code = cRaceHeader.type_code Then '異種レースは対象外とする
+                                agarisa(cnt) = oK.agarisa
+                                cyakusa(cnt) = oK.cyakusa_cr
+                            End If
                             cnt += 1
                             If cnt > 3 Then
                                 Exit For
                             End If
-                        Else
-                            Dim dmy As Integer = 0
                         End If
                     End If
                 End If
@@ -1139,7 +1172,7 @@ Public Class AnaForm
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim a As New raceReviewForm
-        a.entry(oHead.race_name)
+        a.entry(cRaceHeader.race_name)
     End Sub
 
     Private Sub BtnDof_Click(sender As Object, e As EventArgs) Handles BtnDof.Click
@@ -1161,7 +1194,18 @@ Public Class AnaForm
                     agarisaPoint = GetDofTime(jrow, cmp_cyakujun, cyakusaPoint)
                     flx.Item(jrow, FlxCol.dof_agarisa) = agarisaPoint
                     flx.Item(jrow, FlxCol.dof_cyakusa) = cyakusaPoint
-                    flx.Item(jrow, FlxCol.dof_total) = Int(coefSpan * coefDate * (agarisaPoint + cyakusaPoint))
+                    Dim dof_total As Integer = Int(coefSpan * coefDate * (agarisaPoint + cyakusaPoint))
+                    flx.Item(jrow, FlxCol.dof_total) = dof_total
+                    If IsNumeric(flx.Item(jrow, FlxCol.test_point)) Then
+                        Dim test_point As Integer = CInt(flx.Item(jrow, FlxCol.test_point))
+                        dof_total += test_point
+                    End If
+
+                    If IsNumeric(flx.Item(jrow, FlxCol.agarisaRank)) AndAlso IsNumeric(flx.Item(jrow, FlxCol.cyakusaRank)) Then
+                        flx.Item(jrow, FlxCol.g_total) = dof_total + CInt(flx.Item(jrow, FlxCol.agarisaRank)) + CInt(flx.Item(jrow, FlxCol.cyakusaRank))
+                    Else
+                        flx.Item(jrow, FlxCol.g_total) = dof_total
+                    End If
                 End If
             Next
         Else
@@ -1242,8 +1286,8 @@ Public Class AnaForm
         If chkRacename2.Checked Then
             chkRacename.Checked = False
             If txtRacename.Text.Length = 0 Then
-                If oHead IsNot Nothing Then
-                    txtRacename.Text = oHead.race_name
+                If cRaceHeader IsNot Nothing Then
+                    txtRacename.Text = cRaceHeader.race_name
                 End If
             End If
         End If
