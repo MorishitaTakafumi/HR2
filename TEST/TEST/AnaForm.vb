@@ -4,7 +4,7 @@ Imports System.IO
 
 Public Class AnaForm
 
-    Private Const HIS_CNT As Integer = 5
+    Private Const HIS_CNT As Integer = 4
     Private Enum FlxCol
         waku = 0
         umaban = 1
@@ -17,6 +17,7 @@ Public Class AnaForm
         kyoriScore = histStart + HIS_CNT
         agarisaRank
         cyakusaRank
+        timeRank
         dateScore
         coef_span
         coef_date
@@ -112,22 +113,23 @@ Public Class AnaForm
             .Item(0, FlxCol.umaban) = "馬" & vbLf & "番"
             .Item(0, FlxCol.bamei) = "馬名"
             .Item(0, FlxCol.chk) = "印"
-            .Item(0, FlxCol.ninki) = "人気"
-            .Item(0, FlxCol.hutan) = "負担"
+            .Item(0, FlxCol.ninki) = "人" & vbLf & "気"
+            .Item(0, FlxCol.hutan) = "負" & vbLf & "担"
             .Item(0, FlxCol.spanVal) = "前走間隔" & vbLf & "±７日"
             For j As Integer = 0 To HIS_CNT - 1
                 .Item(0, FlxCol.histStart + j) = (j + 1).ToString & "走前"
             Next
-            .Item(0, FlxCol.agarisaRank) = "上差" & vbLf & "優秀性"
-            .Item(0, FlxCol.cyakusaRank) = "着差" & vbLf & "優秀性"
+            .Item(0, FlxCol.agarisaRank) = "上差" & vbLf & "優秀" & vbLf & "性"
+            .Item(0, FlxCol.cyakusaRank) = "着差" & vbLf & "優秀" & vbLf & "性"
+            .Item(0, FlxCol.timeRank) = "時計" & vbLf & "優秀" & vbLf & "合計"
             .Item(0, FlxCol.kyoriScore) = "今回" & vbLf & "距離" & vbLf & "成績"
             .Item(0, FlxCol.dateScore) = "今回" & vbLf & "日付" & vbLf & "±７日" & vbLf & "成績"
             .Item(0, FlxCol.coef_span) = "span" & vbLf & "係数"
             .Item(0, FlxCol.coef_date) = "date" & vbLf & "係数"
-            .Item(0, FlxCol.dof_agarisa) = "上差" & vbLf & "適合度"
-            .Item(0, FlxCol.dof_cyakusa) = "着差" & vbLf & "適合度"
-            .Item(0, FlxCol.dof_total) = "適合度" & vbLf & "合計"
-            .Item(0, FlxCol.test_point) = "お試し" & vbLf & "得失"
+            .Item(0, FlxCol.dof_agarisa) = "上差" & vbLf & "適合" & vbLf & "度"
+            .Item(0, FlxCol.dof_cyakusa) = "着差" & vbLf & "適合" & vbLf & "度"
+            .Item(0, FlxCol.dof_total) = "適合" & vbLf & "合計"
+            .Item(0, FlxCol.test_point) = "試し" & vbLf & "得失"
             .Item(0, FlxCol.g_total) = "総計"
 
             .Styles.Normal.Border.Style = BorderStyleEnum.Flat
@@ -138,6 +140,9 @@ Public Class AnaForm
             .Cols.MaxSize = 120
 
             .Cols(FlxCol.bamei).TextAlign = TextAlignEnum.LeftCenter
+            .Cols(FlxCol.agarisaRank).DataType = GetType(Integer)
+            .Cols(FlxCol.cyakusaRank).DataType = GetType(Integer)
+            .Cols(FlxCol.timeRank).DataType = GetType(Integer)
 
             .AllowMerging = AllowMergingEnum.FixedOnly
             .Cols(FlxCol.waku).AllowMerging = True
@@ -275,6 +280,7 @@ Public Class AnaForm
                 xx(FlxCol.dateScore) = AnaValClass.Score2String(oUma.dateScore)
                 xx(FlxCol.agarisaRank) = oUma.agarisaRank
                 xx(FlxCol.cyakusaRank) = oUma.cyakusaRank
+                xx(FlxCol.timeRank) = oUma.cyakusaRank + oUma.agarisaRank
                 xx(FlxCol.test_point) = oUma.extraPoint
             End If
             flx.AddItem(xx)
@@ -506,9 +512,8 @@ Public Class AnaForm
         ShowTable(anaList)
         PaintTable(anaList)
         fm3.Close()
-        If RbFile.Checked Then
-            ShowCyakujun()
-        End If
+        ShowCyakujun()
+        AutoSetSearchParams()
         If Not autoMode Then
             showWebPageAccessCounter()
         End If
@@ -580,8 +585,9 @@ Public Class AnaForm
         End If
     End Sub
 
-    Private Sub BtnGetCount_Click(sender As Object, e As EventArgs) Handles BtnGetCount.Click
-        Dim errmsg As String = ""
+    '該当件数取得
+    Private Function GetRaceCount(ByRef raceCount As Integer) As String
+        raceCount = 0
         Using conn As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
             Try
@@ -626,7 +632,6 @@ Public Class AnaForm
                 End If
 
                 Dim r As SQLite.SQLiteDataReader = cmd.ExecuteReader
-                Dim cnt As Integer = 0
                 Dim dt As Date
                 Dim lstTuki As New List(Of Integer)
                 If txtTuki.Text.Trim.Length > 0 Then
@@ -640,18 +645,91 @@ Public Class AnaForm
                 While r.Read
                     dt = CDate(r("dt"))
                     If lstTuki.Count = 0 OrElse lstTuki.Contains(dt.Month) Then
-                        cnt += 1
+                        raceCount += 1
                     End If
                 End While
-                lb_msg.Text = cnt.ToString
                 r.Close()
+                Return ""
             Catch ex As Exception
-                errmsg = ex.Message
+                Return ex.Message
             End Try
         End Using
+    End Function
+
+    '過去レース解析値の検索条件を自動セット
+    Private Sub AutoSetSearchParams()
+        Dim ok_cnt As Integer = 8
+        'デフォルト条件
+        Dim cnt As Integer
+        Dim errmsg As String = GetRaceCount(cnt)
+        lb_msg.Text = cnt.ToString
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+        If cnt >= ok_cnt Then
+            Return
+        End If
+        '競馬場を空にしてみる
+        Dim tmpStr As String = txtJo.Text
+        txtJo.Text = ""
+        errmsg = GetRaceCount(cnt)
+        lb_msg.Text = cnt.ToString
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+        If cnt >= ok_cnt Then
+            Return
+        End If
+        '競馬場を元に戻して同一レース名を外して同一月で
+        txtJo.Text = tmpStr
+        chkRacename.Checked = False
+        txtTuki.Text = cRaceHeader.dt.Month.ToString
+        errmsg = GetRaceCount(cnt)
+        lb_msg.Text = cnt.ToString
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+        If cnt >= ok_cnt Then
+            Return
+        End If
+        '前後月を含めて
+        Dim tuki As Integer = cRaceHeader.dt.Month
+        If tuki = 1 Then
+            txtTuki.Text = "1,2,12"
+        ElseIf tuki = 12 Then
+            txtTuki.Text = "11,12,1"
+        Else
+            txtTuki.Text = (tuki - 1).ToString & "," & tuki.ToString & "," & (tuki + 1).ToString
+        End If
+        errmsg = GetRaceCount(cnt)
+        lb_msg.Text = cnt.ToString
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+        If cnt >= ok_cnt Then
+            Return
+        End If
+        '全月
+        txtTuki.Text = ""
+        errmsg = GetRaceCount(cnt)
+        lb_msg.Text = cnt.ToString
+        If errmsg.Length > 0 Then
+            MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+            Return
+        End If
+    End Sub
+
+    Private Sub BtnGetCount_Click(sender As Object, e As EventArgs) Handles BtnGetCount.Click
+        Dim cnt As Integer
+        Dim errmsg As String = GetRaceCount(cnt)
         If errmsg.Length > 0 Then
             MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
         End If
+        lb_msg.Text = cnt.ToString
     End Sub
 
     Private Sub new_logic()
@@ -738,7 +816,7 @@ Public Class AnaForm
                         bameiList.Add(r("bamei"))
                         cyakujunList.Add(r("cyakujun"))
                         dtList.Add(dt)
-                        If bameiList.Count >= 50 Then 'たくさん見てもあまり結果は変わらない
+                        If bameiList.Count >= 20 Then 'たくさん見てもあまり結果は変わらない
                             Exit While
                         End If
                     End If
@@ -1186,10 +1264,10 @@ Public Class AnaForm
                 If flx.Item(jrow, FlxCol.spanVal) IsNot Nothing Then
                     Dim myScore As Integer = cnvScoreStr2Val(flx.Item(jrow, FlxCol.spanVal))
                     Dim coefSpan As Double = GetSpanScoreCoefficient(myScore)
-                    flx.Item(jrow, FlxCol.coef_span) = coefSpan.ToString("F3")
+                    flx.Item(jrow, FlxCol.coef_span) = coefSpan.ToString("F2")
                     myScore = cnvScoreStr2Val(flx.Item(jrow, FlxCol.dateScore))
                     Dim coefDate As Double = GetDateScoreCoefficient(myScore)
-                    flx.Item(jrow, FlxCol.coef_date) = coefDate.ToString("F3")
+                    flx.Item(jrow, FlxCol.coef_date) = coefDate.ToString("F2")
                     Dim agarisaPoint, cyakusaPoint As Integer
                     agarisaPoint = GetDofTime(jrow, cmp_cyakujun, cyakusaPoint)
                     flx.Item(jrow, FlxCol.dof_agarisa) = agarisaPoint
@@ -1201,8 +1279,8 @@ Public Class AnaForm
                         dof_total += test_point
                     End If
 
-                    If IsNumeric(flx.Item(jrow, FlxCol.agarisaRank)) AndAlso IsNumeric(flx.Item(jrow, FlxCol.cyakusaRank)) Then
-                        flx.Item(jrow, FlxCol.g_total) = dof_total + CInt(flx.Item(jrow, FlxCol.agarisaRank)) + CInt(flx.Item(jrow, FlxCol.cyakusaRank))
+                    If IsNumeric(flx.Item(jrow, FlxCol.timeRank)) Then
+                        flx.Item(jrow, FlxCol.g_total) = dof_total + CInt(flx.Item(jrow, FlxCol.timeRank))
                     Else
                         flx.Item(jrow, FlxCol.g_total) = dof_total
                     End If
@@ -1276,8 +1354,13 @@ Public Class AnaForm
         Next
         '比較対象数の多い少ないの影響を除くため平均をとる
         If nCyakujunOk > 0 Then
-            agarisaPoint /= nCyakujunOk
+            agarisaPoint /= nCyakujunOk * oParam.agarisaCyakusaRate
             cyakusaPoint /= nCyakujunOk
+            If dataCnt < 4 Then
+                Dim waribiki As Double = 1 - (4 - dataCnt) * oParam.waribiki
+                agarisaPoint *= waribiki
+                cyakusaPoint *= waribiki
+            End If
         End If
         Return agarisaPoint
     End Function

@@ -17,6 +17,9 @@ Public Class ParamSetClass
     Public timeP(3) As Double '何走前かでの重みづけ用 1走前,2走前,3走前,4走前の順 GlblMod.GetDegreeOfFit_time()
     Public timeZoneCoef As Double 'タイムゾーンに応じた係数　GlblMod.GetTimeZoneCoef()
 
+    Public waribiki As Double = 0.025 '近４走にデータが不足する時の割引率
+    Public agarisaCyakusaRate As Double = 1.1 '上り差と着差の得点有効率：着差を１としたときの上り差の掛け率
+
     Private rand As New Random()
 
     Public Sub New()

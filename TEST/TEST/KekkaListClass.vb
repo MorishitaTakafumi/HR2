@@ -117,7 +117,7 @@ Public Class KekkaListClass
     '着差補正
     Public Sub correctCyakusa(ByVal oHead As RaceHeaderClass)
         'レースクラスをオープンに標準化するための補正値
-        Dim hoseiti As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        Dim hoseiti As Single = oTC.get_time_correction(oHead.class_code, oHead.type_code, oHead.kyori, oHead.jo_code)
         If hoseiti = DMY_VAL Then '距離によってはデータが無い場合がある
             Dim alKyori As Integer
             If oHead.kyori < 1200 Then
@@ -127,7 +127,7 @@ Public Class KekkaListClass
             Else
                 alKyori = 2000
             End If
-            hoseiti = oTC.get_time_correction(oHead.class_code, oHead.type_code, alKyori)
+            hoseiti = oTC.get_time_correction(oHead.class_code, oHead.type_code, alKyori, oHead.jo_code)
         End If
         For j As Integer = 0 To cnt - 1
             m_bf(j).cyakusa_cr = m_bf(j).cyakusa_raw + hoseiti
@@ -146,7 +146,7 @@ Public Class KekkaListClass
         agariList.Sort()
         'レースクラスをオープンに標準化するための補正値
         '過去版ではG1を-0.6として以下+0.2していたがDB収録レースの平均値をベースとした値に変更した
-        Dim hoseiti As Single = oTC.get_agari_correction(oHead.class_code, oHead.type_code, oHead.kyori)
+        Dim hoseiti As Single = oTC.get_agari_correction(oHead.class_code, oHead.type_code, oHead.kyori, oHead.jo_code)
         If hoseiti = DMY_VAL Then '距離によってはデータが無い場合がある
             Dim alKyori As Integer
             If oHead.kyori < 1200 Then
@@ -156,7 +156,7 @@ Public Class KekkaListClass
             Else
                 alKyori = 2000
             End If
-            hoseiti = oTC.get_time_correction(oHead.class_code, oHead.type_code, alKyori)
+            hoseiti = oTC.get_time_correction(oHead.class_code, oHead.type_code, alKyori, oHead.jo_code)
         End If
         '補正計算では何コーナーの通過順位を使うか
         Dim corner_idx As Integer = oHead.GetCornerToCalcAgarisa() - 1

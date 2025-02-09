@@ -29,6 +29,8 @@ Partial Class DebufForm
         Me.Label4 = New System.Windows.Forms.Label()
         Me.BtnRedisp = New System.Windows.Forms.Button()
         Me.flx = New C1.Win.C1FlexGrid.C1FlexGrid()
+        Me.CbBa = New System.Windows.Forms.ComboBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.flx, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -37,7 +39,7 @@ Partial Class DebufForm
         Me.CbKyori.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbKyori.FormattingEnabled = True
         Me.CbKyori.ImeMode = System.Windows.Forms.ImeMode.Disable
-        Me.CbKyori.Location = New System.Drawing.Point(246, 24)
+        Me.CbKyori.Location = New System.Drawing.Point(354, 24)
         Me.CbKyori.Margin = New System.Windows.Forms.Padding(2)
         Me.CbKyori.Name = "CbKyori"
         Me.CbKyori.Size = New System.Drawing.Size(92, 20)
@@ -46,7 +48,7 @@ Partial Class DebufForm
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(196, 27)
+        Me.Label5.Location = New System.Drawing.Point(321, 27)
         Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(29, 12)
@@ -57,7 +59,7 @@ Partial Class DebufForm
         '
         Me.CbSyubetu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CbSyubetu.FormattingEnabled = True
-        Me.CbSyubetu.Location = New System.Drawing.Point(70, 24)
+        Me.CbSyubetu.Location = New System.Drawing.Point(208, 24)
         Me.CbSyubetu.Margin = New System.Windows.Forms.Padding(2)
         Me.CbSyubetu.Name = "CbSyubetu"
         Me.CbSyubetu.Size = New System.Drawing.Size(92, 20)
@@ -66,7 +68,7 @@ Partial Class DebufForm
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(20, 27)
+        Me.Label4.Location = New System.Drawing.Point(175, 27)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(29, 12)
@@ -76,7 +78,7 @@ Partial Class DebufForm
         'BtnRedisp
         '
         Me.BtnRedisp.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.BtnRedisp.Location = New System.Drawing.Point(372, 12)
+        Me.BtnRedisp.Location = New System.Drawing.Point(468, 12)
         Me.BtnRedisp.Name = "BtnRedisp"
         Me.BtnRedisp.Size = New System.Drawing.Size(82, 41)
         Me.BtnRedisp.TabIndex = 30
@@ -93,15 +95,38 @@ Partial Class DebufForm
         Me.flx.Location = New System.Drawing.Point(22, 59)
         Me.flx.Name = "flx"
         Me.flx.Rows.DefaultSize = 21
-        Me.flx.Size = New System.Drawing.Size(567, 494)
+        Me.flx.Size = New System.Drawing.Size(987, 494)
         Me.flx.StyleInfo = resources.GetString("flx.StyleInfo")
         Me.flx.TabIndex = 31
+        '
+        'CbBa
+        '
+        Me.CbBa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.CbBa.FormattingEnabled = True
+        Me.CbBa.ImeMode = System.Windows.Forms.ImeMode.Disable
+        Me.CbBa.Location = New System.Drawing.Point(41, 24)
+        Me.CbBa.Margin = New System.Windows.Forms.Padding(2)
+        Me.CbBa.Name = "CbBa"
+        Me.CbBa.Size = New System.Drawing.Size(92, 20)
+        Me.CbBa.TabIndex = 32
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(20, 27)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(17, 12)
+        Me.Label1.TabIndex = 33
+        Me.Label1.Text = "場"
         '
         'DebufForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(601, 565)
+        Me.ClientSize = New System.Drawing.Size(1021, 565)
+        Me.Controls.Add(Me.CbBa)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.flx)
         Me.Controls.Add(Me.BtnRedisp)
         Me.Controls.Add(Me.CbKyori)
@@ -124,4 +149,6 @@ Partial Class DebufForm
     Friend WithEvents Label4 As Label
     Friend WithEvents BtnRedisp As Button
     Friend WithEvents flx As C1.Win.C1FlexGrid.C1FlexGrid
+    Friend WithEvents CbBa As ComboBox
+    Friend WithEvents Label1 As Label
 End Class

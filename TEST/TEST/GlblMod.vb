@@ -340,6 +340,13 @@
         Else
             coef = 1 - (myZone - cmpZone) * oParam.timeR2
         End If
+
+        If coef > 1 Then
+            coef = 1
+        ElseIf coef < 0 Then
+            coef = 0
+        End If
+
         Return fullPoint * oParam.timeP(soumaeV) * coef * GetTimeZoneCoef(myZone)
     End Function
 

@@ -118,8 +118,13 @@
             End If
         Next
         If dcnt > 0 Then
-            agarisaRank = (agarisaZonePointSum / dcnt) / 11 * 100
+            agarisaRank = (agarisaZonePointSum / dcnt) / 11 * 100 * param.agarisaCyakusaRate
             cyakusaRank = (cyakusaZonePointSum / dcnt) / 11 * 100
+            If dcnt < 4 Then
+                Dim waribiki As Double = 1 - (4 - dcnt) * param.waribiki
+                agarisaRank *= waribiki
+                cyakusaRank *= waribiki
+            End If
         Else
             agarisaRank = 0
             cyakusaRank = 0
