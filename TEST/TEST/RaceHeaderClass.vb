@@ -203,6 +203,22 @@ Public Class RaceHeaderClass
         Return "?"
     End Function
 
+    Public Function GetShortClassName() As String
+        Select Case class_code
+            Case 0, 1, 2, 3
+                Return class_code.ToString & "w"
+            Case 4
+                Return "Op"
+            Case 5
+                Return "G3"
+            Case 6
+                Return "G2"
+            Case 7
+                Return "G1"
+        End Select
+        Return "?"
+    End Function
+
     '上り差の補正値を計算するため何コーナーでの通過順位を使うか
     Public Function GetCornerToCalcAgarisa() As Integer
 

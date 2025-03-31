@@ -256,6 +256,12 @@
     </Compile>
     <Compile Include="UmaHeaderClass.vb" />
     <Compile Include="UmaHistClass.vb" />
+    <Compile Include="UmaHistGraphForm.Designer.vb">
+      <DependentUpon>UmaHistGraphForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UmaHistGraphForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="umaHistListClass.vb" />
     <Compile Include="umaInfoParseMode.vb" />
     <Compile Include="UmaStoreClass.vb" />
@@ -316,6 +322,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TopMenu.resx">
       <DependentUpon>TopMenu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UmaHistGraphForm.resx">
+      <DependentUpon>UmaHistGraphForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinRateForm.resx">
       <DependentUpon>WinRateForm.vb</DependentUpon>

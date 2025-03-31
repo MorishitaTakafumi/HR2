@@ -259,6 +259,11 @@ Public Class StoreAnaValForm
                 If oKekka IsNot Nothing Then '同着のときNothingとなる
                     Dim uma_url As String = makeJRAurl(oKekka.uma_href)
                     errmsg = umaHistList.GetUmaInfo(uma_url, "", DMY_DATE, True)
+                    If errmsg.Length > 0 Then
+                        MsgBox(errmsg, MsgBoxStyle.Critical, Me.Text)
+                        Return False
+                    End If
+                    UmaStore.add1(umaHistList)
                     Dim hist_idx As Integer = 0
                     For i As Integer = 0 To umaHistList.cnt - 1
                         lb_msg.Text = "情報処理中 " & (j + 1).ToString & " " & hist_idx.ToString & "/4"

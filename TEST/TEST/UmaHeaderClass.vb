@@ -126,23 +126,23 @@ Public Class UmaHeaderClass
         End Try
     End Function
 
-    '登録
-    Public Function save(ByVal uma_hist_list As umaHistListClass) As String
-        Using conn As New SQLiteConnection(GetDbConnectionString)
-            Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
-            conn.Open()
-            Dim errmsg As String = ""
-            If rec_id > 0 Then
-                errmsg = update(cmd)
-            Else
-                errmsg = addNew(cmd)
-            End If
-            If errmsg.Length = 0 Then
-                errmsg = uma_hist_list.save(cmd, rec_id)
-            End If
-            Return errmsg
-        End Using
-    End Function
+    ''登録
+    'Public Function save(ByVal uma_hist_list As umaHistListClass) As String
+    '    Using conn As New SQLiteConnection(GetDbConnectionString)
+    '        Dim cmd As SQLite.SQLiteCommand = conn.CreateCommand
+    '        conn.Open()
+    '        Dim errmsg As String = ""
+    '        If rec_id > 0 Then
+    '            errmsg = update(cmd)
+    '        Else
+    '            errmsg = addNew(cmd)
+    '        End If
+    '        If errmsg.Length = 0 Then
+    '            errmsg = uma_hist_list.save(cmd, rec_id)
+    '        End If
+    '        Return errmsg
+    '    End Using
+    'End Function
 
     '登録
     Public Function save(ByVal cmd As SQLiteCommand) As String

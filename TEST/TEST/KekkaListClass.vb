@@ -73,6 +73,21 @@ Public Class KekkaListClass
         Return ""
     End Function
 
+    '馬名を指定して上り差と着差を取得する
+    Public Function GetAgarisaCyakusa(ByVal arg_bamei As String, ByRef cyakusa As Double) As Double
+        For j As Integer = 0 To cnt - 1
+            If StrComp(arg_bamei, m_bf(j).bamei, CompareMethod.Text) = 0 Then
+                If m_bf(j).cyakujun > 0 Then
+                    cyakusa = m_bf(j).cyakusa_cr
+                    Return m_bf(j).agarisa
+                Else
+                    Return DMY_VAL
+                End If
+            End If
+        Next
+        Return DMY_VAL
+    End Function
+
     'レース種別の同異
     '戻り値：True=同種, False=異種
     Public Function IsSameTypeRace(ByVal konkaiSyubetu As String) As Boolean

@@ -97,7 +97,7 @@ Partial Class AnaForm
         Me.ListBox1.Location = New System.Drawing.Point(13, 159)
         Me.ListBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(383, 213)
+        Me.ListBox1.Size = New System.Drawing.Size(383, 194)
         Me.ListBox1.TabIndex = 4
         '
         'flx

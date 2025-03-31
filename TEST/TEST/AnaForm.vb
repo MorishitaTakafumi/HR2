@@ -67,8 +67,6 @@ Public Class AnaForm
         Show()
         BtnGo.PerformClick()
         BtnHistGet.PerformClick()
-        BtnDof.PerformClick()
-        flx.Sort(SortFlags.Descending, FlxCol.dof_total)
         autoModeResult = ""
         Dim cnt As Integer = 0
         Dim jrow As Integer = flx.Rows.Fixed
@@ -538,6 +536,13 @@ Public Class AnaForm
         End If
     End Sub
 
+    Private Sub flx_DoubleClick(sender As Object, e As EventArgs) Handles flx.DoubleClick
+        If flx.Row >= flx.Rows.Fixed Then
+            Dim a As New UmaHistGraphForm
+            a.entry(flx.Item(flx.Row, FlxCol.bamei), cRaceHeader.dt)
+        End If
+    End Sub
+
     Private Sub BtnRedisp_Click(sender As Object, e As EventArgs) Handles BtnRedisp.Click
         PaintTable(anaList)
     End Sub
@@ -580,6 +585,8 @@ Public Class AnaForm
         End If
         new_logic()
         makeDosu()
+        BtnDof.PerformClick()
+        flx.Sort(SortFlags.Descending, FlxCol.g_total)
         If Not autoMode Then
             showWebPageAccessCounter()
         End If
@@ -1416,4 +1423,5 @@ Public Class AnaForm
             txtTuki.Text = a.SelectedTukiText
         End If
     End Sub
+
 End Class
