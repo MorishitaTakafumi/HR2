@@ -14,6 +14,10 @@ Module WebMod
         MsgBox($"WebPageアクセス回数は{WebPageAccessCount }です")
     End Sub
 
+    Public Function GetWebPageAccessCounter() As String
+        Return $"WebPageアクセス回数は{WebPageAccessCount }です"
+    End Function
+
     Public Function GetWebPageText(ByVal url As String) As String
         Dim client As New HttpClient()
         url = makeJRAurl(url)

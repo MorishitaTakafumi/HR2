@@ -6,6 +6,18 @@
 
     Private UmaQ As New Queue(Of umaHistListClass)
 
+    Private m_CntRequest As Integer = 0
+    Private m_CntHit As Integer = 0
+
+    Public Sub ClearCnt()
+        m_CntRequest = 0
+        m_CntHit = 0
+    End Sub
+
+    Public Function GetCntRequestHit() As String
+        Return m_CntHit.ToString & "/" & m_CntRequest.ToString
+    End Function
+
     Public Sub add1(ByVal o As umaHistListClass)
         removeData(o.umaHeader.bamei)
 
@@ -16,8 +28,10 @@
     End Sub
 
     Public Function GetData(ByVal bamei As String) As umaHistListClass
+        m_CntRequest += 1
         For Each item In m_bf
             If item.umaHeader.bamei = bamei Then
+                m_CntHit += 1
                 Return item.Clone()
             End If
         Next

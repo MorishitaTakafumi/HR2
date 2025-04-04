@@ -404,6 +404,8 @@ Public Class AnaForm
         anaList.init()
         txtJo.Text = cRaceHeader.keibajo
         Dim errmsg As String = ""
+        UmaStore.ClearCnt()
+        kekkaStore.ClearCnt()
         Using con As New SQLiteConnection(GetDbConnectionString)
             Dim cmd As SQLiteCommand = con.CreateCommand
             Try
@@ -513,7 +515,10 @@ Public Class AnaForm
         ShowCyakujun()
         AutoSetSearchParams()
         If Not autoMode Then
-            showWebPageAccessCounter()
+            Dim ss As String = "UmaStoreHitCnt : " & UmaStore.GetCntRequestHit & vbLf &
+                               "KekkaStoreHitCnt : " & kekkaStore.GetCntRequestHit & vbLf &
+                               GetWebPageAccessCounter()
+            MsgBox(ss, MsgBoxStyle.Information, Me.Text)
         End If
     End Sub
 
@@ -581,6 +586,8 @@ Public Class AnaForm
 
     Private Sub BtnHistGet_Click(sender As Object, e As EventArgs) Handles BtnHistGet.Click
         If Not autoMode Then
+            UmaStore.ClearCnt()
+            kekkaStore.ClearCnt()
             ClearWebPageAccessCounter()
         End If
         new_logic()
@@ -588,7 +595,10 @@ Public Class AnaForm
         BtnDof.PerformClick()
         flx.Sort(SortFlags.Descending, FlxCol.g_total)
         If Not autoMode Then
-            showWebPageAccessCounter()
+            Dim ss As String = "UmaStoreHitCnt : " & UmaStore.GetCntRequestHit & vbLf &
+                               "KekkaStoreHitCnt : " & kekkaStore.GetCntRequestHit & vbLf &
+                               GetWebPageAccessCounter()
+            MsgBox(ss, MsgBoxStyle.Information, Me.Text)
         End If
     End Sub
 
@@ -942,6 +952,8 @@ Public Class AnaForm
                         Return errmsg
                     End If
                     oUmaHist = UmaHists
+                    UmaHists.umaHeader.bamei = arg_bamei
+                    UmaStore.add1(UmaHists.Clone)
                 Else
                     Return ""
                 End If
@@ -967,6 +979,7 @@ Public Class AnaForm
                 If DateDiff(DateInterval.Day, oS.dt, cRaceHeader.dt) > 1 AndAlso oS.href.Trim.Length > 0 Then
                     Dim shortname As String = oS.racename
                     oS.racename = oShortRaceName.GetLongName(oS.racename)
+                    oS.bamei = arg_bamei
                     Dim kekkaList As KekkaListClass = kekkaStore.GetData(oS)
                     Dim oRaceHead As RaceHeaderClass
                     If kekkaList Is Nothing Then
