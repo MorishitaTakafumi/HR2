@@ -865,6 +865,10 @@ window.addEventListener('load', function(){
     <div class="cell time">
         発走時刻：<strong>14時55分</strong>
       </div>
+    <div class="cell baba">
+        <ul>
+          <li class="weather"><span class="inner"><span class="cap">天候</span><span class="txt">晴</span></span></li><li class="durt"><span class="inner"><span class="cap">ダート</span><span class="txt">良</span></span></li></ul>
+      </div>
     </div>
 </div>
 <div class="race_title">
@@ -931,8 +935,17 @@ window.addEventListener('load', function(){
 
 
 
+  <div class="refresh">
+    <a class="btn-def btn-sm blue btn-block" href="/JRADB/accessD.html?CNAME=pw01dde0109202502031020250405/D3"><i class="fa fa-refresh" aria-hidden="true"></i>更新</a>
+  </div>
 
 
+
+
+  <ul>
+    
+    <li class="odds"><a href="#" class="btn-def btn-sm blue btn-block" onclick="return doAction('/JRADB/accessO.html', 'pw151ouS309202502031020250405Z/76');"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>オッズ</a></li>
+  </ul>
 
   <div class="print_btn">
     <a href="#" class="btn-def btn-sm btn-block" onclick="click_send('/accessD.pdf'); return doPrint('/JRADB/accessD.pdf', 'pw01dpr0109202502031020250405/9D');"><i class="fa fa-print" aria-hidden="true"></i>印刷用ページ</a>
@@ -970,7 +983,7 @@ window.addEventListener('load', function(){
     </td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002020102751/B6">エミサキホコル</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002020102751/B6">エミサキホコル</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>16.7</strong></span><span class="pop_rank">(7<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.3.2.16)</div><div class="cell win">8573.6万</div></div><p class="owner">亀岡 和彦</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001178/08');">杉山 佳明</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -1140,7 +1153,7 @@ window.addEventListener('load', function(){
 <td class="num">2</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002018105998/3F">ロードエクレール</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002018105998/3F">ロードエクレール</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>14.4</strong></span><span class="pop_rank">(6<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(5.3.3.18)</div><div class="cell win">12241.1万</div></div><p class="owner">(株)ロードホースクラブ</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001086/11');">斎藤 誠</a><span class="division">(美浦)</span></p>
 <ul class="family_line">
@@ -1312,7 +1325,7 @@ window.addEventListener('load', function(){
     </td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019105482/14">アサヒ</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019105482/14">アサヒ</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>25.4</strong></span><span class="pop_rank">(8<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(2.4.1.18)</div><div class="cell win">6864.3万</div></div><p class="owner">(株)Gリビエール・レーシング</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001132/14');">金成 貴史</a><span class="division">(美浦)</span></p>
 <ul class="family_line">
@@ -1484,7 +1497,7 @@ window.addEventListener('load', function(){
     </td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019102137/A3">シロン</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019102137/A3">シロン</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>46.4</strong></span><span class="pop_rank">(13<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.1.5.15)</div><div class="cell win">6513.8万</div></div><p class="owner">山本 律</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001194/AE');">小栗 実</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -1653,7 +1666,7 @@ window.addEventListener('load', function(){
 <td class="num">5</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><span class="horse_icon"><img src="/JRADB/img/kigo/maru-gai.png" alt="マルガイ"></span><a href="/JRADB/accessU.html?CNAME=pw01dud002020110007/B1">ペースセッティング</a></div></div>
+<div class="name"><span class="horse_icon"><img src="/JRADB/img/kigo/maru-gai.png" alt="マルガイ"></span><a href="/JRADB/accessU.html?CNAME=pw01dud002020110007/B1">ペースセッティング</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>26.1</strong></span><span class="pop_rank">(9<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(2.5.3.9)</div><div class="cell win">9116.1万</div></div><p class="owner">(有)シルクレーシング</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001164/6D');">安田 翔伍</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -1824,7 +1837,7 @@ window.addEventListener('load', function(){
 <td class="num">6</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019103529/2C">アルファマム</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019103529/2C">アルファマム</a></div><div class="odds"><div class="odds_line"><span class="num"><strong class="red">8.4</strong></span><span class="pop_rank">(2<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(7.2.3.12)</div><div class="cell win">15902.1万</div></div><p class="owner">平井 裕</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk000429/32');">佐々木 晶三</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -1996,7 +2009,7 @@ window.addEventListener('load', function(){
     </td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019105400/AE">アスクドゥラメンテ</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019105400/AE">アスクドゥラメンテ</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>30.0</strong></span><span class="pop_rank">(10<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.1.0.4)</div><div class="cell win">4811.5万</div></div><p class="owner">廣崎利洋HD(株)</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001055/44');">藤原 英昭</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -2167,7 +2180,7 @@ window.addEventListener('load', function(){
 <td class="num">8</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019102454/FD">サクセスローレル</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019102454/FD">サクセスローレル</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>146.9</strong></span><span class="pop_rank">(15<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.3.1.15)</div><div class="cell win">6413.6万</div></div><p class="owner">(株)タカシマ</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001078/BE');">北出 成人</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -2338,7 +2351,7 @@ window.addEventListener('load', function(){
 <td class="num">9</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><span class="horse_icon"><img src="/JRADB/img/kigo/maru-chi.png" alt="マルチ"></span><a href="/JRADB/accessU.html?CNAME=pw01dud002020106557/C2">コンクイスタ</a></div></div>
+<div class="name"><span class="horse_icon"><img src="/JRADB/img/kigo/maru-chi.png" alt="マルチ"></span><a href="/JRADB/accessU.html?CNAME=pw01dud002020106557/C2">コンクイスタ</a></div><div class="odds"><div class="odds_line"><span class="num"><strong class="red">9.0</strong></span><span class="pop_rank">(3<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(5.5.1.3)</div><div class="cell win">6950.7万</div></div><p class="owner">(有)ターフ・スポート</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001176/F0');">吉岡 辰弥</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -2505,7 +2518,7 @@ window.addEventListener('load', function(){
 <td class="num">10</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002014102562/9C">アーバンイェーガー</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002014102562/9C">アーバンイェーガー</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>240.5</strong></span><span class="pop_rank">(16<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(5.8.8.44)</div><div class="cell win">15247.8万</div></div><p class="owner">村木 克成</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001134/2C');">高橋 文雅</a><span class="division">(美浦)</span></p>
 <ul class="family_line">
@@ -2676,7 +2689,7 @@ window.addEventListener('load', function(){
 <td class="num">11</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002021103725/CD">テイエムリステット</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002021103725/CD">テイエムリステット</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>33.9</strong></span><span class="pop_rank">(11<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.2.1.6)</div><div class="cell win">6813万</div></div><p class="owner">竹園 正繼</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001212/88');">秋山 真一郎</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -2846,7 +2859,7 @@ window.addEventListener('load', function(){
 <td class="num">12</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019105972/F9">ジレトール</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002019105972/F9">ジレトール</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>13.1</strong></span><span class="pop_rank">(4<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(6.4.3.11)</div><div class="cell win">15237.4万</div></div><p class="owner">(有)キャロットファーム</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001092/4C');">松永 幹夫</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -3017,7 +3030,7 @@ window.addEventListener('load', function(){
 <td class="num">13</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002020101599/3D">サンライズフレイム</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002020101599/3D">サンライズフレイム</a></div><div class="odds"><div class="odds_line"><span class="num"><strong class="red">1.9</strong></span><span class="pop_rank">(1<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(6.1.3.1)</div><div class="cell win">12721.6万</div></div><p class="owner">(株)ライフハウス</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001166/85');">石坂 公一</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -3188,7 +3201,7 @@ window.addEventListener('load', function(){
 <td class="num">14</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002018100388/5E">サトノテンペスト</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002018100388/5E">サトノテンペスト</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>50.8</strong></span><span class="pop_rank">(14<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.3.1.14)</div><div class="cell win">7240.5万</div></div><p class="owner">里見 治</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001136/44');">高橋 亮</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -3358,7 +3371,7 @@ window.addEventListener('load', function(){
 <td class="num">15</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><span class="horse_icon"><img src="/JRADB/img/kigo/maru-gai.png" alt="マルガイ"></span><a href="/JRADB/accessU.html?CNAME=pw01dud002020110106/6F">アドバンスファラオ</a></div></div>
+<div class="name"><span class="horse_icon"><img src="/JRADB/img/kigo/maru-gai.png" alt="マルガイ"></span><a href="/JRADB/accessU.html?CNAME=pw01dud002020110106/6F">アドバンスファラオ</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>35.7</strong></span><span class="pop_rank">(12<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(5.2.1.14)</div><div class="cell win">7734.8万</div></div><p class="owner">久保田 典秀</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk000427/1A');">森 秀行</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -3529,7 +3542,7 @@ window.addEventListener('load', function(){
 <td class="num">16</td>
 <td class="horse">
 <div class="name_line">
-<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002021101457/72">リジル</a></div></div>
+<div class="name"><a href="/JRADB/accessU.html?CNAME=pw01dud002021101457/72">リジル</a></div><div class="odds"><div class="odds_line"><span class="num"><strong>13.5</strong></span><span class="pop_rank">(5<span>番人気</span>)</span></div></div></div>
 <div class="result_line">
 <div class="cell result">(4.3.3.3)</div><div class="cell win">7163.5万</div></div><p class="owner">下河辺 隆行</p><p class="trainer"><a href="#" onclick="return doAction('/JRADB/accessC.html', 'pw05cmk001146/AF');">奥村 豊</a><span class="division">(栗東)</span></p>
 <ul class="family_line">
@@ -3694,6 +3707,12 @@ window.addEventListener('load', function(){
 </tbody>
 </table>
 </div>
+<div class="caution mt20" id="odds_area">
+<p class="odds_line">オッズは<span class="time">20時49分現在</span><a class="btn-def btn-xs btn-narrow blue" href="/JRADB/accessD.html?CNAME=pw01dde0109202502031020250405/D3"><i class="fa fa-refresh" aria-hidden="true"></i>更新</a></p><ul class="mt10">
+<li><span class="dot">・</span><span class="txt">オッズの赤表示は、10倍未満を示します。</span></li>
+<li><span class="dot">・</span><span class="txt">勝馬投票に的中された方がいない場合、その投票法に投票された方全員に、定められた算式に基づく金額（<a href="/kouza/yougo/w426.html">特払い</a>）を払戻しいたします。</span></li>
+<li><span class="dot">・</span><span class="txt">特定の馬番・組番に人気が著しく集中した場合、JRAプラス10の対象にならないことがあります。詳しくは<a href="/keiba/pp10/plus10.html">お知らせ</a>をご覧下さい。</span></li>
+</ul></div>
 <div class="record_unit mt30">
 <div class="title"><h2>コースレコード</h2></div>
 
@@ -3806,6 +3825,14 @@ window.addEventListener('load', function(){
     <a href="#" class="btn-def" onclick="return doAction('/JRADB/accessD.html', 'pw01dli00/F3');"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i>開催選択へ戻る</a>
     <a href="#" class="btn-def" onclick="return doAction('/JRADB/accessD.html', 'pw01drl00092025020320250405/D7');"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i>レース選択へ戻る</a>
     <a href="#" class="btn-def" onclick="click_send('/accessD.pdf'); return doPrint('/JRADB/accessD.pdf', 'pw01dpr0109202502031020250405/9D');"><i class="fa fa-print" aria-hidden="true"></i>印刷用ページ</a>
+  </div>
+  
+  <div class="refresh">
+    
+      <a href="/JRADB/accessD.html?CNAME=pw01dde0109202502031020250405/D3" class="btn-def btn-sm blue">
+      
+    
+    <i class="fa fa-refresh" aria-hidden="true"></i>更新</a>
   </div>
   
 </div><ul class="nav race-num mt15">
