@@ -541,10 +541,16 @@ Public Class AnaForm
         End If
     End Sub
 
+    Private Sub ShowGraph(ByVal jrow As Integer)
+        Dim cyakusa_line As Double = oTC.get_time_correction(cRaceHeader.class_code, cRaceHeader.type_code, cRaceHeader.kyori, cRaceHeader.jo_code)
+        Dim agarisa_line As Double = oTC.get_agari_correction(cRaceHeader.class_code, cRaceHeader.type_code, cRaceHeader.kyori, cRaceHeader.jo_code)
+        Dim a As New UmaHistGraphForm
+        a.entry(flx.Item(jrow, FlxCol.bamei), cRaceHeader.dt, cyakusa_line, agarisa_line)
+    End Sub
+
     Private Sub flx_DoubleClick(sender As Object, e As EventArgs) Handles flx.DoubleClick
         If flx.Row >= flx.Rows.Fixed Then
-            Dim a As New UmaHistGraphForm
-            a.entry(flx.Item(flx.Row, FlxCol.bamei), cRaceHeader.dt)
+            ShowGraph(flx.Row)
         End If
     End Sub
 
@@ -1437,4 +1443,11 @@ Public Class AnaForm
         End If
     End Sub
 
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Me.Cursor = Cursors.WaitCursor
+        For jrow As Integer = flx.Rows.Fixed To flx.Rows.Count - 1
+            ShowGraph(jrow)
+        Next
+        Me.Cursor = Cursors.Default
+    End Sub
 End Class

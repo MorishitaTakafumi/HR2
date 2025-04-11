@@ -84,5 +84,5 @@ C:\学習\HR2\TEST\TEST\obj\Debug\TEST.pdb
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.SelectTukiForm.resources
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.SelectTukiForm.resources
 C:\学習\HR2\TEST\TEST\obj\Debug\TEST.UmaHistGraphForm.resources
-C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache
 C:\STUDY\HR2\TEST\TEST\obj\Debug\TEST.UmaHistGraphForm.resources
+C:\学習\HR2\TEST\TEST\obj\Debug\TEST.vbproj.AssemblyReference.cache
